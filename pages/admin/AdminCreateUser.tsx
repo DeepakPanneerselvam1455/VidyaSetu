@@ -1,5 +1,6 @@
 
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 // FIX: Replaced useHistory with useNavigate for react-router-dom v6 compatibility.
 import { useNavigate, Link } from 'react-router-dom';
 import * as api from '../../lib/api';
@@ -7,6 +8,8 @@ import { Button, buttonVariants } from '../../components/ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Select } from '../../components/ui/Select';
+import { checkPasswordStrength } from '../../lib/utils';
+import PasswordStrengthMeter from '../../components/ui/PasswordStrengthMeter';
 
 const AdminCreateUser: React.FC = () => {
     // FIX: Replaced useHistory with useNavigate for react-router-dom v6.
@@ -14,15 +17,20 @@ const AdminCreateUser: React.FC = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [passwordStrength, setPasswordStrength] = useState({ score: 0, level: 'none' as const, text: '' });
     const [showPassword, setShowPassword] = useState(false);
     const [role, setRole] = useState<'student' | 'mentor' | 'admin'>('student');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
 
+    useEffect(() => {
+        setPasswordStrength(checkPasswordStrength(password));
+    }, [password]);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (password.length < 6) {
-            setError('Password must be at least 6 characters long.');
+        if (passwordStrength.score < 3) {
+            setError('Password is too weak. Please choose a stronger password.');
             return;
         }
         setIsSubmitting(true);
@@ -37,6 +45,8 @@ const AdminCreateUser: React.FC = () => {
             setIsSubmitting(false);
         }
     };
+
+    const isPasswordWeak = password.length > 0 && passwordStrength.score < 3;
 
     return (
         <div className="max-w-2xl mx-auto">
@@ -63,7 +73,7 @@ const AdminCreateUser: React.FC = () => {
                                     {showPassword ? <EyeOffIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
                                 </button>
                             </div>
-                            <p id="password-help" className="text-xs text-slate-500 mt-1">Must be at least 6 characters long.</p>
+                            <PasswordStrengthMeter level={passwordStrength.level} text={passwordStrength.text} />
                         </div>
                         <div>
                             <label htmlFor="role" className="block text-sm font-medium mb-1">Role</label>
@@ -75,11 +85,14 @@ const AdminCreateUser: React.FC = () => {
                         </div>
                         {error && <p className="text-sm text-red-500">{error}</p>}
                     </CardContent>
-                    <CardFooter className="flex justify-end gap-2">
-                        <Link to="/admin/users" className={buttonVariants({ variant: 'outline' })}>Cancel</Link>
-                        <Button type="submit" disabled={isSubmitting}>
+                    <CardFooter className="flex flex-col items-stretch gap-2">
+                        <Button type="submit" disabled={isSubmitting || isPasswordWeak}>
                             {isSubmitting ? 'Creating...' : 'Create User'}
                         </Button>
+                         {isPasswordWeak && (
+                            <p className="text-xs text-center text-orange-500">Password must be at least 'Medium' strength.</p>
+                        )}
+                        <Link to="/admin/users" className={buttonVariants({ variant: 'outline' })}>Cancel</Link>
                     </CardFooter>
                 </Card>
             </form>

@@ -1,5 +1,6 @@
 
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 // FIX: Replaced useHistory with useNavigate for react-router-dom v6 compatibility.
 import { useNavigate, Link } from 'react-router-dom';
 import * as api from '../lib/api';
@@ -9,11 +10,14 @@ import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
 import { User } from '../types';
 import Dialog from '../components/ui/Dialog';
+import { checkPasswordStrength } from '../lib/utils';
+import PasswordStrengthMeter from '../components/ui/PasswordStrengthMeter';
 
 const RegisterPage: React.FC = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [passwordStrength, setPasswordStrength] = useState({ score: 0, level: 'none' as const, text: '' });
     const [showPassword, setShowPassword] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -25,9 +29,17 @@ const RegisterPage: React.FC = () => {
     // FIX: Replaced useHistory with useNavigate for react-router-dom v6.
     const navigate = useNavigate();
 
+    useEffect(() => {
+        setPasswordStrength(checkPasswordStrength(password));
+    }, [password]);
+
     const handleInitialSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
+        if (passwordStrength.score < 3) {
+            setError("Password is too weak. Please choose a stronger password.");
+            return;
+        }
         if (password !== confirmPassword) {
             setError("Passwords do not match.");
             return;
@@ -56,6 +68,8 @@ const RegisterPage: React.FC = () => {
             setIsLoading(false);
         }
     };
+
+    const isPasswordWeak = password.length > 0 && passwordStrength.score < 3;
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-900 p-4">
@@ -109,6 +123,7 @@ const RegisterPage: React.FC = () => {
                                 {showPassword ? <EyeOffIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
                             </button>
                         </div>
+                        <PasswordStrengthMeter level={passwordStrength.level} text={passwordStrength.text} />
                     </div>
                     <div>
                         <label className="text-sm font-medium text-slate-700 dark:text-white">Confirm Password</label>
@@ -143,9 +158,12 @@ const RegisterPage: React.FC = () => {
                         </Select>
                     </div>
                     {error && <p className="text-sm text-red-600 text-center">{error}</p>}
-                    <Button type="submit" className="w-full !mt-6 text-lg py-3 h-auto">
+                    <Button type="submit" className="w-full !mt-6 text-lg py-3 h-auto" disabled={isPasswordWeak}>
                         Create Account
                     </Button>
+                     {isPasswordWeak && (
+                        <p className="text-xs text-center text-orange-500">Password must be at least 'Medium' strength.</p>
+                    )}
                 </form>
                  <p className="text-center text-sm text-slate-600 dark:text-slate-300 mt-6">
                     Already have an account?{' '}
