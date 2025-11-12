@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 // FIX: Replaced useHistory with useNavigate for react-router-dom v6 compatibility.
 import { useParams, useNavigate } from 'react-router-dom';
@@ -46,6 +45,8 @@ const StudentQuizView: React.FC = () => {
     const [timeElapsed, setTimeElapsed] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isConfirmSubmitOpen, setIsConfirmSubmitOpen] = useState(false);
+    const [visitedQuestions, setVisitedQuestions] = useState<Set<number>>(new Set());
+
 
     // AI Feedback State
     const [aiFeedbacks, setAiFeedbacks] = useState<Record<string, string>>({});
@@ -120,6 +121,12 @@ const StudentQuizView: React.FC = () => {
         };
         fetchLatestAttempt();
     }, [quizState, quizId, user]);
+
+    useEffect(() => {
+        if (quizState === 'active') {
+            setVisitedQuestions(prev => new Set(prev).add(currentQuestionIndex));
+        }
+    }, [currentQuestionIndex, quizState]);
     
     const handleFetchFeedback = async (question: Question) => {
         if (aiFeedbacks[question.id]) return; // Don't re-fetch if already loaded
@@ -141,7 +148,11 @@ const StudentQuizView: React.FC = () => {
         setAnswers(prev => ({ ...prev, [questionId]: answer }));
     };
     
-    const handleStartQuiz = () => setQuizState('active');
+    const handleStartQuiz = () => {
+        setQuizState('active');
+        setVisitedQuestions(new Set([0]));
+    };
+
 
     const handleSubmit = async () => {
         if (!quiz || !user || isSubmitting) return;
@@ -399,7 +410,10 @@ const StudentQuizView: React.FC = () => {
                     <h3 className="font-semibold text-white mb-4">Question Map</h3>
                     <div className="grid grid-cols-5 gap-2">
                         {quiz.questions.map((q, index) => {
-                            const isAnswered = answers[q.id] !== undefined && answers[q.id] !== '';
+                            const isAnswered = answers[q.id] !== undefined && answers[q.id].trim() !== '';
+                            const hasBeenVisited = visitedQuestions.has(index);
+                            const isSkipped = hasBeenVisited && !isAnswered && currentQuestionIndex !== index;
+                            
                             return (
                                 <button
                                     key={q.id}
@@ -407,16 +421,32 @@ const StudentQuizView: React.FC = () => {
                                     className={cn(
                                         "flex items-center justify-center h-10 rounded-md border font-bold text-sm transition-colors",
                                         currentQuestionIndex === index 
-                                            ? "bg-violet-600 border-violet-500 text-white"
+                                            ? "bg-violet-600 border-violet-500 text-white ring-2 ring-offset-2 ring-offset-slate-800 ring-violet-500"
                                             : isAnswered 
-                                                ? "bg-slate-700 border-slate-600 text-slate-300"
-                                                : "bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700"
+                                                ? "bg-green-800 border-green-700 text-green-200"
+                                                : isSkipped
+                                                    ? "bg-yellow-800 border-yellow-700 text-yellow-200"
+                                                    : "bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700"
                                     )}
+                                    title={
+                                        currentQuestionIndex === index ? 'Current' :
+                                        isAnswered ? 'Answered' :
+                                        isSkipped ? 'Skipped' : 'Not Visited'
+                                    }
                                 >
                                     {index + 1}
                                 </button>
                             );
                         })}
+                    </div>
+                     <div className="mt-4 space-y-2 text-xs text-slate-400">
+                        <h4 className="font-semibold text-sm text-white mb-2">Legend</h4>
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                            <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-green-800 border border-green-700"></div>Answered</div>
+                            <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-yellow-800 border border-yellow-700"></div>Skipped</div>
+                            <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-slate-800 border border-slate-700"></div>Not Visited</div>
+                            <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-violet-600 border border-violet-500"></div>Current</div>
+                        </div>
                     </div>
                 </div>
                 <Button onClick={() => setIsConfirmSubmitOpen(true)} disabled={isSubmitting} className="w-full bg-green-600 hover:bg-green-700 text-white text-base py-3 h-auto">
