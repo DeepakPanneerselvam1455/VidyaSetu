@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 // FIX: Replaced useHistory with useNavigate for react-router-dom v6 compatibility.
 import { useNavigate, Link } from 'react-router-dom';
@@ -72,52 +70,64 @@ const RegisterPage: React.FC = () => {
     const isPasswordWeak = password.length > 0 && passwordStrength.score < 3;
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-900 p-4">
-            <div className="w-full max-w-md bg-white dark:bg-slate-950 rounded-2xl shadow-2xl p-8 border dark:border-slate-800">
+        <div 
+          className="min-h-screen bg-cover bg-center p-4 flex flex-col items-center justify-center"
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=2070&auto=format&fit=crop')" }}
+        >
+            <div className="w-full max-w-md bg-slate-900/40 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-slate-700">
                 <div className="text-center mb-8">
                     <div className="inline-flex items-center justify-center gap-2">
                         <FlameIcon className="w-8 h-8 text-orange-500" />
-                        <h1 className="text-4xl font-bold text-slate-900 dark:text-white">SkillForge</h1>
+                        <h1 className="text-4xl font-bold text-white">SkillForge</h1>
                     </div>
-                    <h2 className="text-2xl mt-4 font-semibold text-slate-800 dark:text-white">Create Account</h2>
-                    <p className="text-slate-600 dark:text-slate-300 mt-1">Learn. Create. Excel.</p>
+                    <h2 className="text-2xl mt-4 font-semibold text-white">Create Account</h2>
+                    <p className="text-white/80 mt-1">Learn. Create. Excel.</p>
                 </div>
                 <form onSubmit={handleInitialSubmit} className="space-y-4">
                     <div>
-                        <label className="text-sm font-medium text-slate-700 dark:text-white">Full Name</label>
-                        <Input
-                            type="text"
-                            placeholder="Enter your full name"
-                            required
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <label className="text-sm font-medium text-slate-700 dark:text-white">Email Address</label>
-                        <Input
-                            type="email"
-                            placeholder="Enter your email"
-                            required
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <label className="text-sm font-medium text-slate-700 dark:text-white">Password</label>
+                        <label className="text-sm font-medium text-white/90">Full Name</label>
                         <div className="relative">
+                            <UserIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-slate-400" />
+                            <Input
+                                type="text"
+                                placeholder="Enter your full name"
+                                required
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="pl-10 h-11 bg-black/20 border-slate-500 placeholder:text-slate-400 focus:border-violet-400 focus:ring-violet-400"
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <label className="text-sm font-medium text-white/90">Email Address</label>
+                        <div className="relative">
+                            <MailIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-slate-400" />
+                            <Input
+                                type="email"
+                                placeholder="Enter your email"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="pl-10 h-11 bg-black/20 border-slate-500 placeholder:text-slate-400 focus:border-violet-400 focus:ring-violet-400"
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <label className="text-sm font-medium text-white/90">Password</label>
+                        <div className="relative">
+                             <LockIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-slate-400" />
                             <Input
                                 type={showPassword ? 'text' : 'password'}
                                 placeholder="Enter your password"
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="pr-10"
+                                className="pl-10 pr-10 h-11 bg-black/20 border-slate-500 placeholder:text-slate-400 focus:border-violet-400 focus:ring-violet-400"
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
                                 aria-label={showPassword ? 'Hide password' : 'Show password'}
                             >
                                 {showPassword ? <EyeOffIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
@@ -126,20 +136,21 @@ const RegisterPage: React.FC = () => {
                         <PasswordStrengthMeter level={passwordStrength.level} text={passwordStrength.text} />
                     </div>
                     <div>
-                        <label className="text-sm font-medium text-slate-700 dark:text-white">Confirm Password</label>
+                        <label className="text-sm font-medium text-white/90">Confirm Password</label>
                         <div className="relative">
+                             <LockIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-slate-400" />
                             <Input
                                 type={showConfirmPassword ? 'text' : 'password'}
                                 placeholder="Confirm your password"
                                 required
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                className="pr-10"
+                                className="pl-10 pr-10 h-11 bg-black/20 border-slate-500 placeholder:text-slate-400 focus:border-violet-400 focus:ring-violet-400"
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
                                 aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
                             >
                                 {showConfirmPassword ? <EyeOffIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
@@ -147,27 +158,28 @@ const RegisterPage: React.FC = () => {
                         </div>
                     </div>
                     <div>
-                        <label className="text-sm font-medium text-slate-700 dark:text-white">Account Type</label>
+                        <label className="text-sm font-medium text-white/90">Account Type</label>
                         <Select
                             value={role}
                             onChange={(e) => setRole(e.target.value as User['role'])}
+                            className="bg-black/20 border-slate-500 text-white focus:border-violet-400 focus:ring-violet-400"
                         >
                             <option value="student">Student - Learn and take courses</option>
                             <option value="mentor">Instructor - Create and manage courses</option>
                             <option value="admin">Admin - Manage the platform</option>
                         </Select>
                     </div>
-                    {error && <p className="text-sm text-red-600 text-center">{error}</p>}
+                    {error && <p className="text-sm text-red-400 text-center">{error}</p>}
                     <Button type="submit" className="w-full !mt-6 text-lg py-3 h-auto" disabled={isPasswordWeak}>
                         Create Account
                     </Button>
                      {isPasswordWeak && (
-                        <p className="text-xs text-center text-orange-500">Password must be at least 'Medium' strength.</p>
+                        <p className="text-xs text-center text-orange-400">Password must be at least 'Medium' strength.</p>
                     )}
                 </form>
-                 <p className="text-center text-sm text-slate-600 dark:text-slate-300 mt-6">
+                 <p className="text-center text-sm text-white/80 mt-6">
                     Already have an account?{' '}
-                    <Link to="/login" className="font-semibold text-indigo-600 hover:underline dark:text-indigo-400">
+                    <Link to="/login" className="font-semibold text-violet-400 hover:underline">
                         Sign in
                     </Link>
                 </p>
@@ -227,5 +239,15 @@ const EyeIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 const EyeOffIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
 );
+const UserIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+);
+const MailIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+);
+const LockIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+);
+
 
 export default RegisterPage;
