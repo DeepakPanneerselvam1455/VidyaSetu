@@ -76,9 +76,9 @@ const MentorCourseManagement: React.FC = () => {
                                 </div>
                             </CardContent>
                             <CardFooter className="grid grid-cols-3 gap-2">
-                                <Link to={`/mentor/course/${course.id}`} className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'col-span-3')}>Manage Quizzes</Link>
-                                <Button variant="ghost" size="sm" onClick={() => handleEditClick(course)}>Edit</Button>
-                                <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/50 dark:hover:text-red-500" onClick={() => handleDeleteClick(course)}>Delete</Button>
+                                <Link to={`/mentor/course/${course.id}`} className={cn(buttonVariants({ variant: 'default', size: 'sm' }))}>Manage</Link>
+                                <Button variant="outline" size="sm" onClick={() => handleEditClick(course)}>Edit</Button>
+                                <Button variant="outline" size="sm" className="text-red-600 border-red-600/50 hover:bg-red-50 hover:text-red-700 dark:text-red-500 dark:hover:bg-red-900/20 dark:hover:text-red-400 dark:border-red-500/50" onClick={() => handleDeleteClick(course)}>Delete</Button>
                             </CardFooter>
                         </Card>
                     ))}
@@ -335,9 +335,9 @@ const DeleteCourseDialog: React.FC<DeleteCourseDialogProps> = ({ isOpen, onClose
 }
 
 const FileIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
 );
-const LightbulbIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>;
+const LightbulbIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>;
 
 
 export default MentorCourseManagement;

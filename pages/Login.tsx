@@ -167,7 +167,7 @@ const RoleInfoCard: React.FC<{ icon: React.ReactNode; title: string; description
     <button
         type="button"
         onClick={onClick}
-        className="flex w-full items-start gap-4 p-4 rounded-lg hover:bg-white/10 transition-colors text-left focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        className="flex w-full items-start gap-4 p-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/20 transition-colors text-left focus:outline-none focus:ring-2 focus:ring-indigo-400"
     >
         <div className="bg-slate-800/50 rounded-lg p-3 shadow-sm shrink-0">{icon}</div>
         <div>
