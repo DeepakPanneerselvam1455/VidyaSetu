@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 // FIX: Replaced useHistory with useNavigate for react-router-dom v6 compatibility.
 import { useNavigate, Link } from 'react-router-dom';
@@ -64,12 +65,12 @@ const RegisterPage: React.FC = () => {
                         <FlameIcon className="w-8 h-8 text-orange-500" />
                         <h1 className="text-4xl font-bold text-slate-900 dark:text-white">SkillForge</h1>
                     </div>
-                    <h2 className="text-2xl mt-4 font-semibold text-slate-800 dark:text-slate-200">Create Account</h2>
-                    <p className="text-slate-600 dark:text-slate-400 mt-1">Learn. Create. Excel.</p>
+                    <h2 className="text-2xl mt-4 font-semibold text-slate-800 dark:text-white">Create Account</h2>
+                    <p className="text-slate-600 dark:text-slate-300 mt-1">Learn. Create. Excel.</p>
                 </div>
                 <form onSubmit={handleInitialSubmit} className="space-y-4">
                     <div>
-                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Full Name</label>
+                        <label className="text-sm font-medium text-slate-700 dark:text-white">Full Name</label>
                         <Input
                             type="text"
                             placeholder="Enter your full name"
@@ -79,7 +80,7 @@ const RegisterPage: React.FC = () => {
                         />
                     </div>
                     <div>
-                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Email Address</label>
+                        <label className="text-sm font-medium text-slate-700 dark:text-white">Email Address</label>
                         <Input
                             type="email"
                             placeholder="Enter your email"
@@ -89,7 +90,7 @@ const RegisterPage: React.FC = () => {
                         />
                     </div>
                     <div>
-                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
+                        <label className="text-sm font-medium text-slate-700 dark:text-white">Password</label>
                         <div className="relative">
                             <Input
                                 type={showPassword ? 'text' : 'password'}
@@ -102,7 +103,7 @@ const RegisterPage: React.FC = () => {
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white"
                                 aria-label={showPassword ? 'Hide password' : 'Show password'}
                             >
                                 {showPassword ? <EyeOffIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
@@ -110,7 +111,7 @@ const RegisterPage: React.FC = () => {
                         </div>
                     </div>
                     <div>
-                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Confirm Password</label>
+                        <label className="text-sm font-medium text-slate-700 dark:text-white">Confirm Password</label>
                         <div className="relative">
                             <Input
                                 type={showConfirmPassword ? 'text' : 'password'}
@@ -123,7 +124,7 @@ const RegisterPage: React.FC = () => {
                             <button
                                 type="button"
                                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white"
                                 aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
                             >
                                 {showConfirmPassword ? <EyeOffIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
@@ -131,7 +132,7 @@ const RegisterPage: React.FC = () => {
                         </div>
                     </div>
                     <div>
-                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Account Type</label>
+                        <label className="text-sm font-medium text-slate-700 dark:text-white">Account Type</label>
                         <Select
                             value={role}
                             onChange={(e) => setRole(e.target.value as User['role'])}
@@ -146,7 +147,7 @@ const RegisterPage: React.FC = () => {
                         Create Account
                     </Button>
                 </form>
-                 <p className="text-center text-sm text-slate-600 dark:text-slate-400 mt-6">
+                 <p className="text-center text-sm text-slate-600 dark:text-slate-300 mt-6">
                     Already have an account?{' '}
                     <Link to="/login" className="font-semibold text-indigo-600 hover:underline dark:text-indigo-400">
                         Sign in
@@ -160,17 +161,17 @@ const RegisterPage: React.FC = () => {
                 title="Confirm Your Details"
                 description="Please review your information before creating your account."
             >
-                <div className="space-y-4 my-4 text-slate-800 dark:text-slate-200">
+                <div className="space-y-4 my-4 text-slate-800 dark:text-white">
                     <div>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">Full Name</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-300">Full Name</p>
                         <p className="font-semibold">{name}</p>
                     </div>
                     <div>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">Email Address</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-300">Email Address</p>
                         <p className="font-semibold">{email}</p>
                     </div>
                     <div>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">Account Type</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-300">Account Type</p>
                         <p className="font-semibold capitalize">{role === 'mentor' ? 'Instructor' : role}</p>
                     </div>
                 </div>

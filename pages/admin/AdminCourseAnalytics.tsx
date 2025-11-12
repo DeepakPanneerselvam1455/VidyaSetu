@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import * as api from '../../lib/api';
 import { Course, User, QuizAttempt, Quiz } from '../../types';
@@ -134,7 +135,7 @@ const AdminCourseAnalytics: React.FC = () => {
 
 
     if (isLoading) {
-        return <div className="text-center p-8">Loading analytics...</div>;
+        return <div className="text-center p-8 dark:text-white">Loading analytics...</div>;
     }
 
     const TableHeader: React.FC<{ sortKey: SortKey; children: React.ReactNode, className?: string }> = ({ sortKey, children, className }) => (
@@ -150,8 +151,8 @@ const AdminCourseAnalytics: React.FC = () => {
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Course Management & Analytics</h1>
-                    <p className="text-slate-500 dark:text-slate-400">Oversee engagement, performance, and manage all courses.</p>
+                    <h1 className="text-3xl font-bold tracking-tight dark:text-white">Course Management & Analytics</h1>
+                    <p className="text-slate-500 dark:text-slate-300">Oversee engagement, performance, and manage all courses.</p>
                 </div>
                 <Button onClick={() => setIsCreateModalOpen(true)}>Create Course</Button>
             </div>
@@ -160,7 +161,7 @@ const AdminCourseAnalytics: React.FC = () => {
                 <CardContent className="p-0">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
-                            <thead className="text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
+                            <thead className="text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-white">
                                 <tr>
                                     <TableHeader sortKey="course.title">Course</TableHeader>
                                     <TableHeader sortKey="mentorName">Instructor</TableHeader>
@@ -394,8 +395,8 @@ const DeleteCourseDialog: React.FC<DeleteCourseDialogProps> = ({ isOpen, onClose
 const ProgressBar: React.FC<{ value: number }> = ({ value }) => (
     <div>
         <div className="flex justify-between mb-1">
-            <span className="text-xs font-medium text-slate-600 dark:text-slate-400">Course Progress</span>
-            <span className="text-xs font-medium text-slate-600 dark:text-slate-400">{value}%</span>
+            <span className="text-xs font-medium text-slate-600 dark:text-slate-300">Course Progress</span>
+            <span className="text-xs font-medium text-slate-600 dark:text-slate-300">{value}%</span>
         </div>
         <div className="w-full bg-slate-200 rounded-full h-1.5 dark:bg-slate-700">
             <div className="bg-indigo-600 h-1.5 rounded-full" style={{ width: `${value}%` }}></div>

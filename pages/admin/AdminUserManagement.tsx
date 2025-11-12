@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import * as api from '../../lib/api';
@@ -130,8 +131,8 @@ const AdminUserManagement: React.FC = () => {
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">User Management</h1>
-                    <p className="text-slate-500 dark:text-slate-400">View, create, edit, and delete users.</p>
+                    <h1 className="text-3xl font-bold tracking-tight dark:text-white">User Management</h1>
+                    <p className="text-slate-500 dark:text-slate-300">View, create, edit, and delete users.</p>
                 </div>
                 <Link to="/admin/users/create" className={buttonVariants()}>Create User</Link>
             </div>
@@ -149,7 +150,7 @@ const AdminUserManagement: React.FC = () => {
                 <CardContent className="p-0">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
-                            <thead className="text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
+                            <thead className="text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-white">
                                 <tr>
                                     <TableHeader sortKey="name">Name</TableHeader>
                                     <TableHeader sortKey="email">Email</TableHeader>
@@ -198,7 +199,7 @@ const AdminUserManagement: React.FC = () => {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={5} className="text-center p-8 text-slate-500">
+                                        <td colSpan={5} className="text-center p-8 text-slate-500 dark:text-slate-300">
                                             <div className="flex flex-col items-center gap-2">
                                                 <UserSearchIcon className="w-[38px] h-[38px] text-slate-400" />
                                                 <span className="font-semibold">No users found</span>
@@ -215,11 +216,11 @@ const AdminUserManagement: React.FC = () => {
 
             {totalPages > 1 && (
                 <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-500">
+                    <span className="text-sm text-slate-500 dark:text-white">
                         Showing <strong>{startIndex + 1}</strong>-<strong>{Math.min(startIndex + itemsPerPage, processedUsers.length)}</strong> of <strong>{processedUsers.length}</strong> users
                     </span>
                     <div className="flex items-center gap-4">
-                        <span className="text-sm text-slate-500">Page {currentPage} of {totalPages}</span>
+                        <span className="text-sm text-slate-500 dark:text-white">Page {currentPage} of {totalPages}</span>
                         <div className="flex gap-2">
                              <Button 
                                 variant="outline" 
@@ -309,7 +310,7 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ isOpen, onClose, onUser
                 <div>
                     <label htmlFor="edit-email" className="block text-sm font-medium mb-1">Email Address</label>
                     <Input id="edit-email" type="email" value={email} onChange={e => setEmail(e.target.value)} required disabled />
-                    <p className="text-xs text-slate-500 mt-1">Email cannot be changed.</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-300 mt-1">Email cannot be changed.</p>
                 </div>
                 <div>
                     <label htmlFor="edit-role" className="block text-sm font-medium mb-1">Role</label>
@@ -437,7 +438,7 @@ const ResetPasswordDialog: React.FC<ResetPasswordDialogProps> = ({ isOpen, onClo
                                 {showNewPassword ? <EyeOffIcon className="w-[18px] h-[18px]" /> : <EyeIcon className="w-[18px] h-[18px]" />}
                             </button>
                         </div>
-                        <p id="password-reset-help" className="text-xs text-slate-500 mt-1">Must be at least 6 characters long.</p>
+                        <p id="password-reset-help" className="text-xs text-slate-500 dark:text-slate-300 mt-1">Must be at least 6 characters long.</p>
                     </div>
                     <div>
                         <label htmlFor="confirm-password" className="block text-sm font-medium mb-1">Confirm New Password</label>
@@ -513,7 +514,7 @@ const EyeIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
 );
 const EyeOffIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
 );
 
 export default AdminUserManagement;

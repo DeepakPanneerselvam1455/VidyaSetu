@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
@@ -72,7 +73,7 @@ const AdminSettings: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-bold tracking-tight">System Settings</h1>
+            <h1 className="text-3xl font-bold tracking-tight dark:text-white">System Settings</h1>
             
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div className="md:col-span-1">
@@ -121,8 +122,8 @@ const SettingsTabButton: React.FC<{ tab: SettingsTab; activeTab: SettingsTab; on
             className={cn(
                 'px-3 py-2 text-left rounded-md text-sm font-medium transition-colors',
                 activeTab === tab 
-                    ? 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-50' 
-                    : 'hover:bg-slate-100/50 dark:hover:bg-slate-800/50'
+                    ? 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-white' 
+                    : 'hover:bg-slate-100/50 dark:text-white/80 dark:hover:bg-slate-800/50'
             )}
         >
             {children}
@@ -171,21 +172,21 @@ const NotificationSettings = ({ settings, onChange }: { settings: typeof default
         <div className="flex items-center justify-between">
             <div>
                 <label htmlFor="new-user-notif" className="font-medium">New User Registration</label>
-                <p className="text-sm text-slate-500">Send a welcome email to new users.</p>
+                <p className="text-sm text-slate-500 dark:text-slate-300">Send a welcome email to new users.</p>
             </div>
             <ToggleSwitch id="new-user-notif" checked={settings.newUser} onChange={e => onChange('newUser', e.target.checked)} />
         </div>
         <div className="flex items-center justify-between">
              <div>
                 <label htmlFor="quiz-submit-notif" className="font-medium">Quiz Submission Confirmation</label>
-                <p className="text-sm text-slate-500">Send a confirmation email to students after they submit a quiz.</p>
+                <p className="text-sm text-slate-500 dark:text-slate-300">Send a confirmation email to students after they submit a quiz.</p>
             </div>
             <ToggleSwitch id="quiz-submit-notif" checked={settings.quizSubmit} onChange={e => onChange('quizSubmit', e.target.checked)} />
         </div>
          <div className="flex items-center justify-between">
              <div>
                 <label htmlFor="mentor-notif" className="font-medium">Instructor Notifications</label>
-                <p className="text-sm text-slate-500">Notify instructors when a student completes one of their quizzes.</p>
+                <p className="text-sm text-slate-500 dark:text-slate-300">Notify instructors when a student completes one of their quizzes.</p>
             </div>
             <ToggleSwitch id="mentor-notif" checked={settings.mentorNotify} onChange={e => onChange('mentorNotify', e.target.checked)} />
         </div>
@@ -197,12 +198,12 @@ const IntegrationSettings = ({ settings, onChange }: { settings: typeof defaultS
         <div>
             <label className="block text-sm font-medium mb-1">Google Analytics</label>
             <Input placeholder="UA-XXXXXXXXX-X" value={settings.googleAnalytics} onChange={e => onChange('googleAnalytics', e.target.value)} />
-            <p className="text-xs text-slate-500 mt-1">Enable tracking of platform usage and user behavior.</p>
+            <p className="text-xs text-slate-500 dark:text-slate-300 mt-1">Enable tracking of platform usage and user behavior.</p>
         </div>
         <div>
             <label className="block text-sm font-medium mb-1">Stripe API Key</label>
             <Input type="password" placeholder="sk_test_... or pk_test_..." value={settings.stripe} onChange={e => onChange('stripe', e.target.value)} />
-             <p className="text-xs text-slate-500 mt-1">Connect your Stripe account for course payments (feature coming soon).</p>
+             <p className="text-xs text-slate-500 dark:text-slate-300 mt-1">Connect your Stripe account for course payments (feature coming soon).</p>
         </div>
     </div>
 );

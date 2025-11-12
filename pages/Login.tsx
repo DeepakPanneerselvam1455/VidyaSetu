@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 // FIX: Replaced useHistory with useNavigate for react-router-dom v6 compatibility.
 // Fix: Update imports for react-router-dom v6 to resolve module export errors.
@@ -50,20 +51,20 @@ const LoginPage: React.FC = () => {
       <div className="w-full max-w-5xl">
         <div className="bg-white dark:bg-slate-950 rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden border border-slate-800">
           {/* Left Side */}
-          <div className="w-full md:w-1/2 p-8 sm:p-12 text-slate-800 dark:text-slate-200 flex flex-col justify-center">
+          <div className="w-full md:w-1/2 p-8 sm:p-12 text-slate-800 dark:text-white flex flex-col justify-center">
             <div className="mb-8">
               <h1 className="text-4xl font-bold text-slate-900 dark:text-white">SkillForge</h1>
-              <p className="text-slate-700 dark:text-slate-300 mt-2">Welcome Back</p>
+              <p className="text-slate-700 dark:text-white mt-2">Welcome Back</p>
             </div>
             <form onSubmit={handleLogin} className="space-y-6">
               <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-semibold text-slate-600 dark:text-slate-400">Email Address*</label>
+                <label htmlFor="email" className="text-sm font-semibold text-slate-600 dark:text-white">Email Address*</label>
                 <div className="relative">
                   <MailIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-slate-400 dark:text-slate-500" />
                   <Input
                     id="email"
                     type="email"
-                    className="pl-10"
+                    className="pl-10 h-11 !bg-black !border-slate-700"
                     placeholder="Enter your email"
                     required
                     value={email}
@@ -72,13 +73,13 @@ const LoginPage: React.FC = () => {
                 </div>
               </div>
               <div className="space-y-2">
-                <label htmlFor="password" className="text-sm font-semibold text-slate-600 dark:text-slate-400">Password*</label>
+                <label htmlFor="password" className="text-sm font-semibold text-slate-600 dark:text-white">Password*</label>
                 <div className="relative">
                   <LockIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-slate-400 dark:text-slate-500" />
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
-                    className="pl-10 pr-10"
+                    className="pl-10 pr-10 h-11 !bg-black !border-slate-700"
                     placeholder="Enter your password"
                     required
                     value={password}
@@ -87,7 +88,7 @@ const LoginPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOffIcon className="w-[18px] h-[18px]" /> : <EyeIcon className="w-[18px] h-[18px]" />}
@@ -99,7 +100,7 @@ const LoginPage: React.FC = () => {
                 {isLoading ? 'Signing In...' : 'Sign In'}
               </Button>
             </form>
-            <p className="text-center text-sm text-slate-600 dark:text-slate-400 mt-6">
+            <p className="text-center text-sm text-slate-600 dark:text-white mt-6">
               Don't have an account?{' '}
               <Link to="/register" className="font-semibold text-violet-600 hover:underline dark:text-violet-400">
                 Sign up here
@@ -110,8 +111,8 @@ const LoginPage: React.FC = () => {
           <div className="w-full md:w-1/2 p-8 sm:p-12 bg-slate-50 dark:bg-slate-900 flex flex-col justify-center">
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-200">SkillForge Platform</h2>
-                <p className="text-slate-600 dark:text-slate-400 mt-2">Advanced learning management system with role-based access for enhanced educational experiences. Click a role to sign in with demo credentials.</p>
+                <h2 className="text-2xl font-bold text-slate-800 dark:text-white">SkillForge Platform</h2>
+                <p className="text-slate-600 dark:text-white mt-2">Advanced learning management system with role-based access for enhanced educational experiences. Click a role to sign in with demo credentials.</p>
               </div>
               <div className="space-y-4">
                 <RoleInfoCard
@@ -169,8 +170,8 @@ const RoleInfoCard: React.FC<{ icon: React.ReactNode; title: string; description
     >
         <div className="bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm shrink-0">{icon}</div>
         <div>
-            <h3 className="font-semibold text-slate-800 dark:text-slate-200">{title}</h3>
-            <p className="text-sm text-slate-600 dark:text-slate-400">{description}</p>
+            <h3 className="font-semibold text-slate-800 dark:text-white">{title}</h3>
+            <p className="text-sm text-slate-600 dark:text-white">{description}</p>
         </div>
     </button>
 )

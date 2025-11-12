@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
@@ -40,7 +41,7 @@ const AdminSecurity: React.FC = () => {
 
     return (
         <div className="space-y-6">
-             <h1 className="text-3xl font-bold tracking-tight">Security Settings</h1>
+             <h1 className="text-3xl font-bold tracking-tight dark:text-white">Security Settings</h1>
             
             <div className="border-b border-slate-200 dark:border-slate-700">
                 <nav className="-mb-px flex space-x-6" aria-label="Tabs">
@@ -66,7 +67,7 @@ const SecurityTabButton: React.FC<{ tab: SecurityTab; activeTab: SecurityTab; on
                 'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
                 activeTab === tab
                     ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
-                    : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:border-slate-600'
+                    : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-300 dark:hover:text-white dark:hover:border-slate-600'
             )}
         >
             {children}
@@ -183,7 +184,7 @@ const PasswordPolicy = () => {
             <div>
                 <label className="font-medium text-sm">Password Expiration (days)</label>
                 <Input type="number" value={policy.expirationDays} onChange={e => handleChange('expirationDays', parseInt(e.target.value) || 0)} />
-                <p className="text-xs text-slate-500 mt-1">Set to 0 to disable expiration.</p>
+                <p className="text-xs text-slate-500 dark:text-slate-300 mt-1">Set to 0 to disable expiration.</p>
             </div>
         </CardContent>
          <CardFooter className="flex justify-end">
@@ -255,11 +256,11 @@ const AuditLog = () => {
                                 <td className="p-3 whitespace-nowrap" title={new Date(log.timestamp).toLocaleString()}>{formatTimeAgo(log.timestamp)}</td>
                                 <td className="p-3"><span className="font-mono text-xs bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 rounded">{log.type}</span></td>
                                 <td className="p-3">{log.title}</td>
-                                <td className="p-3 text-slate-500 dark:text-slate-400">{log.details?.userName || log.details?.userId || 'N/A'}</td>
-                                <td className="p-3 text-slate-500 dark:text-slate-400">{log.details?.adminName || 'System'}</td>
+                                <td className="p-3 text-slate-500 dark:text-slate-300">{log.details?.userName || log.details?.userId || 'N/A'}</td>
+                                <td className="p-3 text-slate-500 dark:text-slate-300">{log.details?.adminName || 'System'}</td>
                             </tr>
                         )) : (
-                            <tr><td colSpan={5} className="text-center p-8 text-slate-500">No security logs found.</td></tr>
+                            <tr><td colSpan={5} className="text-center p-8 text-slate-500 dark:text-slate-300">No security logs found.</td></tr>
                         )}
                     </tbody>
                 </table>

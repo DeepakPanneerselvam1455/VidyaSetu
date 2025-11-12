@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import * as api from '../../lib/api';
 import { useAuth } from '../../lib/auth';
@@ -112,7 +113,7 @@ const StudentMyCourses: React.FC = () => {
     };
     
     if (isLoading) {
-        return <div className="text-center p-8 text-slate-300">Loading your courses...</div>;
+        return <div className="text-center p-8 text-white">Loading your courses...</div>;
     }
 
     return (
@@ -120,7 +121,7 @@ const StudentMyCourses: React.FC = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight text-white">My Courses</h1>
-                    <p className="text-slate-400">Your assigned courses and learning materials.</p>
+                    <p className="text-slate-300">Your assigned courses and learning materials.</p>
                 </div>
                 <div className="relative w-full md:w-auto">
                     <SearchIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -129,7 +130,7 @@ const StudentMyCourses: React.FC = () => {
                         placeholder="Search courses or instructors..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10 w-full md:w-64 !bg-[#1E293B] !border-slate-700 text-white placeholder:text-slate-500"
+                        className="pl-10 w-full md:w-64 !bg-[#1E293B] !border-slate-700 text-white placeholder:text-slate-400"
                         aria-label="Search my courses"
                     />
                 </div>
@@ -143,8 +144,8 @@ const StudentMyCourses: React.FC = () => {
                                 <CardContent className="p-6 flex-grow">
                                     <div className="flex justify-between items-start gap-4">
                                         <div className="flex-1">
-                                            <h2 className="text-xl font-bold">{course.title}</h2>
-                                            <p className="text-sm text-slate-400 mt-1 line-clamp-2">{course.description}</p>
+                                            <h2 className="text-xl font-bold text-white">{course.title}</h2>
+                                            <p className="text-sm text-slate-300 mt-1 line-clamp-2">{course.description}</p>
                                         </div>
                                         <Button className="shrink-0 flex items-center gap-2">
                                             {course.progress > 0 ? (
@@ -157,7 +158,7 @@ const StudentMyCourses: React.FC = () => {
                                     <div className="mt-6">
                                         <div className="flex justify-between items-center mb-1">
                                             <span className="text-sm font-medium text-slate-300">Progress</span>
-                                            <span className="text-sm font-bold">{course.progress}%</span>
+                                            <span className="text-sm font-bold text-white">{course.progress}%</span>
                                         </div>
                                         <div className="w-full bg-slate-700 rounded-full h-2">
                                             <div className="bg-violet-600 h-2 rounded-full transition-all duration-500" style={{ width: `${course.progress}%` }}></div>
@@ -193,13 +194,13 @@ const StudentMyCourses: React.FC = () => {
                                                 ))}
                                             </ul>
                                         ) : (
-                                            <p className="text-sm text-center text-slate-400 py-4">No materials available for this course.</p>
+                                            <p className="text-sm text-center text-slate-300 py-4">No materials available for this course.</p>
                                         )}
                                     </div>
                                 )}
                                 {expandedSections[course.id] === 'discussions' && (
                                     <div className="p-6 border-t border-slate-700 bg-black/10 text-center">
-                                        <p className="text-sm text-slate-400">Discussions feature coming soon.</p>
+                                        <p className="text-sm text-slate-300">Discussions feature coming soon.</p>
                                     </div>
                                 )}
                             </Card>
@@ -209,14 +210,14 @@ const StudentMyCourses: React.FC = () => {
                     <div className="text-center py-16 border-2 border-dashed border-slate-700 rounded-lg text-white">
                         <SearchXIcon className="w-16 h-16 mx-auto text-slate-500" />
                         <p className="mt-4 text-lg font-semibold">No Courses Found</p>
-                        <p className="text-slate-400">Your search for "{searchTerm}" did not match any courses.</p>
+                        <p className="text-slate-300">Your search for "{searchTerm}" did not match any courses.</p>
                     </div>
                 )
             ) : (
                 <div className="text-center py-16 border-2 border-dashed border-slate-700 rounded-lg text-white">
                     <BookIcon className="w-16 h-16 mx-auto text-violet-500" />
                     <p className="mt-4 text-lg font-semibold">No Courses Assigned</p>
-                    <p className="text-slate-400">Your instructor hasn't assigned any courses to you yet.</p>
+                    <p className="text-slate-300">Your instructor hasn't assigned any courses to you yet.</p>
                 </div>
             )}
         </div>

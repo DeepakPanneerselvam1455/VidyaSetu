@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 // FIX: Replaced useHistory with useNavigate for react-router-dom v6 compatibility.
 import { useParams, useNavigate } from 'react-router-dom';
@@ -175,9 +176,9 @@ const StudentQuizView: React.FC = () => {
         }
     };
 
-    if (isLoading) return <div className="text-center p-8">Loading quiz...</div>;
+    if (isLoading) return <div className="text-center p-8 text-white">Loading quiz...</div>;
     if (error) return <div className="text-center p-8 text-red-600 font-semibold bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">{error}</div>;
-    if (!quiz || !course) return <div className="text-center p-8">Quiz data could not be fully loaded.</div>;
+    if (!quiz || !course) return <div className="text-center p-8 text-white">Quiz data could not be fully loaded.</div>;
 
     const currentQuestion = quiz.questions[currentQuestionIndex];
     const minutes = Math.floor(timeElapsed / 60).toString().padStart(2, '0');
@@ -193,15 +194,15 @@ const StudentQuizView: React.FC = () => {
                             <BookCopyIcon className="w-8 h-8 text-violet-400" />
                         </div>
                         <h2 className="text-2xl font-bold">Ready to begin?</h2>
-                        <p className="text-slate-400 mt-1">{quiz.title}</p>
-                        <p className="text-xs text-slate-500">{course.title}</p>
+                        <p className="text-slate-300 mt-1">{quiz.title}</p>
+                        <p className="text-xs text-slate-400">{course.title}</p>
                     </div>
                     <div className="space-y-3 text-sm border-t border-b border-slate-700 py-4">
-                        <div className="flex justify-between items-center"><span className="text-slate-400">Questions:</span> <span className="font-semibold">{quiz.questions.length}</span></div>
-                        <div className="flex justify-between items-center"><span className="text-slate-400">Time Limit:</span> <span className="font-semibold">{quiz.duration ? `${quiz.duration} minutes` : 'None'}</span></div>
-                        <div className="flex justify-between items-center"><span className="text-slate-400">Your Best Score:</span> <span className={`font-semibold ${bestScore ? 'text-green-400' : ''}`}>{bestScore ? `${percentage}%` : 'N/A'}</span></div>
+                        <div className="flex justify-between items-center"><span className="text-slate-300">Questions:</span> <span className="font-semibold">{quiz.questions.length}</span></div>
+                        <div className="flex justify-between items-center"><span className="text-slate-300">Time Limit:</span> <span className="font-semibold">{quiz.duration ? `${quiz.duration} minutes` : 'None'}</span></div>
+                        <div className="flex justify-between items-center"><span className="text-slate-300">Your Best Score:</span> <span className={`font-semibold ${bestScore ? 'text-green-400' : ''}`}>{bestScore ? `${percentage}%` : 'N/A'}</span></div>
                     </div>
-                    <p className="text-xs text-center text-slate-500">Once you begin, the timer (if applicable) will start and cannot be paused.</p>
+                    <p className="text-xs text-center text-slate-400">Once you begin, the timer (if applicable) will start and cannot be paused.</p>
                     <div className="flex gap-4">
                         <Button variant="outline" className="w-full" onClick={() => navigate('/student/quizzes')}>Go Back</Button>
                         <Button className="w-full" onClick={handleStartQuiz}>Begin Quiz</Button>
@@ -226,7 +227,7 @@ const StudentQuizView: React.FC = () => {
                     <CardContent className="space-y-2">
                         <p className="text-lg font-medium">Your Score:</p>
                         <p className="text-5xl font-bold text-indigo-600 dark:text-indigo-400">{finalScore} / {totalPoints}</p>
-                        <p className="text-2xl text-slate-600 dark:text-slate-300">That's {percentage}%!</p>
+                        <p className="text-2xl text-slate-600 dark:text-white">That's {percentage}%!</p>
                     </CardContent>
                 </Card>
 
@@ -266,7 +267,7 @@ const StudentQuizView: React.FC = () => {
 
                                         {aiFeedbacks[q.id] ? (
                                              <div className="pt-3">
-                                                <h4 className="text-sm font-semibold mb-2 flex items-center gap-2 text-slate-500">
+                                                <h4 className="text-sm font-semibold mb-2 flex items-center gap-2 text-slate-500 dark:text-slate-300">
                                                     <BotIcon className="w-4 h-4" />
                                                     Explanation
                                                 </h4>
@@ -314,7 +315,7 @@ const StudentQuizView: React.FC = () => {
             <div className="lg:col-span-2 space-y-6">
                  <div>
                     <h1 className="text-2xl font-bold text-white">{quiz.title}</h1>
-                    <p className="text-slate-400">{course.title}</p>
+                    <p className="text-slate-300">{course.title}</p>
                 </div>
                 <div className="space-y-4">
                     <p className="font-semibold text-lg text-slate-200">{currentQuestionIndex + 1}. {currentQuestion.question}</p>
@@ -362,7 +363,7 @@ const StudentQuizView: React.FC = () => {
                             disabled={currentQuestionIndex === 0}>
                                 Previous
                         </Button>
-                        <p className="text-slate-400">Question {currentQuestionIndex + 1} of {quiz.questions.length}</p>
+                        <p className="text-slate-300">Question {currentQuestionIndex + 1} of {quiz.questions.length}</p>
                         {currentQuestionIndex === quiz.questions.length - 1 ? (
                             <Button
                                 className="bg-green-600 hover:bg-green-700"
@@ -388,7 +389,7 @@ const StudentQuizView: React.FC = () => {
             {/* Right side: Timer and Question Map */}
             <div className="lg:sticky lg:top-8 space-y-6">
                 <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6 text-center">
-                    <div className="flex items-center justify-center gap-2 text-slate-400 mb-2">
+                    <div className="flex items-center justify-center gap-2 text-slate-300 mb-2">
                         <ClockIcon className="w-5 h-5" />
                         <span className="text-sm font-medium">Time Elapsed</span>
                     </div>
@@ -431,7 +432,7 @@ const StudentQuizView: React.FC = () => {
                                 <AlertTriangleIcon className="w-8 h-8 text-yellow-400" />
                             </div>
                             <h2 className="text-2xl font-bold">Confirm Submission</h2>
-                            <p className="text-slate-400 mt-1">Are you sure you want to submit your answers? This action cannot be undone.</p>
+                            <p className="text-slate-300 mt-1">Are you sure you want to submit your answers? This action cannot be undone.</p>
                         </div>
                         <div className="flex gap-4 pt-4">
                             <Button variant="outline" className="w-full" onClick={() => setIsConfirmSubmitOpen(false)} disabled={isSubmitting}>

@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
@@ -36,7 +37,7 @@ const AdminContentModeration: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-bold tracking-tight">Content Moderation Queue</h1>
+            <h1 className="text-3xl font-bold tracking-tight dark:text-white">Content Moderation Queue</h1>
             
              <Card>
                 <CardHeader className="flex-row items-center justify-between">
@@ -65,7 +66,7 @@ const AdminContentModeration: React.FC = () => {
                                     </div>
                                     <div className="text-right text-sm">
                                         <p className="font-semibold text-red-600">{item.reason}</p>
-                                        <p className="text-slate-500">Reported by: {item.reportedBy}</p>
+                                        <p className="text-slate-500 dark:text-slate-300">Reported by: {item.reportedBy}</p>
                                     </div>
                                 </div>
                                 <div className="flex justify-end gap-2 mt-3 pt-3 border-t dark:border-slate-700">
@@ -79,7 +80,7 @@ const AdminContentModeration: React.FC = () => {
                         <div className="text-center py-16">
                             <CheckCircleIcon className="w-12 h-12 mx-auto text-green-500" />
                             <h3 className="mt-4 text-lg font-medium">Queue is Clear!</h3>
-                            <p className="text-slate-500 mt-1">No content is currently awaiting moderation.</p>
+                            <p className="text-slate-500 dark:text-slate-300 mt-1">No content is currently awaiting moderation.</p>
                         </div>
                     )}
                 </CardContent>
