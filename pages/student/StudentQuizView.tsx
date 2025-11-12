@@ -230,6 +230,8 @@ const StudentQuizView: React.FC = () => {
                     </CardContent>
                 </Card>
 
+                <PerformanceFeedbackCard percentage={percentage} />
+
                 <Card>
                     <CardHeader>
                         <CardTitle>Detailed Review</CardTitle>
@@ -447,6 +449,66 @@ const StudentQuizView: React.FC = () => {
 };
 
 
+const TrophyIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+);
 
+const BookOpenIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+);
+
+
+const PerformanceFeedbackCard: React.FC<{ percentage: number }> = ({ percentage }) => {
+    let feedback: { message: string; description: string; icon: React.ReactNode; bgClass: string; };
+
+    if (percentage >= 90) {
+        feedback = {
+            message: "Excellent Work!",
+            description: "You have a strong grasp of the material. Keep up the great momentum!",
+            icon: <TrophyIcon className="w-8 h-8 text-yellow-500" />,
+            bgClass: "from-green-50 via-yellow-50 to-green-50 dark:from-green-950/50 dark:via-yellow-950/50 dark:to-green-950/50 border-green-200 dark:border-green-800"
+        };
+    } else if (percentage >= 75) {
+        feedback = {
+            message: "Great Job!",
+            description: "You're doing very well. A quick review of any missed questions will solidify your knowledge.",
+            icon: <TrophyIcon className="w-8 h-8 text-green-500" />,
+            bgClass: "from-green-50 to-blue-50 dark:from-green-950/50 dark:to-blue-950/50 border-green-200 dark:border-green-800"
+        };
+    } else if (percentage >= 60) {
+        feedback = {
+            message: "Good Work!",
+            description: "A solid performance. Focus on the areas where you lost points to improve further.",
+            icon: <CheckCircle2Icon className="w-8 h-8 text-blue-500" />,
+            bgClass: "from-blue-50 to-slate-50 dark:from-blue-950/50 dark:to-slate-900/50 border-blue-200 dark:border-blue-800"
+        };
+    } else if (percentage >= 40) {
+        feedback = {
+            message: "Keep Trying, You're Getting There.",
+            description: "Some concepts seem tricky. It's a good idea to review the course materials for this topic.",
+            icon: <BookOpenIcon className="w-8 h-8 text-orange-500" />,
+            bgClass: "from-yellow-50 to-orange-50 dark:from-yellow-950/50 dark:to-orange-950/50 border-yellow-200 dark:border-yellow-800"
+        };
+    } else {
+        feedback = {
+            message: "Don't Give Up, Review and Retry.",
+            description: "This quiz was tough. Re-watching the videos and reading the materials will make a big difference for your next attempt.",
+            icon: <XCircleIcon className="w-8 h-8 text-red-500" />,
+            bgClass: "from-red-50 to-orange-50 dark:from-red-950/50 dark:to-orange-950/50 border-red-200 dark:border-red-800"
+        };
+    }
+
+    return (
+        <Card className={cn("bg-gradient-to-r", feedback.bgClass)}>
+            <CardHeader className="flex flex-row items-center gap-4">
+                <div className="shrink-0">{feedback.icon}</div>
+                <div>
+                    <CardTitle>{feedback.message}</CardTitle>
+                    <CardDescription className="mt-1">{feedback.description}</CardDescription>
+                </div>
+            </CardHeader>
+        </Card>
+    );
+}
 
 export default StudentQuizView;
