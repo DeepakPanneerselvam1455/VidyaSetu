@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import * as api from '../../lib/api';
 import { useAuth } from '../../lib/auth';
@@ -147,7 +146,10 @@ const StudentMyCourses: React.FC = () => {
                                             <h2 className="text-xl font-bold text-white">{course.title}</h2>
                                             <p className="text-sm text-slate-300 mt-1 line-clamp-2">{course.description}</p>
                                         </div>
-                                        <Button className="shrink-0 flex items-center gap-2">
+                                        <Button
+                                            className="shrink-0 flex items-center gap-2"
+                                            onClick={() => toggleSection(course.id, 'materials')}
+                                        >
                                             {course.progress > 0 ? (
                                                 <>Continue <ArrowRightIcon className="w-4 h-4" /></>
                                             ) : (
