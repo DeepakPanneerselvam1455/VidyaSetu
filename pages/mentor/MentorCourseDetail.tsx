@@ -1,9 +1,9 @@
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import * as api from '../../lib/api';
 import { Course, CourseMaterial } from '../../types';
 import { Button } from '../../components/ui/Button';
-// Fix: Import `CardFooter` to resolve 'Cannot find name' error.
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import Dialog from '../../components/ui/Dialog';
@@ -115,6 +115,11 @@ const CourseMaterialsView: React.FC<{ course: Course; onUpdate: () => void }> = 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedMaterial, setSelectedMaterial] = useState<CourseMaterial | null>(null);
     
+    // Quick add state
+    const [quickTitle, setQuickTitle] = useState('');
+    const [quickUrl, setQuickUrl] = useState('');
+    const [isQuickAdding, setIsQuickAdding] = useState(false);
+
     const dragItem = useRef<number | null>(null);
     const dragOverItem = useRef<number | null>(null);
 
@@ -123,6 +128,24 @@ const CourseMaterialsView: React.FC<{ course: Course; onUpdate: () => void }> = 
         const updatedMaterials = [...course.materials, materialWithId];
         await api.updateCourse({ ...course, materials: updatedMaterials });
         onUpdate();
+    };
+
+    const handleQuickAddVideo = async () => {
+        if (!quickTitle || !quickUrl) return;
+        setIsQuickAdding(true);
+        try {
+            await handleAddMaterial({
+                title: quickTitle,
+                url: quickUrl,
+                type: 'video'
+            });
+            setQuickTitle('');
+            setQuickUrl('');
+        } catch (error) {
+            console.error("Quick add failed", error);
+        } finally {
+            setIsQuickAdding(false);
+        }
     };
     
     const handleUpdateMaterial = async (updatedMaterial: CourseMaterial) => {
@@ -174,9 +197,38 @@ const CourseMaterialsView: React.FC<{ course: Course; onUpdate: () => void }> = 
 
     return (
         <div className="space-y-6">
-            <div className="flex justify-end">
-                <Button onClick={() => setIsAddModalOpen(true)}>Add Material</Button>
+            <div className="flex flex-col lg:flex-row gap-4 p-4 bg-slate-50 dark:bg-slate-900/50 border rounded-xl border-dashed border-slate-300 dark:border-slate-800">
+                <div className="flex-1 space-y-1">
+                    <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Quick Add Video Material</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <Input 
+                            placeholder="Video Title (e.g., Intro to JSX)" 
+                            value={quickTitle} 
+                            onChange={e => setQuickTitle(e.target.value)}
+                        />
+                        <Input 
+                            placeholder="Video URL (YouTube, Vimeo, etc.)" 
+                            value={quickUrl} 
+                            onChange={e => setQuickUrl(e.target.value)}
+                        />
+                    </div>
+                </div>
+                <div className="flex items-end gap-2 shrink-0">
+                    <Button 
+                        onClick={handleQuickAddVideo} 
+                        disabled={isQuickAdding || !quickTitle || !quickUrl}
+                        className="w-full lg:w-auto"
+                    >
+                        <VideoIcon className="w-4 h-4 mr-2" />
+                        {isQuickAdding ? 'Adding...' : 'Add Video'}
+                    </Button>
+                    <Button variant="outline" onClick={() => setIsAddModalOpen(true)} className="w-full lg:w-auto">
+                        <PlusIcon className="w-4 h-4 mr-2" />
+                        Other Material
+                    </Button>
+                </div>
             </div>
+
             {course.materials.length > 0 ? (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {course.materials.map((material, index) => (
@@ -208,7 +260,7 @@ const CourseMaterialsView: React.FC<{ course: Course; onUpdate: () => void }> = 
             ) : (
                 <div className="text-center py-16 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg">
                     <p className="text-lg font-semibold">No materials for this course yet.</p>
-                    <p className="text-slate-500 dark:text-slate-400">Click "Add Material" to upload content.</p>
+                    <p className="text-slate-500 dark:text-slate-400">Use the quick add bar above or click "Other Material" to upload content.</p>
                 </div>
             )}
             <AddMaterialDialog
@@ -258,7 +310,7 @@ const MaterialForm: React.FC<{
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!title || !url) {
-            setError('Please provide a title and a URL/file.');
+            setError('Please provide a title and a resource URL/file.');
             return;
         }
         setError('');
@@ -275,17 +327,24 @@ const MaterialForm: React.FC<{
             <div>
                 <label className="block text-sm font-medium mb-1">Type</label>
                 <Select value={type} onChange={e => { setType(e.target.value as any); setUrl(''); }}>
-                    <option value="link">Link</option>
-                    <option value="pdf">PDF</option>
-                    <option value="video">Video</option>
+                    <option value="link">General Link</option>
+                    <option value="pdf">PDF Document</option>
+                    <option value="video">Video URL</option>
                 </Select>
             </div>
             <div>
-                <label className="block text-sm font-medium mb-1">{type === 'link' ? 'URL' : 'File'}</label>
-                 {type === 'link' ? (
-                    <Input placeholder="https://example.com" value={url} onChange={e => setUrl(e.target.value)} required />
+                <label className="block text-sm font-medium mb-1">
+                    {type === 'pdf' ? 'File' : type === 'video' ? 'Video URL' : 'Link URL'}
+                </label>
+                 {type === 'pdf' ? (
+                    <Input type="file" onChange={handleFileChange} required accept=".pdf" />
                 ) : (
-                    <Input type="file" onChange={handleFileChange} required accept={type === 'pdf' ? '.pdf' : 'video/*'} />
+                    <Input 
+                        placeholder={type === 'video' ? "https://youtube.com/..." : "https://example.com"} 
+                        value={url} 
+                        onChange={e => setUrl(e.target.value)} 
+                        required 
+                    />
                 )}
             </div>
 
@@ -399,6 +458,7 @@ const VideoIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
     </svg>
 );
 const GripVerticalIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="12" r="1" /><circle cx="9" cy="5" r="1" /><circle cx="9" cy="19" r="1" /><circle cx="15" cy="12" r="1" /><circle cx="15" cy="5" r="1" /><circle cx="15" cy="19" r="1" /></svg>
+const PlusIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>;
 
 
 export default MentorCourseDetail;

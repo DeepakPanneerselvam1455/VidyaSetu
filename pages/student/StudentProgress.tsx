@@ -148,7 +148,7 @@ const StudentProgress: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-bold tracking-tight">My Progress</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">My Progress</h1>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                  <StatCard 

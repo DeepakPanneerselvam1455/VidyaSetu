@@ -46,6 +46,13 @@ export interface Question {
   options?: string[];
   correctAnswer: string;
   points: number;
+  bloomsTaxonomy?: 'Remembering' | 'Understanding' | 'Applying' | 'Analyzing' | 'Evaluating' | 'Creating';
+  difficultyTag?: string;
+  aiSuggestion?: {
+    improvedQuestion?: string;
+    suggestedOptions?: string[];
+    reasoning?: string;
+  };
 }
 
 export interface Quiz {
@@ -57,6 +64,11 @@ export interface Quiz {
   createdBy: string; // mentorId
   createdAt: string;
   duration?: number; // Duration in minutes
+  aiInvolvement: 'none' | 'assisted' | 'fully-generated';
+  generatedByAi?: boolean;
+  sourceType?: 'manual' | 'topic-prompt' | 'uploaded-file';
+  sourceFileNames?: string[];
+  extractedTextHash?: string;
 }
 
 export interface QuizAttempt {

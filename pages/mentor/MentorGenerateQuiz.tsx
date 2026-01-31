@@ -11,34 +11,37 @@ import { useNavigate, Link } from 'react-router-dom';
 import { buttonVariants } from '../../components/ui/Button';
 import { cn } from '../../lib/utils';
 import Dialog from '../../components/ui/Dialog';
+import { Badge } from '../../components/ui/Badge';
 
 // Icons
 const SparklesIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="m12 3-1.9 4.8-4.8 1.9 4.8 1.9L12 16l1.9-4.8 4.8-1.9-4.8-1.9L12 3z"/>
         <path d="M5 22v-5l-1.9-4.8-4.8-1.9 4.8-1.9L5 5v5"/>
-        <path d="M19 22v-5l-1.9-4.8-4.8-1.9 4.8-1.9L19 5v5"/>
+        <path d="M19 22v-5l1.9-4.8 4.8-1.9-4.8-1.9L19 5v5"/>
     </svg>
 );
 const Trash2Icon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/>
     </svg>
 );
 const BotIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
 );
 const LoaderIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/>
     </svg>
 );
 const CheckIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
 );
 
+const FileUpIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M12 12v6"/><path d="m9 15 3-3 3 3"/></svg>;
+const FileIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>;
 const AlertTriangleIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
         <line x1="12" x2="12" y1="9" y2="13"/>
         <line x1="12" x2="12.01" y1="17" y2="17"/>
@@ -57,6 +60,11 @@ const ErrorAlert = ({ message }: { message: string | null }) => {
     );
 };
 
+interface UploadedFile {
+    file: File;
+    text?: string;
+    status: 'pending' | 'processing' | 'ready' | 'error';
+}
 
 const MentorGenerateQuiz: React.FC = () => {
     const { user } = useAuth();
@@ -78,6 +86,10 @@ const MentorGenerateQuiz: React.FC = () => {
     const [generationError, setGenerationError] = useState<string | null>(null);
     const [saveError, setSaveError] = useState<string | null>(null);
 
+    // File Upload State
+    const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
     // AI Feedback State
     const [feedback, setFeedback] = useState<Record<string, string>>({});
     const [feedbackLoading, setFeedbackLoading] = useState<Record<string, boolean>>({});
@@ -95,7 +107,6 @@ const MentorGenerateQuiz: React.FC = () => {
     const [draftToRestore, setDraftToRestore] = useState<any | null>(null);
     const [isRestoreModalOpen, setIsRestoreModalOpen] = useState(false);
     const DRAFT_KEY_PREFIX = 'skillforge_quiz_draft_';
-
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -115,7 +126,6 @@ const MentorGenerateQuiz: React.FC = () => {
         fetchCourses();
     }, [user]);
 
-    // Check for draft when course changes
     useEffect(() => {
         if (selectedCourse) {
             setTopic('');
@@ -123,6 +133,7 @@ const MentorGenerateQuiz: React.FC = () => {
             setGeneratedQuestions([]);
             setQuizTitle('');
             setSuggestedTopics([]);
+            setUploadedFiles([]);
             setFeedback({});
             setFeedbackLoading({});
             setFeedbackError({});
@@ -139,7 +150,6 @@ const MentorGenerateQuiz: React.FC = () => {
         }
     }, [selectedCourse]);
 
-    // Trigger auto-save on changes
     useEffect(() => {
         if (generatedQuestions.length === 0 || isLoading || !selectedCourse) {
             return;
@@ -167,7 +177,7 @@ const MentorGenerateQuiz: React.FC = () => {
                 console.error("Failed to save quiz draft to localStorage", e);
                 setAutoSaveStatus('idle');
             }
-        }, 2500); // 2.5-second debounce
+        }, 2500);
 
         return () => {
             if (autoSaveTimeoutRef.current) {
@@ -197,6 +207,61 @@ const MentorGenerateQuiz: React.FC = () => {
         setIsRestoreModalOpen(false);
         setDraftToRestore(null);
     };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            // Fix: Explicitly typing the file objects and the resulting array to resolve incompatibility with UploadedFile interface.
+            const files: UploadedFile[] = Array.from(e.target.files).map(f => ({ 
+                file: f as File, 
+                status: 'pending' as const 
+            }));
+            setUploadedFiles(prev => [...prev, ...files]);
+            processFiles(files);
+        }
+    };
+
+    const processFiles = async (files: UploadedFile[]) => {
+        const updated = [...uploadedFiles, ...files];
+        for (const f of files) {
+            const index = updated.findIndex(u => u.file === f.file);
+            if (index === -1) continue;
+            
+            updated[index].status = 'processing';
+            setUploadedFiles([...updated]);
+
+            try {
+                const text = await extractTextFromFile(f.file);
+                updated[index].text = text;
+                updated[index].status = 'ready';
+            } catch (err) {
+                updated[index].status = 'error';
+            }
+            setUploadedFiles([...updated]);
+        }
+    };
+
+    const extractTextFromFile = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const content = e.target?.result;
+                if (typeof content === 'string') {
+                    resolve(content);
+                } else {
+                    reject(new Error("Failed to read file as text."));
+                }
+            };
+            reader.onerror = () => reject(new Error("File reading error."));
+            
+            // Basic text-based extraction for now
+            // In a real environment, you'd use mammoth.js for .docx, pdf.js for .pdf, etc.
+            reader.readAsText(file);
+        });
+    };
+
+    const removeFile = (index: number) => {
+        setUploadedFiles(prev => prev.filter((_, i) => i !== index));
+    };
     
     const handleSuggestTopics = async () => {
         if (!selectedCourse) return;
@@ -212,13 +277,19 @@ const MentorGenerateQuiz: React.FC = () => {
         }
     };
 
-
     const handleGenerate = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!topic) {
-            setGenerationError("Please enter a topic.");
+        if (!topic && uploadedFiles.length === 0) {
+            setGenerationError("Please enter a topic or upload source files.");
             return;
         }
+
+        const readyFiles = uploadedFiles.filter(f => f.status === 'ready');
+        if (uploadedFiles.length > 0 && readyFiles.length === 0) {
+            setGenerationError("Please wait for files to finish processing.");
+            return;
+        }
+
         setIsLoading(true);
         setGeneratedQuestions([]);
         setFeedback({});
@@ -226,10 +297,19 @@ const MentorGenerateQuiz: React.FC = () => {
         setFeedbackError({});
         setGenerationError(null);
         setSaveError(null);
+
         try {
-            const questions = await api.generateQuizQuestions(topic, learningObjectives, difficulty, numQuestions, questionType);
+            const combinedContext = readyFiles.map(f => `FILE: ${f.file.name}\n${f.text}`).join('\n\n---\n\n');
+            const questions = await api.generateQuizQuestions(
+                topic || (readyFiles.length > 0 ? `Based on ${readyFiles[0].file.name}` : 'General'),
+                learningObjectives,
+                difficulty,
+                numQuestions,
+                questionType,
+                combinedContext || undefined
+            );
             setGeneratedQuestions(questions);
-            setQuizTitle(`${topic.split(',')[0].trim()} Quiz`); // Auto-populate title
+            setQuizTitle(topic ? `${topic.split(',')[0].trim()} Quiz` : `Quiz from ${readyFiles[0]?.file.name || 'Materials'}`);
         } catch (err: any) {
             setGenerationError(err.message);
         } finally {
@@ -239,7 +319,7 @@ const MentorGenerateQuiz: React.FC = () => {
     
     const handleSaveQuiz = async () => {
         if (!selectedCourse || !user || generatedQuestions.length === 0 || !quizTitle) {
-            setSaveError("Missing information to save the quiz. Ensure you have a title and at least one question.");
+            setSaveError("Missing information to save the quiz.");
             return;
         }
         setIsSaving(true);
@@ -252,6 +332,10 @@ const MentorGenerateQuiz: React.FC = () => {
                 difficulty,
                 createdBy: user.id,
                 duration: duration,
+                aiInvolvement: 'fully-generated',
+                generatedByAi: true,
+                sourceType: uploadedFiles.length > 0 ? 'uploaded-file' : 'topic-prompt',
+                sourceFileNames: uploadedFiles.map(f => f.file.name)
             };
             await api.createQuiz(newQuiz);
             clearDraft();
@@ -265,7 +349,7 @@ const MentorGenerateQuiz: React.FC = () => {
 
     const handleSaveAndAssign = async () => {
         if (!selectedCourse || !user || generatedQuestions.length === 0 || !quizTitle) {
-            setSaveError("Missing information to save the quiz. Ensure you have a title and at least one question.");
+            setSaveError("Missing information to save the quiz.");
             return;
         }
         setIsSaving(true);
@@ -278,6 +362,10 @@ const MentorGenerateQuiz: React.FC = () => {
                 difficulty,
                 createdBy: user.id,
                 duration: duration,
+                aiInvolvement: 'fully-generated',
+                generatedByAi: true,
+                sourceType: uploadedFiles.length > 0 ? 'uploaded-file' : 'topic-prompt',
+                sourceFileNames: uploadedFiles.map(f => f.file.name)
             };
             const savedQuiz = await api.createQuiz(newQuizData);
             clearDraft();
@@ -306,7 +394,7 @@ const MentorGenerateQuiz: React.FC = () => {
 
     const handleQuestionChange = (index: number, field: string, value: string | string[] | number) => {
         const newQuestions = [...generatedQuestions];
-        const questionToUpdate: Question = JSON.parse(JSON.stringify(newQuestions[index])); // Deep copy for safety
+        const questionToUpdate: Question = JSON.parse(JSON.stringify(newQuestions[index]));
     
         if (field === 'question' && typeof value === 'string') {
             questionToUpdate.question = value;
@@ -342,58 +430,104 @@ const MentorGenerateQuiz: React.FC = () => {
     }
 
     return (
-        <div className="space-y-6">
-            <Card>
+        <div className="space-y-6 max-w-5xl mx-auto pb-20">
+            <Card className="border-indigo-100 dark:border-indigo-900/30 overflow-hidden">
+                <div className="h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <SparklesIcon className="w-6 h-6 text-indigo-500" />
-                        <span>AI Quiz Generator</span>
+                    <CardTitle className="flex items-center gap-2 text-2xl">
+                        <SparklesIcon className="w-7 h-7 text-indigo-500" />
+                        <span>AI-Driven Quiz Generator</span>
                     </CardTitle>
-                    <CardDescription>
-                        Generate engaging quizzes for your courses. Select a course, provide a topic, and let the AI do the rest.
+                    <CardDescription className="text-base">
+                        Select a course and provide learning materials. Our AI will derive an accurate assessment strictly from your sources.
                     </CardDescription>
                 </CardHeader>
                 <form onSubmit={handleGenerate}>
-                    <CardContent className="space-y-4">
-                        <div>
-                            <label htmlFor="course" className="block text-sm font-medium mb-1">Course</label>
-                            <Select id="course" value={selectedCourse?.id || ''} onChange={e => setSelectedCourse(courses.find(c => c.id === e.target.value) || null)}>
-                                {courses.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
-                            </Select>
-                        </div>
-
-                        <div>
-                            <label htmlFor="topic" className="block text-sm font-medium mb-1">Topics</label>
-                            <div className="flex gap-2 items-start">
-                                <Textarea id="topic" value={topic} onChange={e => setTopic(e.target.value)} required placeholder="e.g., JavaScript Variables, Scope, Hoisting. You can also paste a block of text to generate questions from." rows={3} />
-                                 <Button type="button" variant="outline" onClick={handleSuggestTopics} disabled={isSuggestingTopics || !selectedCourse}>
-                                     <BotIcon className="w-4 h-4 mr-2" />
-                                    {isSuggestingTopics ? 'Thinking...' : 'Suggest'}
-                                 </Button>
+                    <CardContent className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label htmlFor="course" className="block text-sm font-semibold mb-2 text-slate-700 dark:text-slate-300">Target Course</label>
+                                <Select id="course" value={selectedCourse?.id || ''} onChange={e => setSelectedCourse(courses.find(c => c.id === e.target.value) || null)}>
+                                    {courses.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
+                                </Select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-semibold mb-2 text-slate-700 dark:text-slate-300">Topic Refinement (Optional)</label>
+                                <div className="flex gap-2">
+                                    <Input 
+                                        value={topic} 
+                                        onChange={e => setTopic(e.target.value)} 
+                                        placeholder="e.g., Specific focus area..." 
+                                    />
+                                    <Button type="button" variant="outline" size="icon" onClick={handleSuggestTopics} disabled={isSuggestingTopics || !selectedCourse} title="Suggest Topics from Course">
+                                        <BotIcon className="w-5 h-5" />
+                                    </Button>
+                                </div>
                             </div>
                         </div>
-                        
+
+                        {/* File Upload Zone */}
+                        <div>
+                            <label className="block text-sm font-semibold mb-2 text-slate-700 dark:text-slate-300">Knowledge Source Materials</label>
+                            <div 
+                                className="border-2 border-dashed border-slate-300 dark:border-slate-800 rounded-xl p-8 bg-slate-50/50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-900/80 transition-all text-center cursor-pointer group"
+                                onClick={() => fileInputRef.current?.click()}
+                            >
+                                <input 
+                                    type="file" 
+                                    multiple 
+                                    className="hidden" 
+                                    ref={fileInputRef} 
+                                    onChange={handleFileChange} 
+                                    accept=".txt,.pdf,.doc,.docx,.csv,.xlsx,.md,.json"
+                                />
+                                <div className="w-14 h-14 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                                    <FileUpIcon className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
+                                </div>
+                                <p className="font-bold text-slate-900 dark:text-white">Upload learning materials</p>
+                                <p className="text-sm text-slate-500 mt-1">Drag & drop your academic files here (PDF, Word, TXT, Excel, etc.)</p>
+                            </div>
+
+                            {uploadedFiles.length > 0 && (
+                                <div className="mt-4 space-y-2">
+                                    {uploadedFiles.map((f, i) => (
+                                        <div key={i} className="flex items-center justify-between p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+                                            <div className="flex items-center gap-3">
+                                                <div className="p-2 bg-slate-100 dark:bg-slate-700 rounded text-indigo-500">
+                                                    {f.status === 'processing' ? <LoaderIcon className="w-4 h-4 animate-spin" /> : <FileIcon className="w-4 h-4" />}
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm font-medium">{f.file.name}</p>
+                                                    <p className="text-[10px] uppercase font-bold text-slate-400">
+                                                        {f.status} • {(f.file.size / 1024).toFixed(1)} KB
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-red-500" onClick={(e) => { e.stopPropagation(); removeFile(i); }}>
+                                                <Trash2Icon className="w-4 h-4" />
+                                            </Button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
                         {suggestedTopics.length > 0 && (
                             <div className="space-y-2">
-                                <p className="text-sm font-medium text-slate-500">Suggested Topics:</p>
+                                <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Quick Suggestions:</p>
                                 <div className="flex flex-wrap gap-2">
                                     {suggestedTopics.map((sTopic, i) => (
-                                        <Button key={i} type="button" variant="secondary" size="sm" onClick={() => setTopic(sTopic)}>
+                                        <Badge key={i} variant="secondary" className="cursor-pointer hover:bg-indigo-100 dark:hover:bg-indigo-900/50 py-1.5 px-3" onClick={() => setTopic(sTopic)}>
                                             {sTopic}
-                                        </Button>
+                                        </Badge>
                                     ))}
                                 </div>
                             </div>
                         )}
 
-                        <div>
-                            <label htmlFor="learningObjectives" className="block text-sm font-medium mb-1">Learning Objectives (Optional)</label>
-                            <Textarea id="learningObjectives" value={learningObjectives} onChange={e => setLearningObjectives(e.target.value)} placeholder="e.g., Student can explain the difference between var, let, and const. Student should understand function scope vs block scope." rows={3}/>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-slate-200 dark:border-slate-800">
                              <div>
-                                <label htmlFor="difficulty" className="block text-sm font-medium mb-1">Difficulty</label>
+                                <label htmlFor="difficulty" className="block text-sm font-semibold mb-2">Target Difficulty</label>
                                 <Select id="difficulty" value={difficulty} onChange={e => setDifficulty(e.target.value as any)}>
                                     <option>Beginner</option>
                                     <option>Intermediate</option>
@@ -401,150 +535,161 @@ const MentorGenerateQuiz: React.FC = () => {
                                 </Select>
                             </div>
                             <div>
-                                <label htmlFor="questionType" className="block text-sm font-medium mb-1">Question Type</label>
-                                <Select id="questionType" value={questionType} onChange={e => setQuestionType(e.target.value as 'mixed' | 'multiple-choice')}>
-                                    <option value="multiple-choice">Multiple Choice Only</option>
+                                <label htmlFor="questionType" className="block text-sm font-semibold mb-2">Structure</label>
+                                <Select id="questionType" value={questionType} onChange={e => setQuestionType(e.target.value as any)}>
+                                    <option value="multiple-choice">Multiple Choice (MCQ)</option>
                                     <option value="mixed">Mixed Types</option>
                                 </Select>
                             </div>
                             <div>
-                                <label htmlFor="numQuestions" className="block text-sm font-medium mb-1">Number of Questions</label>
-                                <Input id="numQuestions" type="number" min="1" max="10" value={numQuestions} onChange={e => setNumQuestions(parseInt(e.target.value))} />
+                                <label htmlFor="numQuestions" className="block text-sm font-semibold mb-2">Item Count</label>
+                                <Input id="numQuestions" type="number" min="1" max="20" value={numQuestions} onChange={e => setNumQuestions(parseInt(e.target.value))} />
                             </div>
                         </div>
                     </CardContent>
-                    <CardFooter className="flex-col items-stretch">
+                    <CardFooter className="flex-col items-stretch pb-8">
                         <ErrorAlert message={generationError} />
-                        <Button type="submit" disabled={isLoading} className="w-full">
-                            {isLoading ? 'Generating...' : 'Generate Questions'}
+                        <Button type="submit" disabled={isLoading || (topic === '' && uploadedFiles.length === 0)} className="w-full h-12 text-lg shadow-lg shadow-indigo-500/20 bg-indigo-600 hover:bg-indigo-700">
+                            {isLoading ? (
+                                <span className="flex items-center gap-2">
+                                    <LoaderIcon className="w-5 h-5 animate-spin" />
+                                    Analyzing Knowledge Source...
+                                </span>
+                            ) : (
+                                <span className="flex items-center gap-2">
+                                    <SparklesIcon className="w-5 h-5" />
+                                    Generate Expert Quiz
+                                </span>
+                            )}
                         </Button>
                     </CardFooter>
                 </form>
             </Card>
 
             {generatedQuestions.length > 0 && (
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Review & Save Quiz</CardTitle>
-                        <CardDescription>Review the generated questions. You can edit any details before saving.</CardDescription>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
-                            <div>
-                                <label htmlFor="quizTitle" className="block text-sm font-medium mb-1">Quiz Title</label>
-                                <Input id="quizTitle" value={quizTitle} onChange={e => setQuizTitle(e.target.value)} required />
-                            </div>
-                             <div>
-                                <label htmlFor="quiz-duration" className="block text-sm font-medium mb-1">Duration (minutes)</label>
-                                <Select id="quiz-duration" value={duration} onChange={e => setDuration(parseInt(e.target.value))}>
-                                    <option value={5}>5 Minutes</option>
-                                    <option value={10}>10 Minutes</option>
-                                    <option value={15}>15 Minutes</option>
-                                    <option value={30}>30 Minutes</option>
-                                </Select>
-                            </div>
-                        </div>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        {generatedQuestions.map((q, index) => (
-                            <div key={q.id} className="p-4 border rounded-lg space-y-3 bg-slate-50 dark:bg-slate-900/50">
-                                <div className="flex justify-between items-start gap-4">
-                                    <h3 className="font-semibold text-lg flex-1 pt-1">Question {index + 1}</h3>
-                                    <div className="flex gap-2 items-center">
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() => handleGetFeedback(q)}
-                                            disabled={feedbackLoading[q.id]}
-                                            className="w-[170px]"
-                                        >
-                                            {feedbackLoading[q.id] ? (
-                                                <span className="flex items-center justify-center">
-                                                    <LoaderIcon className="w-4 h-4 mr-2 animate-spin" />
-                                                    <span>Getting...</span>
-                                                </span>
-                                            ) : (
-                                                <span className="flex items-center justify-center">
-                                                    <BotIcon className="w-4 h-4 mr-2" />
-                                                    <span>Get AI Feedback</span>
-                                                </span>
-                                            )}
-                                        </Button>
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className="text-red-500 hover:text-red-700 hover:bg-red-100 dark:hover:bg-red-900/50"
-                                            onClick={() => handleRemoveQuestion(index)}
-                                            aria-label={`Remove question ${index + 1}`}
-                                        >
-                                            <Trash2Icon className="w-4 h-4"/>
-                                        </Button>
-                                    </div>
-                                </div>
+                <div className="space-y-6 animate-in slide-in-from-bottom-5 duration-500">
+                    <Card className="border-indigo-200 dark:border-indigo-900/50 shadow-xl">
+                        <CardHeader className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-800">
+                            <div className="flex justify-between items-center">
                                 <div>
-                                    <label className="text-sm font-medium">Question Text</label>
-                                    <Input value={q.question} onChange={e => handleQuestionChange(index, 'question', e.target.value)} />
+                                    <CardTitle className="text-xl">Preview & Edit Draft</CardTitle>
+                                    <CardDescription>Review items before publishing. All content is derived from your source files.</CardDescription>
                                 </div>
-                                {q.type === 'multiple-choice' && q.options && (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                        {q.options.map((opt, i) => (
-                                            <div key={i}>
-                                                <label className="text-sm font-medium">Option {i + 1}</label>
-                                                <Input value={opt} onChange={e => handleQuestionChange(index, `option-${i}`, e.target.value)} />
+                                <div className="flex flex-col items-end gap-1">
+                                    <Badge variant="outline" className="text-indigo-600 border-indigo-200 dark:text-indigo-400 dark:border-indigo-800">Source: File Based</Badge>
+                                    {autoSaveStatus === 'saved' && <span className="text-[10px] text-green-600 flex items-center gap-1"><CheckIcon className="w-3 h-3" /> Auto-saved</span>}
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                                <div>
+                                    <label htmlFor="quizTitle" className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-1.5">Quiz Title</label>
+                                    <Input id="quizTitle" value={quizTitle} onChange={e => setQuizTitle(e.target.value)} required className="font-semibold" />
+                                </div>
+                                 <div>
+                                    <label htmlFor="quiz-duration" className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-1.5">Time Limit (min)</label>
+                                    <Select id="quiz-duration" value={duration} onChange={e => setDuration(parseInt(e.target.value))}>
+                                        <option value={5}>5 Minutes</option>
+                                        <option value={10}>10 Minutes</option>
+                                        <option value={15}>15 Minutes</option>
+                                        <option value={20}>20 Minutes</option>
+                                        <option value={30}>30 Minutes</option>
+                                    </Select>
+                                </div>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="space-y-6 pt-6">
+                            {generatedQuestions.map((q, index) => (
+                                <div key={q.id} className="p-5 border border-slate-200 dark:border-slate-800 rounded-xl space-y-4 bg-white dark:bg-slate-950 transition-shadow hover:shadow-sm">
+                                    <div className="flex justify-between items-start gap-4">
+                                        <div className="flex items-center gap-3">
+                                            <span className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-sm text-indigo-600">
+                                                {index + 1}
+                                            </span>
+                                            {q.bloomsTaxonomy && (
+                                                <Badge variant="secondary" className="text-[10px] uppercase tracking-wider font-normal">
+                                                    {q.bloomsTaxonomy}
+                                                </Badge>
+                                            )}
+                                        </div>
+                                        <div className="flex gap-2 items-center">
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => handleGetFeedback(q)}
+                                                disabled={feedbackLoading[q.id]}
+                                                className="text-xs h-8 text-indigo-600 dark:text-indigo-400"
+                                            >
+                                                {feedbackLoading[q.id] ? <LoaderIcon className="w-3 h-3 mr-2 animate-spin" /> : <BotIcon className="w-3 h-3 mr-2" />}
+                                                Clarify Wording
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-8 w-8 text-red-500 hover:bg-red-50"
+                                                onClick={() => handleRemoveQuestion(index)}
+                                            >
+                                                <Trash2Icon className="w-4 h-4"/>
+                                            </Button>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-4 pl-1">
+                                        <div>
+                                            <label className="text-xs font-bold text-slate-400 uppercase mb-1 block">Question Text</label>
+                                            <Textarea value={q.question} onChange={e => handleQuestionChange(index, 'question', e.target.value)} rows={2} className="resize-none" />
+                                        </div>
+                                        
+                                        {q.type === 'multiple-choice' && q.options && (
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                {q.options.map((opt, i) => (
+                                                    <div key={i} className="flex gap-2">
+                                                        <div className="flex-1">
+                                                            <label className="text-[10px] font-bold text-slate-400 uppercase mb-0.5 block">Option {i + 1}</label>
+                                                            <Input 
+                                                                value={opt} 
+                                                                onChange={e => handleQuestionChange(index, `option-${i}`, e.target.value)} 
+                                                                className={cn(opt === q.correctAnswer && "border-green-500 bg-green-50/20")}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                ))}
                                             </div>
-                                        ))}
-                                    </div>
-                                )}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                    <div>
-                                        <label className="text-sm font-medium">Correct Answer</label>
-                                        <Input value={q.correctAnswer} onChange={e => handleQuestionChange(index, 'correctAnswer', e.target.value)} />
-                                    </div>
-                                    <div>
-                                        <label className="text-sm font-medium">Points</label>
-                                        <Input type="number" value={q.points} onChange={e => handleQuestionChange(index, 'points', e.target.value)} />
-                                    </div>
-                                </div>
+                                        )}
 
-                                {(feedbackLoading[q.id] || feedbackError[q.id] || feedback[q.id]) && (
-                                    <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700">
-                                        <h4 className="text-sm font-semibold mb-2 flex items-center gap-2">
-                                            <BotIcon className="w-4 h-4" />
-                                            AI Feedback
-                                        </h4>
-                                        {feedbackLoading[q.id] && <p className="text-sm text-slate-500">Generating explanation...</p>}
-                                        {feedbackError[q.id] && <p className="text-sm text-red-500">{feedbackError[q.id]}</p>}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-100 dark:border-slate-800">
+                                            <div>
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase mb-1 block">Correct Key</label>
+                                                <Input value={q.correctAnswer} onChange={e => handleQuestionChange(index, 'correctAnswer', e.target.value)} className="bg-slate-50 dark:bg-slate-900 border-dashed" />
+                                            </div>
+                                            <div>
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase mb-1 block">Points Allocation</label>
+                                                <Input type="number" value={q.points} onChange={e => handleQuestionChange(index, 'points', e.target.value)} />
+                                            </div>
+                                        </div>
+
                                         {feedback[q.id] && (
-                                            <div className="text-sm p-3 bg-slate-100 dark:bg-slate-800 rounded-md whitespace-pre-wrap">
-                                                {feedback[q.id]}
+                                            <div className="p-4 bg-indigo-50/50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-900/30 rounded-xl text-sm italic text-indigo-700 dark:text-indigo-300 flex gap-3 animate-in fade-in duration-300">
+                                                <BotIcon className="w-5 h-5 shrink-0" />
+                                                <p>"{feedback[q.id]}"</p>
                                             </div>
                                         )}
                                     </div>
-                                )}
+                                </div>
+                            ))}
+                        </CardContent>
+                        <CardFooter className="flex-col items-stretch gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+                            <ErrorAlert message={saveError} />
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <Button onClick={handleSaveQuiz} disabled={isSaving} variant="outline" className="flex-1 h-11">
+                                    {isSaving ? 'Processing...' : 'Save Draft'}
+                                </Button>
+                                <Button onClick={handleSaveAndAssign} disabled={isSaving} className="flex-1 h-11 bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-500/10">
+                                    {isSaving ? 'Processing...' : 'Finalize & Assign Students'}
+                                </Button>
                             </div>
-                        ))}
-                    </CardContent>
-                    <CardFooter className="flex-col items-stretch">
-                        <div className="flex justify-between items-center mb-2 min-h-[20px]">
-                            {saveError ? (
-                                <ErrorAlert message={saveError} />
-                            ) : (
-                                <div></div> // Placeholder to keep alignment
-                            )}
-                            <div className="flex-shrink-0">
-                                {autoSaveStatus === 'saving' && <span className="text-xs flex items-center justify-end gap-1 text-slate-500 dark:text-slate-400"><LoaderIcon className="w-3 h-3 animate-spin" /> Saving draft...</span>}
-                                {autoSaveStatus === 'saved' && <span className="text-xs flex items-center justify-end gap-1 text-green-600 dark:text-green-400"><CheckIcon className="w-3 h-3" /> Draft saved</span>}
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            <Button onClick={handleSaveQuiz} disabled={isSaving} variant="outline">
-                                {isSaving ? 'Saving...' : 'Save as Draft'}
-                            </Button>
-                            <Button onClick={handleSaveAndAssign} disabled={isSaving}>
-                                {isSaving ? 'Saving...' : 'Save & Assign'}
-                            </Button>
-                        </div>
-                    </CardFooter>
-                </Card>
+                        </CardFooter>
+                    </Card>
+                </div>
             )}
 
             {quizToAssign && (
@@ -564,12 +709,12 @@ const MentorGenerateQuiz: React.FC = () => {
                 <Dialog
                     isOpen={isRestoreModalOpen}
                     onClose={handleDiscardDraft}
-                    title="Unsaved Draft Found"
-                    description={`You have an unsaved quiz draft for this course from ${new Date(draftToRestore.timestamp).toLocaleString()}. Do you want to restore it?`}
+                    title="Restore Previous Workspace?"
+                    description={`We found an unsaved quiz draft for this course from ${new Date(draftToRestore.timestamp).toLocaleString()}. Would you like to resume?`}
                 >
-                    <div className="flex justify-end gap-2 pt-4">
-                        <Button variant="outline" onClick={handleDiscardDraft}>Discard</Button>
-                        <Button onClick={handleRestoreDraft}>Restore Draft</Button>
+                    <div className="flex justify-end gap-3 pt-4">
+                        <Button variant="ghost" onClick={handleDiscardDraft} className="text-red-500">Discard Draft</Button>
+                        <Button onClick={handleRestoreDraft}>Restore Workspace</Button>
                     </div>
                 </Dialog>
             )}
@@ -593,7 +738,6 @@ const AssignQuizDialog: React.FC<AssignQuizDialogProps> = ({ isOpen, onClose, qu
             api.getUsers().then(allUsers => {
                 setStudents(allUsers.filter(u => u.role === 'student'));
             });
-            // Reset state on open
             setSelectedStudentIds([]);
             setDueDate('');
             setError('');
@@ -640,46 +784,52 @@ const AssignQuizDialog: React.FC<AssignQuizDialogProps> = ({ isOpen, onClose, qu
         <Dialog isOpen={isOpen} onClose={onClose} title={`Assign Quiz: ${quiz.title}`}>
              <div className="space-y-4">
                 {successMessage ? (
-                    <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-md">
-                        <p className="font-semibold text-green-700 dark:text-green-300">{successMessage}</p>
+                    <div className="text-center p-8 bg-green-50 dark:bg-green-900/20 rounded-xl">
+                        <CheckIcon className="w-12 h-12 text-green-500 mx-auto mb-4" />
+                        <p className="font-bold text-green-700 dark:text-green-300 text-lg">{successMessage}</p>
                     </div>
                 ) : (
                     <>
                         <div>
-                            <label className="block text-sm font-medium mb-2">Select Students</label>
-                            <div className="border rounded-md max-h-60 overflow-y-auto p-2 dark:border-slate-700">
-                                <div className="flex items-center p-2 border-b dark:border-slate-700">
+                            <label className="block text-sm font-semibold mb-2">Select Target Students</label>
+                            <div className="border rounded-xl max-h-60 overflow-y-auto p-2 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+                                <div className="flex items-center p-3 border-b dark:border-slate-800">
                                     <input 
                                         type="checkbox" 
                                         id="select-all" 
-                                        className="w-4 h-4 mr-3"
+                                        className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                                         checked={selectedStudentIds.length === students.length && students.length > 0}
                                         onChange={handleSelectAll}
                                     />
-                                    <label htmlFor="select-all" className="font-medium">Select All</label>
+                                    <label htmlFor="select-all" className="ml-3 font-bold text-sm">Select All Students</label>
                                 </div>
                                 {students.map(student => (
-                                    <div key={student.id} className="flex items-center p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800">
+                                    <div key={student.id} className="flex items-center p-3 rounded-lg hover:bg-white dark:hover:bg-slate-800 transition-colors">
                                         <input 
                                             type="checkbox" 
                                             id={`student-${student.id}`} 
-                                            className="w-4 h-4 mr-3"
+                                            className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                                             checked={selectedStudentIds.includes(student.id)}
                                             onChange={() => handleStudentSelect(student.id)}
                                         />
-                                        <label htmlFor={`student-${student.id}`}>{student.name} ({student.email})</label>
+                                        <div className="ml-3">
+                                            <label htmlFor={`student-${student.id}`} className="block text-sm font-medium">{student.name}</label>
+                                            <p className="text-[10px] text-slate-500">{student.email}</p>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
                         </div>
                         <div>
-                            <label htmlFor="due-date" className="block text-sm font-medium mb-1">Due Date (Optional)</label>
+                            <label htmlFor="due-date" className="block text-sm font-semibold mb-1.5">Due Date (Optional)</label>
                             <Input id="due-date" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} />
                         </div>
                         {error && <p className="text-sm text-red-500">{error}</p>}
-                        <div className="flex justify-end gap-2 pt-4">
-                            <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-                            <Button onClick={handleAssign} disabled={isAssigning}>{isAssigning ? 'Assigning...' : 'Assign Quiz'}</Button>
+                        <div className="flex justify-end gap-3 pt-4">
+                            <Button type="button" variant="ghost" onClick={onClose}>Cancel</Button>
+                            <Button onClick={handleAssign} disabled={isAssigning} className="bg-indigo-600 hover:bg-indigo-700">
+                                {isAssigning ? 'Assigning...' : 'Confirm Assignments'}
+                            </Button>
                         </div>
                     </>
                 )}

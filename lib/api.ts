@@ -264,6 +264,41 @@ export const getAIFeedbackForQuestion = async (question: Question) => {
     return res.text;
 };
 
+export const getQuestionAISuggestion = async (question: Question, courseTitle: string) => {
+    const res = await ai.models.generateContent({
+        model: 'gemini-3-flash-preview',
+        config: {
+            responseMimeType: 'application/json',
+            responseSchema: {
+                type: Type.OBJECT,
+                properties: {
+                    improvedQuestion: { type: Type.STRING },
+                    suggestedOptions: { type: Type.ARRAY, items: { type: Type.STRING } },
+                    bloomsTaxonomy: { type: Type.STRING },
+                    difficultyAssessment: { type: Type.STRING },
+                    reasoning: { type: Type.STRING }
+                }
+            }
+        },
+        contents: `Analyze this quiz question for a course on "${courseTitle}": 
+        Question: "${question.question}"
+        Correct Answer: "${question.correctAnswer}"
+        
+        Suggest:
+        1. Improved wording for clarity and higher-education standards.
+        2. 3 plausible but incorrect multiple choice distractors.
+        3. Identify the Bloom's Taxonomy level (Remembering, Understanding, Applying, Analyzing, Evaluating, Creating).
+        4. Assess the difficulty balancing.
+        
+        Return the result as a JSON object.`,
+    });
+    try {
+        return JSON.parse(res.text || '{}');
+    } catch {
+        return null;
+    }
+};
+
 export const improveQuestionWithAI = async (q: any, quizContext: Quiz) => {
     const res = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
@@ -318,7 +353,33 @@ export const getLearningSuggestion = async (attempt: QuizAttempt, quiz: Quiz, co
     return res.text?.trim() || "Excellent progress! Focus on Advanced Patterns next.";
 };
 
-export const generateQuizQuestions = async (topic: string, objectives: string, difficulty: string, count: number, type: string) => {
+export const generateQuizQuestions = async (topic: string, objectives: string, difficulty: string, count: number, type: string, contextText?: string) => {
+    let prompt = `Generate ${count} ${difficulty} level ${type} questions about "${topic}". Objectives: ${objectives}. Each question should be worth 10 points. Ensure questions follow academic standards and map them to Bloom's Taxonomy.`;
+    
+    if (contextText) {
+        prompt = `You are an academic expert. STRATEGICALLY AND STRICTLY use the provided TEXT EXCERPTS as the SINGLE SOURCE OF TRUTH to generate a quiz.
+        
+        SOURCE CONTENT:
+        """
+        ${contextText}
+        """
+        
+        PARAMETERS:
+        - Target Difficulty: ${difficulty}
+        - Number of Questions: ${count}
+        - Question Type: ${type}
+        - Focus Topic: ${topic}
+        
+        STRICT RULES:
+        1. Derive ALL information strictly from the provided source content. Do not invent facts or use external knowledge.
+        2. Questions must align with the provided difficulty.
+        3. No repetitive questions.
+        4. For Multiple Choice: Provide exactly 4 options. Distractors must be plausible based on the source content.
+        5. Map each question to Bloom's Taxonomy.
+        
+        JSON FORMAT REQUIRED.`;
+    }
+
     const res = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         config: {
@@ -333,13 +394,15 @@ export const generateQuizQuestions = async (topic: string, objectives: string, d
                         question: { type: Type.STRING },
                         options: { type: Type.ARRAY, items: { type: Type.STRING } },
                         correctAnswer: { type: Type.STRING },
-                        points: { type: Type.NUMBER }
+                        points: { type: Type.NUMBER },
+                        bloomsTaxonomy: { type: Type.STRING },
+                        difficultyTag: { type: Type.STRING }
                     },
                     required: ["id", "type", "question", "correctAnswer", "points"]
                 }
             }
         },
-        contents: `Generate ${count} ${difficulty} level ${type} questions about "${topic}". Objectives: ${objectives}. Each question should be worth 10 points.`,
+        contents: prompt,
     });
     try {
         const questions = JSON.parse(res.text || '[]');
