@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import * as api from '../../lib/api';
@@ -14,8 +13,9 @@ import { Select } from '../../components/ui/Select';
 import { logActivity } from '../../lib/activityLog';
 import { checkPasswordStrength } from '../../lib/utils';
 import PasswordStrengthMeter from '../../components/ui/PasswordStrengthMeter';
+import { cn } from '../../lib/utils';
 
-type SortKey = 'name' | 'email' | 'role' | 'createdAt';
+type SortKey = 'name' | 'email' | 'role' | 'createdAt' | 'accountStatus';
 
 const AdminUserManagement: React.FC = () => {
     const { user: currentUser } = useAuth();
@@ -25,13 +25,14 @@ const AdminUserManagement: React.FC = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false);
+    const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
 
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: 'ascending' | 'descending' }>({ key: 'createdAt', direction: 'descending' });
 
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(10);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
 
     const fetchUsers = async () => {
         setIsLoading(true);
@@ -80,7 +81,10 @@ const AdminUserManagement: React.FC = () => {
         setCurrentPage(1);
     }, [searchTerm, itemsPerPage]);
 
-    // Pagination calculations
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [sortConfig]);
+
     const totalPages = Math.ceil(processedUsers.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const paginatedUsers = processedUsers.slice(startIndex, startIndex + itemsPerPage);
@@ -114,14 +118,19 @@ const AdminUserManagement: React.FC = () => {
         setIsResetPasswordModalOpen(true);
     };
 
+    const handleStatusClick = (user: User) => {
+        setSelectedUser(user);
+        setIsStatusModalOpen(true);
+    };
+
     const getRoleBadgeVariant = (role: User['role']): 'destructive' | 'secondary' | 'success' => {
-        if (role === 'admin') return 'destructive'; // Red for high-privilege
-        if (role === 'mentor') return 'secondary';   // Neutral gray for mentor
-        return 'success'; // Green for student, indicating learning/growth
+        if (role === 'admin') return 'destructive'; // Red
+        if (role === 'mentor') return 'secondary'; // Gray/Secondary
+        return 'success'; // Green
     }
     
     const TableHeader: React.FC<{ sortKey: SortKey; children: React.ReactNode }> = ({ sortKey, children }) => (
-        <th scope="col" className="px-6 py-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors" onClick={() => requestSort(sortKey)}>
+        <th scope="col" className="px-6 py-4 cursor-pointer hover:text-white transition-colors uppercase tracking-wider text-xs font-semibold text-slate-400 text-left" onClick={() => requestSort(sortKey)}>
             <div className="flex items-center">
                 {children}
                 {getSortIndicator(sortKey)}
@@ -129,81 +138,136 @@ const AdminUserManagement: React.FC = () => {
         </th>
     );
 
+    const getPageNumbers = () => {
+        const pages = [];
+        const maxVisiblePages = 5;
+        let start = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+        let end = Math.min(totalPages, start + maxVisiblePages - 1);
+        
+        if (end - start + 1 < maxVisiblePages) {
+            start = Math.max(1, end - maxVisiblePages + 1);
+        }
+
+        for (let i = start; i <= end; i++) {
+            pages.push(i);
+        }
+        return pages;
+    };
+
     return (
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight dark:text-white">User Management</h1>
-                    <p className="text-slate-500 dark:text-slate-300">View, create, edit, and delete users.</p>
+                    <p className="text-slate-500 dark:text-slate-400">View, create, edit, and delete users.</p>
                 </div>
-                <Link to="/admin/users/create" className={buttonVariants()}>Create User</Link>
+                <Link to="/admin/users/create" className={cn(buttonVariants({ variant: 'default' }), "bg-violet-600 hover:bg-violet-700 text-white")}>Create User</Link>
             </div>
             
-            <div className="flex items-center">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                  <Input 
                     placeholder="Search by name or email..."
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
-                    className="max-w-xs"
+                    className="max-w-xs bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
                 />
+                <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                    <span>Rows per page:</span>
+                    <Select 
+                        value={itemsPerPage.toString()} 
+                        onChange={e => setItemsPerPage(parseInt(e.target.value))}
+                        className="w-20 h-9 bg-slate-900 border-slate-700 text-white"
+                    >
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </Select>
+                </div>
             </div>
 
-            <Card>
+            <Card className="bg-slate-900 border-slate-800">
                 <CardContent className="p-0">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
-                            <thead className="text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-white">
+                            <thead className="bg-slate-900 border-b border-slate-800">
                                 <tr>
                                     <TableHeader sortKey="name">Name</TableHeader>
                                     <TableHeader sortKey="email">Email</TableHeader>
                                     <TableHeader sortKey="role">Role</TableHeader>
+                                    <TableHeader sortKey="accountStatus">Status</TableHeader>
                                     <TableHeader sortKey="createdAt">Joined On</TableHeader>
-                                    <th scope="col" className="px-6 py-3"><span className="sr-only">Actions</span></th>
+                                    <th scope="col" className="px-6 py-4 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody className="divide-y divide-slate-800/50 bg-slate-950">
                                 {isLoading ? (
                                     <tr>
-                                        <td colSpan={5} className="text-center p-8">Loading users...</td>
+                                        <td colSpan={6} className="text-center p-8 text-slate-400">Loading users...</td>
                                     </tr>
                                 ) : paginatedUsers.length > 0 ? (
                                     paginatedUsers.map(user => (
-                                        <tr key={user.id} className="bg-white border-b dark:bg-slate-800 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600">
-                                            <td className="px-6 py-4 font-medium">{user.name}</td>
-                                            <td className="px-6 py-4">{user.email}</td>
+                                        <tr key={user.id} className="hover:bg-slate-900 transition-colors">
+                                            <td className="px-6 py-4 font-medium text-slate-200">{user.name}</td>
+                                            <td className="px-6 py-4 text-slate-400">{user.email}</td>
                                             <td className="px-6 py-4">
                                                 <Badge variant={getRoleBadgeVariant(user.role)} className="capitalize">
                                                     {user.role === 'mentor' ? 'Instructor' : user.role}
                                                 </Badge>
                                             </td>
-                                            <td className="px-6 py-4">{new Date(user.createdAt).toLocaleDateString()}</td>
+                                            <td className="px-6 py-4">
+                                                <Badge variant={user.accountStatus === 'ENABLED' ? 'success' : 'destructive'}>
+                                                    {user.accountStatus}
+                                                </Badge>
+                                            </td>
+                                            <td className="px-6 py-4 text-slate-400">{new Date(user.createdAt).toLocaleDateString()}</td>
                                             <td className="px-6 py-4 text-right">
-                                                <div className="flex gap-1 justify-end">
-                                                    <Button aria-label={`Edit ${user.name}`} variant="ghost" size="icon" onClick={() => handleEditClick(user)}>
-                                                        <EditIcon className="w-[14px] h-[14px]" />
-                                                    </Button>
-                                                    <Button aria-label={`Reset password for ${user.name}`} title={`Reset password for ${user.name}`} variant="ghost" size="icon" onClick={() => handleResetPasswordClick(user)}>
-                                                        <KeyIcon className="w-[14px] h-[14px]" />
-                                                    </Button>
-                                                    <Button 
+                                                <div className="flex gap-3 justify-end items-center">
+                                                    <button
+                                                        aria-label={`${user.accountStatus === 'ENABLED' ? 'Disable' : 'Enable'} ${user.name}`} 
+                                                        title={`${user.accountStatus === 'ENABLED' ? 'Disable' : 'Enable'} account`}
+                                                        className={cn("transition-colors", user.accountStatus === 'ENABLED' ? "text-yellow-500 hover:text-yellow-400" : "text-green-500 hover:text-green-400")}
+                                                        onClick={() => handleStatusClick(user)}
+                                                        disabled={user.id === currentUser?.id}
+                                                    >
+                                                        {user.accountStatus === 'ENABLED' ? <BanIcon className="w-5 h-5" /> : <CheckCircleIcon className="w-5 h-5" />}
+                                                    </button>
+                                                    
+                                                    <button 
+                                                        aria-label={`Edit ${user.name}`} 
+                                                        className="text-slate-400 hover:text-white transition-colors"
+                                                        onClick={() => handleEditClick(user)}
+                                                    >
+                                                        <PencilIcon className="w-5 h-5" />
+                                                    </button>
+
+                                                    <button 
+                                                        aria-label={`Reset password for ${user.name}`} 
+                                                        title="Reset Password"
+                                                        className="text-slate-400 hover:text-white transition-colors" 
+                                                        onClick={() => handleResetPasswordClick(user)}
+                                                    >
+                                                        <LockIcon className="w-5 h-5" />
+                                                    </button>
+                                                    
+                                                    <button 
                                                         aria-label={`Delete ${user.name}`} 
-                                                        variant="ghost" 
-                                                        size="icon" 
+                                                        className="text-red-500 hover:text-red-400 transition-colors disabled:opacity-50"
                                                         onClick={() => handleDeleteClick(user)}
                                                         disabled={user.id === currentUser?.id}
                                                         title={user.id === currentUser?.id ? "You cannot delete your own account." : `Delete ${user.name}`}
                                                     >
-                                                        <TrashIcon className="w-[14px] h-[14px] text-red-500" />
-                                                    </Button>
+                                                        <Trash2Icon className="w-5 h-5" />
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={5} className="text-center p-8 text-slate-500 dark:text-slate-300">
+                                        <td colSpan={6} className="text-center p-8 text-slate-500 dark:text-slate-400">
                                             <div className="flex flex-col items-center gap-2">
-                                                <UserSearchIcon className="w-[38px] h-[38px] text-slate-400" />
+                                                <UserSearchIcon className="w-[38px] h-[38px] text-slate-500" />
                                                 <span className="font-semibold">No users found</span>
                                                 <span>Try adjusting your search term.</span>
                                             </div>
@@ -217,30 +281,62 @@ const AdminUserManagement: React.FC = () => {
             </Card>
 
             {totalPages > 1 && (
-                <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-500 dark:text-white">
-                        Showing <strong>{startIndex + 1}</strong>-<strong>{Math.min(startIndex + itemsPerPage, processedUsers.length)}</strong> of <strong>{processedUsers.length}</strong> users
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                    <span className="text-sm text-slate-500 dark:text-slate-400">
+                        Showing <strong>{startIndex + 1}</strong> to <strong>{Math.min(startIndex + itemsPerPage, processedUsers.length)}</strong> of <strong>{processedUsers.length}</strong> users
                     </span>
-                    <div className="flex items-center gap-4">
-                        <span className="text-sm text-slate-500 dark:text-white">Page {currentPage} of {totalPages}</span>
-                        <div className="flex gap-2">
-                             <Button 
-                                variant="outline" 
-                                size="sm"
-                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                                disabled={currentPage === 1}
-                            >
-                                Previous
-                            </Button>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                                disabled={currentPage === totalPages}
-                            >
-                                Next
-                            </Button>
+                    <div className="flex items-center gap-2">
+                         <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => setCurrentPage(1)}
+                            disabled={currentPage === 1}
+                            className="hidden sm:flex border-slate-700 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white"
+                        >
+                            First
+                        </Button>
+                        <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                            disabled={currentPage === 1}
+                            className="border-slate-700 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white"
+                        >
+                            <ChevronLeftIcon className="w-4 h-4" />
+                        </Button>
+                        
+                        <div className="flex items-center gap-1 mx-2">
+                            {getPageNumbers().map(pageNum => (
+                                <Button
+                                    key={pageNum}
+                                    variant={currentPage === pageNum ? "default" : "ghost"}
+                                    size="sm"
+                                    className={cn("w-8 h-8 p-0", currentPage === pageNum ? "bg-violet-600 text-white" : "text-slate-400 hover:text-white hover:bg-slate-800")}
+                                    onClick={() => setCurrentPage(pageNum)}
+                                >
+                                    {pageNum}
+                                </Button>
+                            ))}
                         </div>
+
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                            disabled={currentPage === totalPages}
+                            className="border-slate-700 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white"
+                        >
+                            <ChevronRightIcon className="w-4 h-4" />
+                        </Button>
+                         <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => setCurrentPage(totalPages)}
+                            disabled={currentPage === totalPages}
+                            className="hidden sm:flex border-slate-700 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white"
+                        >
+                            Last
+                        </Button>
                     </div>
                 </div>
             )}
@@ -250,6 +346,7 @@ const AdminUserManagement: React.FC = () => {
                     <EditUserDialog isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} onUserUpdated={fetchUsers} user={selectedUser} />
                     <DeleteUserDialog isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} onUserDeleted={fetchUsers} user={selectedUser} />
                     <ResetPasswordDialog isOpen={isResetPasswordModalOpen} onClose={() => setIsResetPasswordModalOpen(false)} onPasswordReset={() => setIsResetPasswordModalOpen(false)} user={selectedUser} />
+                    <ToggleStatusDialog isOpen={isStatusModalOpen} onClose={() => setIsStatusModalOpen(false)} onStatusChanged={fetchUsers} user={selectedUser} />
                 </>
             )}
         </div>
@@ -258,6 +355,68 @@ const AdminUserManagement: React.FC = () => {
 
 
 // --- Dialog Components ---
+
+interface ToggleStatusDialogProps { isOpen: boolean; onClose: () => void; onStatusChanged: () => void; user: User; }
+const ToggleStatusDialog: React.FC<ToggleStatusDialogProps> = ({ isOpen, onClose, onStatusChanged, user }) => {
+    const { user: adminUser } = useAuth();
+    const [reason, setReason] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState('');
+
+    const targetStatus = user.accountStatus === 'ENABLED' ? 'DISABLED' : 'ENABLED';
+
+    useEffect(() => {
+        if (isOpen) {
+            setReason('');
+            setError('');
+        }
+    }, [isOpen]);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!adminUser) return;
+        setIsSubmitting(true);
+        setError('');
+        try {
+            await api.toggleUserStatus(user.id, adminUser.id, targetStatus, reason);
+            onStatusChanged();
+            onClose();
+        } catch (err) {
+            setError('Failed to update user status.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    return (
+        <Dialog 
+            isOpen={isOpen} 
+            onClose={onClose} 
+            title={targetStatus === 'DISABLED' ? 'Disable User Account' : 'Enable User Account'}
+            description={targetStatus === 'DISABLED' 
+                ? `Disabling ${user.name}'s account will block their access immediately but preserve all their data.`
+                : `Enabling ${user.name}'s account will restore their access immediately.`}
+        >
+            <form onSubmit={handleSubmit} className="space-y-4 pt-2">
+                <div>
+                    <label htmlFor="status-reason" className="block text-sm font-medium mb-1">Reason (Optional)</label>
+                    <Input id="status-reason" value={reason} onChange={e => setReason(e.target.value)} placeholder="e.g., Security policy violation, User request" />
+                </div>
+                {error && <p className="text-sm text-red-500">{error}</p>}
+                <div className="flex justify-end gap-2 pt-4">
+                    <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting}>Cancel</Button>
+                    <Button 
+                        variant={targetStatus === 'DISABLED' ? 'destructive' : 'default'} 
+                        type="submit" 
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? 'Updating...' : `Confirm ${targetStatus === 'DISABLED' ? 'Disable' : 'Enable'}`}
+                    </Button>
+                </div>
+            </form>
+        </Dialog>
+    );
+};
 
 interface EditUserDialogProps { isOpen: boolean; onClose: () => void; onUserUpdated: () => void; user: User; }
 const EditUserDialog: React.FC<EditUserDialogProps> = ({ isOpen, onClose, onUserUpdated, user }) => {
@@ -344,7 +503,6 @@ const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({ isOpen, onClose, on
             onClose();
         } catch (err) {
             console.error("Failed to delete user", err);
-            // Optionally set an error state to show in the dialog
         } finally {
             setIsSubmitting(false);
         }
@@ -369,7 +527,11 @@ interface ResetPasswordDialogProps { isOpen: boolean; onClose: () => void; onPas
 const ResetPasswordDialog: React.FC<ResetPasswordDialogProps> = ({ isOpen, onClose, onPasswordReset, user }) => {
     const { user: adminUser } = useAuth();
     const [newPassword, setNewPassword] = useState('');
-    const [passwordStrength, setPasswordStrength] = useState({ score: 0, level: 'none' as const, text: '' });
+    const [passwordStrength, setPasswordStrength] = useState<{
+      score: number;
+      level: 'none' | 'very weak' | 'weak' | 'medium' | 'strong' | 'very strong';
+      text: string;
+    }>({ score: 0, level: 'none', text: '' });
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -439,10 +601,9 @@ const ResetPasswordDialog: React.FC<ResetPasswordDialogProps> = ({ isOpen, onClo
             {!isConfirming ? (
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        {/* FIX: Corrected typo `classNam e` to `className`. */}
                         <label htmlFor="new-password" className="block text-sm font-medium mb-1">New Password</label>
                         <div className="relative">
-                            <Input id="new-password" type={showNewPassword ? 'text' : 'password'} value={newPassword} onChange={e => setNewPassword(e.target.value)} required aria-describedby="password-reset-help" />
+                            <Input id="new-password" type={showNewPassword ? 'text' : 'password'} value={newPassword} onChange={e => setNewPassword(e.target.value)} required />
                             <button type="button" onClick={() => setShowNewPassword(!showNewPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700">
                                 {showNewPassword ? <EyeOffIcon className="w-[18px] h-[18px]" /> : <EyeIcon className="w-[18px] h-[18px]" />}
                             </button>
@@ -491,42 +652,36 @@ const ResetPasswordDialog: React.FC<ResetPasswordDialogProps> = ({ isOpen, onClo
 
 
 // --- Icon Components ---
-const EditIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-  </svg>
+const PencilIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
 );
-// FIX: Add KeyIcon definition.
-const KeyIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="m21.73 18-4.73-4.73" />
-    <path d="m15 2-3.5 3.5" />
-    <circle cx="6.5" cy="17.5" r="4.5" />
-  </svg>
+const Trash2Icon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
 );
-// FIX: Add TrashIcon definition.
-const TrashIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="3 6 5 6 21 6" />
-    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-  </svg>
+const LockIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
 );
-// FIX: Add UserSearchIcon definition.
+const BanIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
+);
+const CheckCircleIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+);
 const UserSearchIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="10" cy="10" r="4" />
     <path d="M10 16c-3.9 0-7 2-7 4" />
     <circle cx="17" cy="17" r="3" />
     <path d="m21 21-1.9-1.9" />
   </svg>
 );
-// FIX: Add EyeIcon and EyeOffIcon definitions.
 const EyeIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
 );
 const EyeOffIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
 );
+const ChevronLeftIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>;
+const ChevronRightIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>;
 
 export default AdminUserManagement;

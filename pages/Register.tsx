@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// FIX: Replaced useHistory with useNavigate for react-router-dom v6 compatibility.
 import { useNavigate, Link } from 'react-router-dom';
 import * as api from '../lib/api';
 import { useAuth } from '../lib/auth';
@@ -15,7 +14,11 @@ const RegisterPage: React.FC = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [passwordStrength, setPasswordStrength] = useState({ score: 0, level: 'none' as const, text: '' });
+    const [passwordStrength, setPasswordStrength] = useState<{
+      score: number;
+      level: 'none' | 'very weak' | 'weak' | 'medium' | 'strong' | 'very strong';
+      text: string;
+    }>({ score: 0, level: 'none', text: '' });
     const [showPassword, setShowPassword] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -24,7 +27,6 @@ const RegisterPage: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const { login } = useAuth();
-    // FIX: Replaced useHistory with useNavigate for react-router-dom v6.
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -57,7 +59,6 @@ const RegisterPage: React.FC = () => {
             await api.register({ name, email, role }, password);
             // Log in the user automatically after registration
             await login(email, password);
-            // FIX: Replaced history.push with navigate for react-router-dom v6.
             navigate('/');
         } catch (err: any) {
             setError(err.message || 'Failed to create account.');
@@ -74,7 +75,7 @@ const RegisterPage: React.FC = () => {
           className="min-h-screen bg-cover bg-center p-4 flex flex-col items-center justify-center"
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=2070&auto=format&fit=crop')" }}
         >
-            <div className="w-full max-w-md bg-slate-900/40 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-slate-700">
+            <div className="w-full max-md bg-slate-900/40 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-slate-700">
                 <div className="text-center mb-8">
                     <div className="inline-flex items-center justify-center gap-2">
                         <FlameIcon className="w-8 h-8 text-orange-500" />
@@ -248,6 +249,5 @@ const MailIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 const LockIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
 );
-
 
 export default RegisterPage;

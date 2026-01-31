@@ -1,7 +1,4 @@
-
-
 import React, { useState, useEffect } from 'react';
-// FIX: Replaced useHistory with useNavigate for react-router-dom v6 compatibility.
 import { useNavigate, Link } from 'react-router-dom';
 import * as api from '../../lib/api';
 import { Button, buttonVariants } from '../../components/ui/Button';
@@ -12,12 +9,15 @@ import { checkPasswordStrength } from '../../lib/utils';
 import PasswordStrengthMeter from '../../components/ui/PasswordStrengthMeter';
 
 const AdminCreateUser: React.FC = () => {
-    // FIX: Replaced useHistory with useNavigate for react-router-dom v6.
     const navigate = useNavigate();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [passwordStrength, setPasswordStrength] = useState({ score: 0, level: 'none' as const, text: '' });
+    const [passwordStrength, setPasswordStrength] = useState<{
+      score: number;
+      level: 'none' | 'very weak' | 'weak' | 'medium' | 'strong' | 'very strong';
+      text: string;
+    }>({ score: 0, level: 'none', text: '' });
     const [showPassword, setShowPassword] = useState(false);
     const [role, setRole] = useState<'student' | 'mentor' | 'admin'>('student');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,7 +37,6 @@ const AdminCreateUser: React.FC = () => {
         setError('');
         try {
             await api.createUser({ name, email, role }, password);
-            // FIX: Replaced history.push with navigate for react-router-dom v6.
             navigate('/admin/users'); // Redirect on success
         } catch(err: any) {
             setError(err.message || 'Failed to create user. The email might already be in use.');

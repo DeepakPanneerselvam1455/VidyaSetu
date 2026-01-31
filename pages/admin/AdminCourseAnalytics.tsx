@@ -34,10 +34,10 @@ const AdminCourseAnalytics: React.FC = () => {
         setIsLoading(true);
         try {
             const [courses, users, allAttempts, allQuizzes] = await Promise.all([
-                api.getCourses(),
-                api.getUsers(),
-                api.getAllAttempts(),
-                api.getQuizzes()
+                api.getCourses() as Promise<Course[]>,
+                api.getUsers() as Promise<User[]>,
+                api.getAllAttempts() as Promise<QuizAttempt[]>,
+                api.getQuizzes() as Promise<Quiz[]>
             ]);
 
             setMentors(users.filter(u => u.role === 'mentor'));
@@ -416,10 +416,10 @@ const CourseDetailDialog: React.FC<CourseDetailDialogProps> = ({ isOpen, onClose
             setIsLoading(true);
             try {
                 const [quizzes, allAttempts, allUsers, allViewed] = await Promise.all([
-                    api.getQuizzesByCourse(course.id),
-                    api.getAllAttempts(),
-                    api.getUsers(),
-                    api.getAllViewedMaterials()
+                    api.getQuizzesByCourse(course.id) as Promise<Quiz[]>,
+                    api.getAllAttempts() as Promise<QuizAttempt[]>,
+                    api.getUsers() as Promise<User[]>,
+                    api.getAllViewedMaterials() as Promise<Record<string, string[]>>
                 ]);
 
                 const courseQuizIds = new Set(quizzes.map(q => q.id));

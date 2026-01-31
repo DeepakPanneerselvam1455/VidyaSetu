@@ -4,12 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { cn } from '../../lib/utils';
-import { ActivityLogEntry, getActivityLog, subscribe, unsubscribe, formatTimeAgo } from '../../lib/activityLog';
+import { ActivityLogEntry, getActivityLog, formatTimeAgo, logActivity } from '../../lib/activityLog';
+import * as api from '../../lib/api';
+import { useAuth } from '../../lib/auth';
 
 type SecurityTab = 'access' | 'policy' | 'audit';
-
-const RBAC_KEY = 'skillforge_rbac';
-const POLICY_KEY = 'skillforge_policy';
 
 const initialPermissions = {
     student: { viewCourses: true, takeQuizzes: true, createCourses: false, manageOwnQuizzes: false, viewAllAnalytics: false, manageUsers: false, accessSystemSettings: false, deleteAnyCourse: false },
@@ -78,27 +77,47 @@ const SecurityTabButton: React.FC<{ tab: SecurityTab; activeTab: SecurityTab; on
 const AccessControl = () => {
     const [permissions, setPermissions] = useState(initialPermissions);
     const [isSaving, setIsSaving] = useState(false);
+    const { user } = useAuth();
 
     useEffect(() => {
-        const saved = localStorage.getItem(RBAC_KEY);
-        if(saved) setPermissions(JSON.parse(saved));
+        const fetchSettings = async () => {
+            try {
+                const settings = await api.getSystemSettings('security');
+                if (settings && settings.rbac) {
+                    setPermissions(settings.rbac);
+                }
+            } catch (error) {
+                console.error("Failed to fetch RBAC settings", error);
+            }
+        };
+        fetchSettings();
     }, []);
 
     const handlePermissionChange = (role: 'student' | 'instructor' | 'admin', key: string, value: boolean) => {
         setPermissions(prev => ({ ...prev, [role]: { ...prev[role], [key]: value } }));
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         setIsSaving(true);
-        localStorage.setItem(RBAC_KEY, JSON.stringify(permissions));
-        setTimeout(() => setIsSaving(false), 500);
+        try {
+            // Merge current state (permissions) into security settings object
+            const currentSettings = await api.getSystemSettings('security');
+            await api.updateSystemSettings('security', { ...currentSettings, rbac: permissions });
+            
+            logActivity('system_setting_change', 'RBAC Permissions updated by admin', { admin: user?.name });
+        } catch (error) {
+            console.error("Failed to save RBAC settings", error);
+            alert("Failed to save permission changes.");
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     return (
     <Card>
         <CardHeader>
             <CardTitle>Role-Based Access Control</CardTitle>
-            <CardDescription>Define permissions for each user role. Changes are saved locally.</CardDescription>
+            <CardDescription>Define permissions for each user role. Changes are enforced immediately by the backend.</CardDescription>
         </CardHeader>
         <CardContent className="overflow-x-auto">
             <table className="w-full text-left">
@@ -147,20 +166,38 @@ const PermissionRow: React.FC<{
 const PasswordPolicy = () => {
     const [policy, setPolicy] = useState(initialPolicy);
     const [isSaving, setIsSaving] = useState(false);
+    const { user } = useAuth();
 
     useEffect(() => {
-        const saved = localStorage.getItem(POLICY_KEY);
-        if(saved) setPolicy(JSON.parse(saved));
+        const fetchSettings = async () => {
+            try {
+                const settings = await api.getSystemSettings('security');
+                if (settings && settings.policy) {
+                    setPolicy(settings.policy);
+                }
+            } catch (error) {
+                console.error("Failed to fetch password policy", error);
+            }
+        };
+        fetchSettings();
     }, []);
 
     const handleChange = (key: keyof typeof initialPolicy, value: any) => {
         setPolicy(prev => ({...prev, [key]: value}));
     };
     
-    const handleSave = () => {
+    const handleSave = async () => {
         setIsSaving(true);
-        localStorage.setItem(POLICY_KEY, JSON.stringify(policy));
-        setTimeout(() => setIsSaving(false), 500);
+        try {
+            const currentSettings = await api.getSystemSettings('security');
+            await api.updateSystemSettings('security', { ...currentSettings, policy });
+            
+            logActivity('system_setting_change', 'Password policy updated', { admin: user?.name });
+        } catch (error) {
+            console.error("Failed to save password policy", error);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     return (
@@ -198,25 +235,33 @@ const AuditLog = () => {
     const [filter, setFilter] = useState('');
 
     useEffect(() => {
-        const securityLogTypes: ActivityLogEntry['type'][] = [
-            'user_role_change', 
-            'user_password_reset', 
-            'system_setting_change',
-            'user_login',
-            'user_create',
-            'user_delete',
-            'security_alert'
-        ];
-        const allLogs = getActivityLog();
-        setLogs(allLogs.filter(log => securityLogTypes.includes(log.type)));
-        
-        const handleNewLog = (newLog: ActivityLogEntry) => {
-            if (securityLogTypes.includes(newLog.type)) {
-                setLogs(prev => [newLog, ...prev]);
+        const fetchLogs = async () => {
+            // In a real app, this should fetch from the API endpoint `GET /api/logs`
+            // For now, we reuse the existing frontend-simulation logic or fetch if available
+            try {
+                const data = await api.executeHybrid(
+                    () => fetch('http://localhost:5000/api/logs', { credentials: 'include' }).then(res => res.json()),
+                    async () => getActivityLog()
+                );
+                
+                const securityLogTypes: ActivityLogEntry['type'][] = [
+                    'user_role_change', 
+                    'user_password_reset', 
+                    'system_setting_change',
+                    'user_login',
+                    'user_create',
+                    'user_delete',
+                    'security_alert'
+                ];
+                
+                if (Array.isArray(data)) {
+                    setLogs(data.filter(log => securityLogTypes.includes(log.type)));
+                }
+            } catch (err) {
+                console.error("Failed to load audit logs", err);
             }
         };
-        subscribe(handleNewLog);
-        return () => unsubscribe(handleNewLog);
+        fetchLogs();
     }, []);
 
     const filteredLogs = useMemo(() => {

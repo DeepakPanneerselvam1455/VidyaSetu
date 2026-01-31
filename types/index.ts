@@ -1,14 +1,20 @@
+
 export interface User {
   id: string;
   email: string;
   name:string;
   role: 'student' | 'mentor' | 'admin';
   createdAt: string;
+  accountStatus: 'ENABLED' | 'DISABLED';
   dob?: string;
   education?: string;
   school?: string;
   state?: string;
   contact?: string;
+  // Mentorship extensions
+  bio?: string;
+  expertise?: string[];
+  isOpenToMentorship?: boolean;
 }
 
 export interface CourseMaterial {
@@ -74,6 +80,65 @@ export interface QuizAssignment {
   studentId: string;
   assignedAt: string;
   dueDate?: string;
+}
+
+// --- TUTORING & MENTORING TYPES ---
+export interface TutoringSession {
+  id: string;
+  mentorId: string;
+  studentIds: string[]; 
+  topic: string;
+  description?: string;
+  startTime: string; // ISO string
+  duration: number; // minutes
+  status: 'scheduled' | 'active' | 'completed' | 'cancelled';
+  type: 'one-on-one' | 'group';
+  category: 'tutoring' | 'mentoring'; // Distinguish between academic tutoring and career mentorship
+  focus?: 'concept' | 'doubt-clearing' | 'exam-prep' | 'career-advice' | 'personal-growth'; // Specific focus
+  maxStudents: number;
+  meetingLink?: string;
+  privateNotes?: string; // Private notes for the mentor
+}
+
+export interface MentorshipRequest {
+    id: string;
+    studentId: string;
+    mentorId: string;
+    status: 'pending' | 'accepted' | 'rejected';
+    message: string;
+    createdAt: string;
+}
+
+// --- FORUM TYPES ---
+export interface ForumCategory {
+    id: string;
+    name: string;
+    description: string;
+    icon: string;
+}
+
+export interface ForumThread {
+    id: string;
+    categoryId: string;
+    authorId: string;
+    authorName: string;
+    title: string;
+    content: string;
+    createdAt: string;
+    views: number;
+    upvotes: string[];
+    tags: string[];
+    replyCount: number;
+}
+
+export interface ForumPost {
+    id: string;
+    threadId: string;
+    authorId: string;
+    authorName: string;
+    content: string;
+    createdAt: string;
+    upvotes: string[];
 }
 
 // --- CHATBOT TYPES ---

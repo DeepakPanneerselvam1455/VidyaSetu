@@ -1,6 +1,4 @@
-
 import React, { useState, useEffect } from 'react';
-// FIX: Replaced useHistory with useNavigate for react-router-dom v6 compatibility.
 import { useNavigate } from 'react-router-dom';
 import * as api from '../../lib/api';
 import { useAuth } from '../../lib/auth';
@@ -20,7 +18,6 @@ interface TempMaterial {
 
 const MentorAddCourse: React.FC = () => {
     const { user } = useAuth();
-    // FIX: Replaced useHistory with useNavigate for react-router-dom v6.
     const navigate = useNavigate();
     
     // Form state
@@ -124,7 +121,6 @@ const MentorAddCourse: React.FC = () => {
                 materials: processedMaterials,
             };
             await api.createCourse(courseData);
-            // FIX: Replaced history.push with navigate for react-router-dom v6.
             navigate('/mentor/courses');
         } catch (err: any) {
             setError(err.message || 'Failed to create course.');
@@ -289,7 +285,7 @@ const getMaterialIcon = (type: MaterialType) => {
 
 // Icons
 const FileTextIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
 );
 const PlusCircleIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>

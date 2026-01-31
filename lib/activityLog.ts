@@ -1,11 +1,12 @@
 // lib/activityLog.ts
-import { formatDistanceToNow } from 'https://cdn.skypack.dev/date-fns';
+import { formatDistanceToNow } from 'date-fns';
 
 export type ActivityType = 
     | 'user_login' 
     | 'user_create' 
     | 'user_delete'
     | 'user_role_change'
+    | 'user_status_change'
     | 'user_password_reset' 
     | 'course_create' 
     | 'course_update' 

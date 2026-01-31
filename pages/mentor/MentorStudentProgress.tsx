@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import * as api from '../../lib/api';
 import { useAuth } from '../../lib/auth';
@@ -168,18 +169,18 @@ const MentorStudentProgress: React.FC = () => {
             setIsLoading(true);
             try {
                 // Fetch data scoped to the mentor
-                const allCourses = await api.getCourses();
+                const allCourses = await api.getCourses() as Course[];
                 const mentorCourses = allCourses.filter(c => c.mentorId === user.id);
                 const mentorCourseMap = new Map(mentorCourses.map(c => [c.id, c]));
 
-                const allQuizzes = await api.getQuizzes();
+                const allQuizzes = await api.getQuizzes() as Quiz[];
                 const mentorQuizzes = allQuizzes.filter(q => mentorCourseMap.has(q.courseId));
                 const mentorQuizMap = new Map(mentorQuizzes.map(q => [q.id, q]));
 
                 const [allAttempts, allUsers, allViewedMaterials] = await Promise.all([
-                    api.getAllAttempts(),
-                    api.getUsers(),
-                    api.getAllViewedMaterials()
+                    api.getAllAttempts() as Promise<QuizAttempt[]>,
+                    api.getUsers() as Promise<User[]>,
+                    api.getAllViewedMaterials() as Promise<Record<string, string[]>>
                 ]);
 
                 const mentorQuizIds = new Set(mentorQuizzes.map(q => q.id));

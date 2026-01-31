@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import * as api from '../../lib/api';
 import { User, QuizAttempt, Course, Quiz } from '../../types';
@@ -166,11 +167,11 @@ const AdminStudentProgress: React.FC = () => {
             try {
                 // Fetch ALL data, not scoped to a user
                 const [allCourses, allQuizzes, allAttempts, allUsers, allViewedMaterials] = await Promise.all([
-                    api.getCourses(),
-                    api.getQuizzes(),
-                    api.getAllAttempts(),
-                    api.getUsers(),
-                    api.getAllViewedMaterials()
+                    api.getCourses() as Promise<Course[]>,
+                    api.getQuizzes() as Promise<Quiz[]>,
+                    api.getAllAttempts() as Promise<QuizAttempt[]>,
+                    api.getUsers() as Promise<User[]>,
+                    api.getAllViewedMaterials() as Promise<Record<string, string[]>>
                 ]);
 
                 const courseMap = new Map(allCourses.map(c => [c.id, c]));

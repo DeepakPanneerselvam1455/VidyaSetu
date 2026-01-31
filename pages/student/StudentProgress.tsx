@@ -5,6 +5,7 @@ import { useAuth } from '../../lib/auth';
 import { QuizAttempt, Quiz, Course } from '../../types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
+import { cn } from '../../lib/utils';
 
 interface TopicPerformance {
     topic: string;
@@ -18,7 +19,6 @@ const StudentProgress: React.FC = () => {
     const [quizzes, setQuizzes] = useState<{ [id: string]: Quiz }>({});
     const [courses, setCourses] = useState<{ [id: string]: Course }>({});
     const [isLoading, setIsLoading] = useState(true);
-    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -127,29 +127,6 @@ const StudentProgress: React.FC = () => {
             });
     }, [attempts, quizzes, courses]);
 
-
-    // SVG Line Chart constants and calculations
-    const SVG_WIDTH = 500;
-    const SVG_HEIGHT = 220; // Increased height for X-axis labels
-    const PADDING = 30;
-    const Y_AXIS_LABELS = [0, 25, 50, 75, 100];
-
-    const pointCoordinates = useMemo(() => {
-        if (chartData.length < 2) return [];
-        return chartData.map((data, index) => {
-            const x = PADDING + (index / (chartData.length - 1)) * (SVG_WIDTH - 2 * PADDING);
-            const y = (SVG_HEIGHT - PADDING) - (data.score / 100) * (SVG_HEIGHT - 2 * PADDING);
-            return { x, y };
-        });
-    }, [chartData]);
-
-    const pathData = useMemo(() => {
-        if (pointCoordinates.length < 2) return '';
-        return pointCoordinates
-            .map((p, i) => (i === 0 ? 'M' : 'L') + `${p.x} ${p.y}`)
-            .join(' ');
-    }, [pointCoordinates]);
-    
     const getPerformanceColor = (score: number): string => {
         if (score >= 75) return 'bg-green-600';
         if (score >= 50) return 'bg-yellow-500';
@@ -204,71 +181,13 @@ const StudentProgress: React.FC = () => {
                 <Card className="lg:col-span-2">
                     <CardHeader>
                         <CardTitle>Performance Trend</CardTitle>
-                        <CardDescription>Your scores on the last {chartData.length} quizzes.</CardDescription>
+                        <CardDescription>
+                            Your scores on the last {chartData.length} quizzes. 
+                            {chartData.length > 2 && <span className="ml-1 text-slate-500 font-normal text-xs">(Dashed line indicates trend)</span>}
+                        </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        {chartData.length > 1 ? (
-                            <div className="relative w-full h-80" onMouseLeave={() => setHoveredIndex(null)}>
-                                <svg viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`} className="w-full h-full" aria-labelledby="chart-title" role="img">
-                                    <title id="chart-title">Line chart showing quiz score trend</title>
-                                    {Y_AXIS_LABELS.map(label => {
-                                        const y = (SVG_HEIGHT - PADDING) - (label / 100) * (SVG_HEIGHT - 2 * PADDING);
-                                        return (
-                                            <g key={label} className="text-slate-400 dark:text-slate-600">
-                                                <text x={PADDING - 10} y={y + 3} textAnchor="end" className="text-xs fill-current">{label}%</text>
-                                                <line x1={PADDING} x2={SVG_WIDTH - PADDING} y1={y} y2={y} className="stroke-current opacity-50" strokeDasharray="2,4" />
-                                            </g>
-                                        );
-                                    })}
-                                    <line x1={PADDING} x2={SVG_WIDTH - PADDING} y1={SVG_HEIGHT - PADDING} y2={SVG_HEIGHT - PADDING} className="stroke-current text-slate-300 dark:text-slate-700" />
-                                    {pointCoordinates.map(({ x }, index) => (
-                                        <text
-                                            key={`x-label-${index}`}
-                                            x={x}
-                                            y={SVG_HEIGHT - PADDING + 15}
-                                            textAnchor="middle"
-                                            className="text-xs fill-current text-slate-500 dark:text-slate-400"
-                                        >
-                                            {chartData[index].date}
-                                        </text>
-                                    ))}
-                                    <path d={pathData} fill="none" strokeWidth="2" className="text-indigo-500 stroke-current" />
-                                    {pointCoordinates.map(({ x, y }, index) => (
-                                        <g key={index}>
-                                            <circle
-                                                cx={x}
-                                                cy={y}
-                                                r={hoveredIndex === index ? 7 : 4}
-                                                className="text-indigo-500 fill-current transition-all stroke-white dark:stroke-slate-900"
-                                                strokeWidth={hoveredIndex === index ? 2 : 0}
-                                            />
-                                            <rect x={x - 10} y={y - 10} width="20" height="20" fill="transparent" onMouseEnter={() => setHoveredIndex(index)} />
-                                        </g>
-                                    ))}
-                                </svg>
-                                {hoveredIndex !== null && (
-                                    <div
-                                        className="absolute p-2 text-sm bg-slate-900 text-white rounded-md shadow-lg pointer-events-none transform -translate-x-1/2 -translate-y-full transition-opacity z-10 animate-in fade-in-0 zoom-in-95"
-                                        style={{
-                                            left: `${(pointCoordinates[hoveredIndex].x / SVG_WIDTH) * 100}%`,
-                                            top: `${(pointCoordinates[hoveredIndex].y / SVG_HEIGHT) * 100}%`,
-                                            marginTop: '-10px'
-                                        }}
-                                    >
-                                        <p className="font-semibold whitespace-nowrap">{chartData[hoveredIndex].name}</p>
-                                        <p>Score: <span className="font-bold">{chartData[hoveredIndex].score}%</span></p>
-                                    </div>
-                                )}
-                            </div>
-                        ) : (
-                            <div className="text-center py-10 h-80 flex flex-col items-center justify-center">
-                                <BarChartIcon className="w-[46px] h-[46px] text-slate-400 mb-2" />
-                                <p className="font-semibold">Not Enough Data</p>
-                                <p className="text-slate-500 dark:text-slate-400 text-sm">
-                                    {attempts.length < 2 ? "Complete at least two quizzes to see your trend!" : "Take a quiz to start tracking your progress."}
-                                </p>
-                            </div>
-                        )}
+                        <ProgressTrendChart data={chartData} />
                     </CardContent>
                 </Card>
                 <Card>
@@ -282,7 +201,7 @@ const StudentProgress: React.FC = () => {
                                 {topicPerformance.map(item => (
                                     <li key={item.topic}>
                                         <div className="flex justify-between items-center mb-1">
-                                            <span className="text-sm font-medium">{item.topic}</span>
+                                            <span className="text-sm font-medium truncate max-w-[150px]">{item.topic}</span>
                                             <span className="text-sm font-bold">{item.averageScore}%</span>
                                         </div>
                                         <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
@@ -346,6 +265,187 @@ const StudentProgress: React.FC = () => {
                     )}
                 </CardContent>
             </Card>
+        </div>
+    );
+};
+
+// --- Enhanced Chart Component ---
+const ProgressTrendChart: React.FC<{ data: { name: string, score: number, date: string }[] }> = ({ data }) => {
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+    
+    // Dimensions & Padding
+    const SVG_WIDTH = 600;
+    const SVG_HEIGHT = 280;
+    const PADDING = 40;
+    const Y_AXIS_LABELS = [0, 25, 50, 75, 100];
+
+    // Calculate coordinates for data points
+    const pointCoordinates = useMemo(() => {
+        if (data.length < 2) return [];
+        return data.map((d, index) => {
+            const x = PADDING + (index / (data.length - 1)) * (SVG_WIDTH - 2 * PADDING);
+            const y = (SVG_HEIGHT - PADDING) - (d.score / 100) * (SVG_HEIGHT - 2 * PADDING);
+            return { x, y, ...d };
+        });
+    }, [data]);
+
+    // Generate Path for the Line
+    const linePath = useMemo(() => {
+        if (pointCoordinates.length < 2) return '';
+        return pointCoordinates
+            .map((p, i) => (i === 0 ? 'M' : 'L') + `${p.x} ${p.y}`)
+            .join(' ');
+    }, [pointCoordinates]);
+
+    // Generate Area Path (for gradient fill)
+    const areaPath = useMemo(() => {
+        if (pointCoordinates.length < 2) return '';
+        const start = pointCoordinates[0];
+        const end = pointCoordinates[pointCoordinates.length - 1];
+        return `
+            ${linePath}
+            L ${end.x} ${SVG_HEIGHT - PADDING}
+            L ${start.x} ${SVG_HEIGHT - PADDING}
+            Z
+        `;
+    }, [linePath, pointCoordinates]);
+
+    // Calculate Linear Regression Trend Line
+    const trendLine = useMemo(() => {
+        if (data.length < 3) return null; // Need at least 3 points for a meaningful trend
+        
+        const n = data.length;
+        let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+        
+        // X is index (0, 1, 2...), Y is score
+        data.forEach((d, i) => {
+            sumX += i;
+            sumY += d.score;
+            sumXY += i * d.score;
+            sumXX += i * i;
+        });
+        
+        const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+        const intercept = (sumY - slope * sumX) / n;
+        
+        const y1 = intercept;
+        const y2 = slope * (n - 1) + intercept;
+
+        // Helper to map data values to SVG coordinates
+        const mapY = (val: number) => (SVG_HEIGHT - PADDING) - (Math.max(0, Math.min(100, val)) / 100) * (SVG_HEIGHT - 2 * PADDING);
+        const mapX = (idx: number) => PADDING + (idx / (n - 1)) * (SVG_WIDTH - 2 * PADDING);
+
+        return {
+            x1: mapX(0),
+            y1: mapY(y1),
+            x2: mapX(n - 1),
+            y2: mapY(y2),
+            isUpward: slope > 0
+        };
+    }, [data]);
+
+    if (data.length < 2) {
+        return (
+            <div className="text-center py-16 h-72 flex flex-col items-center justify-center border border-dashed rounded-lg border-slate-300 dark:border-slate-700">
+                <BarChartIcon className="w-[46px] h-[46px] text-slate-300 dark:text-slate-600 mb-2" />
+                <p className="font-semibold text-slate-700 dark:text-slate-300">Not Enough Data</p>
+                <p className="text-slate-500 dark:text-slate-400 text-sm">
+                    Complete at least two quizzes to see your performance trend.
+                </p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="relative w-full h-72" onMouseLeave={() => setHoveredIndex(null)}>
+            <svg viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`} className="w-full h-full overflow-visible" aria-label="Quiz score line chart">
+                <defs>
+                    <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#6366f1" stopOpacity="0.3" />
+                        <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+                    </linearGradient>
+                </defs>
+
+                {/* Grid Lines & Y-Axis Labels */}
+                {Y_AXIS_LABELS.map(label => {
+                    const y = (SVG_HEIGHT - PADDING) - (label / 100) * (SVG_HEIGHT - 2 * PADDING);
+                    return (
+                        <g key={label} className="text-slate-300 dark:text-slate-700">
+                            <text x={PADDING - 10} y={y + 4} textAnchor="end" className="text-[10px] fill-slate-400 dark:fill-slate-500">{label}%</text>
+                            <line x1={PADDING} x2={SVG_WIDTH - PADDING} y1={y} y2={y} className="stroke-current" strokeDasharray="4,4" strokeWidth="1" />
+                        </g>
+                    );
+                })}
+
+                {/* X-Axis Line */}
+                <line x1={PADDING} x2={SVG_WIDTH - PADDING} y1={SVG_HEIGHT - PADDING} y2={SVG_HEIGHT - PADDING} className="stroke-slate-300 dark:stroke-slate-600" strokeWidth="1" />
+
+                {/* Date Labels (Only show start and end to avoid clutter if many points, or all if few) */}
+                {pointCoordinates.map(({ x, date }, index) => {
+                    // Show roughly 5 labels max
+                    const showLabel = pointCoordinates.length <= 5 || index === 0 || index === pointCoordinates.length - 1 || index % Math.ceil(pointCoordinates.length/4) === 0;
+                    if (!showLabel) return null;
+                    
+                    return (
+                        <text key={index} x={x} y={SVG_HEIGHT - PADDING + 20} textAnchor="middle" className="text-[10px] fill-slate-500 dark:fill-slate-400">
+                            {date}
+                        </text>
+                    );
+                })}
+
+                {/* Area Fill */}
+                <path d={areaPath} fill="url(#chartGradient)" />
+
+                {/* Trend Line */}
+                {trendLine && (
+                    <line 
+                        x1={trendLine.x1} y1={trendLine.y1} 
+                        x2={trendLine.x2} y2={trendLine.y2} 
+                        className={cn("stroke-2 stroke-slate-400/60 dark:stroke-slate-500/60")}
+                        strokeDasharray="5,5"
+                    />
+                )}
+
+                {/* Main Line */}
+                <path d={linePath} fill="none" strokeWidth="3" className="stroke-indigo-500 drop-shadow-sm" />
+
+                {/* Data Points */}
+                {pointCoordinates.map(({ x, y }, index) => (
+                    <g key={index} className="group cursor-pointer">
+                        {/* Larger invisible touch target */}
+                        <circle cx={x} cy={y} r="15" fill="transparent" onMouseEnter={() => setHoveredIndex(index)} />
+                        {/* Visible point */}
+                        <circle
+                            cx={x}
+                            cy={y}
+                            r={hoveredIndex === index ? 6 : 4}
+                            className={cn(
+                                "fill-white dark:fill-slate-950 stroke-indigo-500 stroke-[3px] transition-all duration-200 ease-out",
+                                hoveredIndex === index && "fill-indigo-100 dark:fill-indigo-900"
+                            )}
+                        />
+                    </g>
+                ))}
+            </svg>
+
+            {/* Tooltip */}
+            {hoveredIndex !== null && pointCoordinates[hoveredIndex] && (
+                <div
+                    className="absolute z-10 p-3 bg-slate-900/95 text-white text-xs rounded-lg shadow-xl pointer-events-none backdrop-blur-sm border border-slate-700 transform -translate-x-1/2 -translate-y-full transition-all duration-200 ease-out"
+                    style={{
+                        left: `${(pointCoordinates[hoveredIndex].x / SVG_WIDTH) * 100}%`,
+                        top: `${(pointCoordinates[hoveredIndex].y / SVG_HEIGHT) * 100}%`,
+                        marginTop: '-15px'
+                    }}
+                >
+                    <div className="font-bold text-sm mb-1">{pointCoordinates[hoveredIndex].score}%</div>
+                    <div className="font-medium text-slate-300 mb-0.5 whitespace-nowrap">{pointCoordinates[hoveredIndex].name}</div>
+                    <div className="text-slate-400">{pointCoordinates[hoveredIndex].date}</div>
+                    
+                    {/* Tooltip Arrow */}
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900 border-r border-b border-slate-700"></div>
+                </div>
+            )}
         </div>
     );
 };

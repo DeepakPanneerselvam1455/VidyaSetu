@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import * as api from '../../lib/api';
 import { useAuth } from '../../lib/auth';
@@ -8,17 +9,16 @@ import { cn } from '../../lib/utils';
 import { Input } from '../../components/ui/Input';
 
 // --- ICONS ---
-const SearchIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>;
-const SearchXIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="14" y1="8" x2="8" y2="14"/><line x1="8" y1="8" x2="14" y2="14"/></svg>;
-const BookIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>;
-const LinkIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"/></svg>;
-const FileTextIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>;
-const VideoIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg>;
-const CheckCircleIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>;
+const SearchIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>;
+const SearchXIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="14" y1="8" x2="8" y2="14"/><line x1="8" y1="8" x2="14" y2="14"/></svg>;
+const BookIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>;
+const LinkIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"/></svg>;
+const FileTextIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>;
+const VideoIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg>;
+const CheckCircleIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>;
 const ArrowRightIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" /></svg>;
 const PlayIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" /></svg>;
 const ChevronDownIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.22 8.22a.75.75 0 011.06 0L10 11.94l3.72-3.72a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.22 9.28a.75.75 0 010-1.06z" clipRule="evenodd" /></svg>;
-const ChatBubbleLeftRightIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fillRule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.75 6.75 0 006.75-6.75v-2.5a.75.75 0 011.5 0v2.5a8.25 8.25 0 01-8.25 8.25c-1.255 0-2.443-.28-3.527-.786a.75.75 0 01.277-1.455zM19.25 10.5a.75.75 0 000-1.5h-2.5a.75.75 0 000 1.5h2.5z" clipRule="evenodd" /><path d="M14.25 6a.75.75 0 000-1.5h-2.5a.75.75 0 000 1.5h2.5z" /><path fillRule="evenodd" d="M12 2.25a8.25 8.25 0 00-8.25 8.25v2.5a.75.75 0 001.5 0v-2.5a6.75 6.75 0 016.75-6.75c1.255 0 2.443.28 3.527.786a.75.75 0 10.554-1.392A9.707 9.707 0 0012 2.25z" clipRule="evenodd" /><path d="M15.75 9a.75.75 0 01.75-.75h2.5a.75.75 0 010 1.5h-2.5a.75.75 0 01-.75-.75z" /></svg>;
 
 // --- HELPER COMPONENTS ---
 const getMaterialIcon = (type: CourseMaterial['type']) => {
@@ -41,7 +41,7 @@ const StudentMyCourses: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [viewedMaterials, setViewedMaterials] = useState<Set<string>>(new Set());
     const [isLoading, setIsLoading] = useState(true);
-    const [expandedSections, setExpandedSections] = useState<Record<string, 'materials' | 'discussions' | null>>({});
+    const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
 
     const calculateProgress = (course: Course, viewed: Set<string>): number => {
         if (!course.materials || course.materials.length === 0) {
@@ -60,7 +60,7 @@ const StudentMyCourses: React.FC = () => {
                 api.getViewedMaterialsForStudent(user.id)
             ]);
             
-            const viewedSet = new Set(viewedMaterialIds);
+            const viewedSet = new Set(viewedMaterialIds as string[]);
             setViewedMaterials(viewedSet);
 
             const coursesWithProgress = assignedCourses.map(course => ({
@@ -104,10 +104,10 @@ const StudentMyCourses: React.FC = () => {
         });
     };
 
-    const toggleSection = (courseId: string, section: 'materials' | 'discussions') => {
+    const toggleSection = (courseId: string) => {
         setExpandedSections(prev => ({
             ...prev,
-            [courseId]: prev[courseId] === section ? null : section
+            [courseId]: !prev[courseId]
         }));
     };
     
@@ -148,7 +148,7 @@ const StudentMyCourses: React.FC = () => {
                                         </div>
                                         <Button
                                             className="shrink-0 flex items-center gap-2"
-                                            onClick={() => toggleSection(course.id, 'materials')}
+                                            onClick={() => toggleSection(course.id)}
                                         >
                                             {course.progress > 0 ? (
                                                 <>Continue <ArrowRightIcon className="w-4 h-4" /></>
@@ -168,18 +168,14 @@ const StudentMyCourses: React.FC = () => {
                                     </div>
                                 </CardContent>
                                 
-                                <div className="border-t border-slate-700 grid grid-cols-2">
-                                    <button onClick={() => toggleSection(course.id, 'materials')} className="flex items-center justify-center gap-2 p-4 text-sm font-medium text-slate-300 hover:bg-slate-700/50 transition-colors border-r border-slate-700">
+                                <div className="border-t border-slate-700 flex">
+                                    <button onClick={() => toggleSection(course.id)} className="flex-1 flex items-center justify-center gap-2 p-4 text-sm font-medium text-slate-300 hover:bg-slate-700/50 transition-colors">
                                         Materials ({course.materials.length})
-                                        <ChevronDownIcon className={cn('w-5 h-5 transition-transform', expandedSections[course.id] === 'materials' && 'rotate-180')} />
-                                    </button>
-                                    <button onClick={() => toggleSection(course.id, 'discussions')} className="flex items-center justify-center gap-2 p-4 text-sm font-medium text-slate-300 hover:bg-slate-700/50 transition-colors">
-                                        Discussions (1)
-                                        <ChevronDownIcon className={cn('w-5 h-5 transition-transform', expandedSections[course.id] === 'discussions' && 'rotate-180')} />
+                                        <ChevronDownIcon className={cn('w-5 h-5 transition-transform', expandedSections[course.id] && 'rotate-180')} />
                                     </button>
                                 </div>
 
-                                {expandedSections[course.id] === 'materials' && (
+                                {expandedSections[course.id] && (
                                     <div className="p-6 border-t border-slate-700 bg-black/10">
                                         {course.materials.length > 0 ? (
                                             <ul className="space-y-3">
@@ -198,11 +194,6 @@ const StudentMyCourses: React.FC = () => {
                                         ) : (
                                             <p className="text-sm text-center text-slate-300 py-4">No materials available for this course.</p>
                                         )}
-                                    </div>
-                                )}
-                                {expandedSections[course.id] === 'discussions' && (
-                                    <div className="p-6 border-t border-slate-700 bg-black/10 text-center">
-                                        <p className="text-sm text-slate-300">Discussions feature coming soon.</p>
                                     </div>
                                 )}
                             </Card>
