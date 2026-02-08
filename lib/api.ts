@@ -30,13 +30,6 @@ const set = <T>(key: string, value: T): void => {
 
 // --- INITIAL DATA SEEDING ---
 export const initMockData = async () => {
-    // Remove Deepak P user if it exists
-    const existingProfiles = get<User[]>(KEYS.PROFILES, []);
-    const filteredProfiles = existingProfiles.filter(u => u.email !== 'deepakp1455@gmail.com');
-    if (filteredProfiles.length < existingProfiles.length) {
-        set(KEYS.PROFILES, filteredProfiles);
-    }
-
     if (localStorage.getItem(KEYS.PROFILES)) return;
 
     const demoProfiles: User[] = [

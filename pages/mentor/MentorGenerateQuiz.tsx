@@ -547,7 +547,7 @@ const MentorGenerateQuiz: React.FC = () => {
                                 </Select>
                             </div>
                             <div>
-                                <label className="block text-sm font-semibold mb-2 text-slate-700 dark:text-slate-300">Topic Refinement</label>
+                                <label className="block text-sm font-semibold mb-2 text-slate-700 dark:text-slate-300">Topic Refinement <span className="text-indigo-500">*</span></label>
                                 <div className="flex gap-2">
                                     <Input 
                                         value={topic} 
