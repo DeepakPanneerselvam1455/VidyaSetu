@@ -30,7 +30,7 @@ const set = <T>(key: string, value: T): void => {
 
 // --- INITIAL DATA SEEDING ---
 export const initMockData = async () => {
-    if (localStorage.getItem(KEYS.PROFILES)) return;
+    if (localStorage.getItem(KEYS.PROFILES) && localStorage.getItem(KEYS.COURSES)?.length! > 2) return;
 
     const demoProfiles: User[] = [
         { id: 'u1', email: 'student@skillforge.com', name: 'Demo Student', role: 'student', createdAt: new Date().toISOString(), accountStatus: 'ENABLED' },
@@ -44,10 +44,97 @@ export const initMockData = async () => {
         { id: 'cat3', name: 'Career Advice', description: 'Mentorship and job hunting', icon: 'Briefcase' }
     ];
 
+    const demoCourses: Course[] = [
+        {
+            id: 'c1',
+            title: 'Mastering React Hooks',
+            description: 'Dive deep into functional components with useEffect, useMemo, and custom hooks.',
+            difficulty: 'Intermediate',
+            mentorId: 'u2',
+            instructorName: 'Expert Mentor',
+            institutionName: 'SkillForge Academy',
+            publishDate: '2024-01-15',
+            language: 'English',
+            topics: ['Hooks', 'React', 'Frontend'],
+            materials: [
+                { id: 'm1', title: 'Introduction to useEffect', type: 'video', url: 'https://www.youtube.com/watch?v=0ZJgIjIuY7U' },
+                { id: 'm2', title: 'Custom Hooks Patterns', type: 'pdf', url: 'patterns.pdf' },
+                { id: 'm3', title: 'Optimization with useMemo', type: 'link', url: 'https://react.dev/reference/react/useMemo' }
+            ],
+            createdAt: new Date().toISOString()
+        },
+        {
+            id: 'c2',
+            title: 'AI Fundamentals with Gemini',
+            description: 'Learn how to integrate Generative AI into your web applications using the Google Gemini API.',
+            difficulty: 'Beginner',
+            mentorId: 'u2',
+            instructorName: 'Expert Mentor',
+            institutionName: 'SkillForge Academy',
+            publishDate: '2024-02-10',
+            language: 'English',
+            topics: ['AI', 'LLM', 'Gemini'],
+            materials: [
+                { id: 'm4', title: 'Gemini API Overview', type: 'video', url: 'https://www.youtube.com/watch?v=GeminiIntro' },
+                { id: 'm5', title: 'Prompt Engineering Guide', type: 'pdf', url: 'prompts.pdf' }
+            ],
+            createdAt: new Date().toISOString()
+        },
+        {
+            id: 'c3',
+            title: 'Node.js Backend Architecture',
+            description: 'Scalable backend design with Express, MongoDB, and modern patterns.',
+            difficulty: 'Advanced',
+            mentorId: 'u2',
+            instructorName: 'Expert Mentor',
+            institutionName: 'SkillForge Academy',
+            publishDate: '2024-03-01',
+            language: 'English',
+            topics: ['Backend', 'Node.js', 'Scaling'],
+            materials: [
+                { id: 'm6', title: 'Stream API in Depth', type: 'link', url: 'https://nodejs.org/api/stream.html' }
+            ],
+            createdAt: new Date().toISOString()
+        }
+    ];
+
+    const demoQuizzes: Quiz[] = [
+        {
+            id: 'q1',
+            courseId: 'c1',
+            title: 'Hooks Proficiency Test',
+            difficulty: 'Intermediate',
+            createdBy: 'u2',
+            createdAt: new Date().toISOString(),
+            duration: 15,
+            aiInvolvement: 'assisted',
+            questions: [
+                {
+                    id: 'qu1',
+                    type: 'multiple-choice',
+                    question: 'Which hook is used to handle side effects in React?',
+                    options: ['useState', 'useMemo', 'useEffect', 'useCallback'],
+                    correctAnswer: 'useEffect',
+                    points: 10,
+                    bloomsTaxonomy: 'Remembering'
+                },
+                {
+                    id: 'qu2',
+                    type: 'multiple-choice',
+                    question: 'What does useMemo return?',
+                    options: ['A function', 'A memoized value', 'A state tuple', 'A ref object'],
+                    correctAnswer: 'A memoized value',
+                    points: 10,
+                    bloomsTaxonomy: 'Understanding'
+                }
+            ]
+        }
+    ];
+
     set(KEYS.PROFILES, demoProfiles);
     set(KEYS.FORUM_CATS, demoForumCats);
-    set(KEYS.COURSES, []);
-    set(KEYS.QUIZZES, []);
+    set(KEYS.COURSES, demoCourses);
+    set(KEYS.QUIZZES, demoQuizzes);
     set(KEYS.ATTEMPTS, []);
     set(KEYS.LOGS, []);
     set(KEYS.TUTORING, []);
