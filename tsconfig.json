@@ -25,5 +25,13 @@
     },
     "allowImportingTsExtensions": true,
     "noEmit": true
-  }
+  },
+  "include": [
+    "src",
+    "lib",
+    "pages",
+    "types",
+    "components",
+    "server"
+  ]
 }

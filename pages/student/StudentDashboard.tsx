@@ -37,7 +37,7 @@ const StudentDashboard: React.FC = () => {
                     api.getAssignedQuizzesForStudent(user.id),
                     api.getCourses()
                 ]);
-                
+
                 setAttempts(userAttempts);
 
                 const totalScore = userAttempts.reduce((acc, a) => acc + (a.score / a.totalPoints) * 100, 0);
@@ -57,7 +57,7 @@ const StudentDashboard: React.FC = () => {
                 setAssignedQuizzes(sortedQuizzes.slice(0, 3));
 
                 if (userAttempts.length > 0) {
-                    const latestAttempt = [...userAttempts].sort((a,b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime())[0];
+                    const latestAttempt = [...userAttempts].sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime())[0];
                     const quiz = await api.getQuizById(latestAttempt.quizId);
                     if (quiz) {
                         const course = await api.getCourseById(quiz.courseId);
@@ -84,16 +84,16 @@ const StudentDashboard: React.FC = () => {
         };
 
 
-        const fetchActivityLog = () => {
-             if (!user) return;
-             const allLogs = getActivityLog();
-             setRecentActivity(allLogs.filter(log => log.details?.studentId === user.id || (log.type === 'user_login' && log.details?.userId === user.id)).slice(0, 8));
+        const fetchActivityLog = async () => {
+            if (!user) return;
+            const allLogs = await getActivityLog();
+            setRecentActivity(allLogs.filter(log => log.details?.studentId === user.id || (log.type === 'user_login' && log.details?.userId === user.id)).slice(0, 8));
         }
-        
+
         const handleNewLog = (newLog: ActivityLogEntry) => {
             if (!user) return;
             if (newLog.details?.studentId === user.id || (newLog.type === 'user_login' && newLog.details?.userId === user.id)) {
-                 setRecentActivity(prev => [newLog, ...prev].slice(0, 8));
+                setRecentActivity(prev => [newLog, ...prev].slice(0, 8));
             }
         };
 
@@ -103,15 +103,15 @@ const StudentDashboard: React.FC = () => {
 
         return () => unsubscribe(handleNewLog);
     }, [user]);
-    
+
     const getActivityIcon = (type: ActivityLogEntry['type']) => {
-        switch(type) {
-            case 'quiz_submit': return <CheckIcon className="w-[18px] h-[18px] text-green-500"/>;
-            case 'user_login': return <LogInIcon className="w-[18px] h-[18px] text-blue-500"/>;
-            default: return <InfoIcon className="w-[18px] h-[18px] text-slate-500"/>;
+        switch (type) {
+            case 'quiz_submit': return <CheckIcon className="w-[18px] h-[18px] text-green-500" />;
+            case 'user_login': return <LogInIcon className="w-[18px] h-[18px] text-blue-500" />;
+            default: return <InfoIcon className="w-[18px] h-[18px] text-slate-500" />;
         }
     };
-    
+
     const chartData = useMemo(() => {
         return attempts
             .sort((a, b) => new Date(a.submittedAt).getTime() - new Date(b.submittedAt).getTime())
@@ -126,32 +126,32 @@ const StudentDashboard: React.FC = () => {
     if (isLoading) {
         return <div className="text-center p-8">Loading dashboard...</div>;
     }
-    
+
     return (
         <div className="space-y-6">
             <div>
                 <h1 className="text-3xl font-bold tracking-tight">Student Dashboard</h1>
                 <p className="text-slate-500 dark:text-slate-400">Welcome back, {user?.name}. Here's your progress overview.</p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <StatCard 
-                  icon={<BookOpenIcon className="w-6 h-6 text-violet-500" />} 
-                  title="Enrolled Courses" 
-                  value={stats.assigned} 
+                <StatCard
+                    icon={<BookOpenIcon className="w-6 h-6 text-violet-500" />}
+                    title="Enrolled Courses"
+                    value={stats.assigned}
                 />
-                <StatCard 
-                  icon={<CheckCircleIcon className="w-6 h-6 text-emerald-500" />} 
-                  title="Completed Quizzes" 
-                  value={stats.completed} 
+                <StatCard
+                    icon={<CheckCircleIcon className="w-6 h-6 text-emerald-500" />}
+                    title="Completed Quizzes"
+                    value={stats.completed}
                 />
-                <StatCard 
-                  icon={<TrendingUpIcon className="w-6 h-6 text-sky-500" />} 
-                  title="Average Score" 
-                  value={`${stats.progress}%`} 
+                <StatCard
+                    icon={<TrendingUpIcon className="w-6 h-6 text-sky-500" />}
+                    title="Average Score"
+                    value={`${stats.progress}%`}
                 />
             </div>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
                     <Card>
@@ -166,7 +166,7 @@ const StudentDashboard: React.FC = () => {
                                 <p className="text-slate-500">Analyzing performance...</p>
                             ) : (
                                 <p className="text-lg font-medium text-slate-800 dark:text-slate-200">
-                                  "{learningSuggestion}"
+                                    "{learningSuggestion}"
                                 </p>
                             )}
                         </CardContent>
@@ -213,7 +213,7 @@ const StudentDashboard: React.FC = () => {
                 </div>
             </div>
 
-             <div className="space-y-4">
+            <div className="space-y-4">
                 <h2 className="text-xl font-bold tracking-tight">Assigned Quizzes</h2>
                 <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                     {assignedQuizzes.length > 0 ? (
@@ -233,11 +233,11 @@ const StudentDashboard: React.FC = () => {
                                     </div>
                                 </CardContent>
                                 <CardFooter>
-                                    <Link 
-                                      to={`/student/quiz/${quiz.id}`} 
-                                      className={cn(buttonVariants({ variant: 'default', size: 'sm' }), 'w-full')}
+                                    <Link
+                                        to={`/student/quiz/${quiz.id}`}
+                                        className={cn(buttonVariants({ variant: 'default', size: 'sm' }), 'w-full')}
                                     >
-                                      Take Quiz
+                                        Take Quiz
                                     </Link>
                                 </CardFooter>
                             </Card>
@@ -253,10 +253,10 @@ const StudentDashboard: React.FC = () => {
     );
 };
 
-const StatCard: React.FC<{icon: React.ReactNode; title: string; value: string | number}> = ({ icon, title, value }) => (
+const StatCard: React.FC<{ icon: React.ReactNode; title: string; value: string | number }> = ({ icon, title, value }) => (
     <Card className="flex items-center p-6 gap-4">
         <div className="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">
-          {icon}
+            {icon}
         </div>
         <div>
             <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{title}</p>
@@ -299,24 +299,24 @@ const ScoreTrendChart: React.FC<{ data: { score: number, date: string }[] }> = (
 };
 
 const BookOpenIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>
 );
 const CheckCircleIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
 );
 const TrendingUpIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17" /><polyline points="16 7 22 7 22 13" /></svg>
 );
 const CheckIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
 );
 const LogInIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /><polyline points="10 17 15 12 10 7" /><line x1="15" y1="12" x2="3" y2="12" /></svg>
 );
 const InfoIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>
 );
-const SparklesIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.9 4.8-4.8 1.9 4.8 1.9L12 16l1.9-4.8 4.8-1.9-4.8-1.9L12 3z"/><path d="M5 22v-5l-1.9-4.8-4.8-1.9 4.8-1.9L5 5v5"/><path d="M19 22v-5l1.9-4.8 4.8-1.9-4.8-1.9L19 5v5"/></svg>;
-const ClipboardListIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>;
+const SparklesIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.9 4.8-4.8 1.9 4.8 1.9L12 16l1.9-4.8 4.8-1.9-4.8-1.9L12 3z" /><path d="M5 22v-5l-1.9-4.8-4.8-1.9 4.8-1.9L5 5v5" /><path d="M19 22v-5l1.9-4.8 4.8-1.9-4.8-1.9L19 5v5" /></svg>;
+const ClipboardListIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg>;
 
 export default StudentDashboard;

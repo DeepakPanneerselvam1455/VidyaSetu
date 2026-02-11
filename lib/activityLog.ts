@@ -1,77 +1,67 @@
-// lib/activityLog.ts
+import { supabase } from './api';
 import { formatDistanceToNow } from 'date-fns';
-
-export type ActivityType = 
-    | 'user_login' 
-    | 'user_create' 
-    | 'user_delete'
-    | 'user_role_change'
-    | 'user_status_change'
-    | 'user_password_reset' 
-    | 'course_create' 
-    | 'course_update' 
-    | 'course_delete'
-    | 'quiz_submit'
-    | 'quiz_create'
-    | 'quiz_delete'
-    | 'report_generated'
-    | 'system_setting_change'
-    | 'content_moderation_approve'
-    | 'security_alert';
 
 export interface ActivityLogEntry {
     id: string;
-    type: ActivityType;
-    title: string;
+    type: string; // Changed from action to type to match usage
+    title: string; // Changed from details to title to match usage
     timestamp: string;
-    details?: Record<string, any>;
+    details?: any; // Added details object
 }
 
-const LOG_KEY = 'skillforge_activity_log';
-
-// --- Pub/Sub for real-time updates ---
-type Listener = (newLog: ActivityLogEntry) => void;
-const listeners = new Set<Listener>();
-
-export const subscribe = (callback: Listener) => {
-    listeners.add(callback);
+export const formatTimeAgo = (timestamp: string): string => {
+    return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
 };
-
-export const unsubscribe = (callback: Listener) => {
-    listeners.delete(callback);
-};
-
-const notify = (newLog: ActivityLogEntry) => {
-    listeners.forEach(listener => listener(newLog));
-};
-
 
 // --- Core Logging Functions ---
-export const getActivityLog = (): ActivityLogEntry[] => {
+export const getActivityLog = async (): Promise<ActivityLogEntry[]> => {
     try {
-        const log = localStorage.getItem(LOG_KEY);
-        return log ? JSON.parse(log) : [];
+        const { data, error } = await supabase
+            .from('activity_logs')
+            .select('*')
+            .order('timestamp', { ascending: false })
+            .limit(50);
+
+        if (error) {
+            console.error("Failed to fetch activity log", error);
+            return [];
+        }
+
+        return data.map((d: any) => ({
+            id: d.id,
+            type: d.type || 'unknown',
+            title: d.title || '',
+            timestamp: d.timestamp,
+            details: d.details
+        }));
     } catch (e) {
+        console.error("Exception in getActivityLog", e);
         return [];
     }
 };
 
-export const logActivity = (type: ActivityType, title: string, details?: Record<string, any>): void => {
-    const currentLog = getActivityLog();
-    const newEntry: ActivityLogEntry = {
-        id: `log-${Date.now()}`,
-        type,
-        title,
-        timestamp: new Date().toISOString(),
-        details,
-    };
+export const logActivity = async (type: string, title: string, details?: any) => {
+    try {
+        const { error } = await supabase.from('activity_logs').insert([{
+            type,
+            title,
+            details,
+            timestamp: new Date().toISOString()
+        }]);
 
-    const updatedLog = [newEntry, ...currentLog].slice(0, 50); // Keep last 50 entries
-    localStorage.setItem(LOG_KEY, JSON.stringify(updatedLog));
-    notify(newEntry);
+        if (error) {
+            console.error("Failed to log activity to Supabase", error);
+        }
+    } catch (err) {
+        console.error("Failed to log activity to Supabase", err);
+    }
 };
 
-// --- Utility ---
-export const formatTimeAgo = (timestamp: string): string => {
-    return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
+export const clearActivityLog = async () => {
+    // Optional: Implement if needed, though usually logs should be immutable
+    console.warn("clearActivityLog not implemented for Supabase backend");
 };
+
+// Deprecated/No-op functions for compatibility if needed
+export const subscribe = (cb: any) => { };
+export const unsubscribe = (cb: any) => { };

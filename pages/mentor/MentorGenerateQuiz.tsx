@@ -17,39 +17,39 @@ import { Badge } from '../../components/ui/Badge';
 // Icons
 const SparklesIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="m12 3-1.9 4.8-4.8 1.9 4.8 1.9L12 16l1.9-4.8 4.8-1.9-4.8-1.9L12 3z"/>
-        <path d="M5 22v-5l-1.9-4.8-4.8-1.9 4.8-1.9L5 5v5"/>
-        <path d="M19 22v-5l1.9-4.8 4.8-1.9-4.8-1.9L19 5v5"/>
+        <path d="m12 3-1.9 4.8-4.8 1.9 4.8 1.9L12 16l1.9-4.8 4.8-1.9-4.8-1.9L12 3z" />
+        <path d="M5 22v-5l-1.9-4.8-4.8-1.9 4.8-1.9L5 5v5" />
+        <path d="M19 22v-5l1.9-4.8 4.8-1.9-4.8-1.9L19 5v5" />
     </svg>
 );
 const Trash2Icon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/>
+        <path d="M3 6h18" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><line x1="10" x2="10" y1="11" y2="17" /><line x1="14" x2="14" y1="11" y2="17" />
     </svg>
 );
 const BotIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 8V4H8" /><rect width="16" height="12" x="4" y="8" rx="2" /><path d="M2 14h2" /><path d="M20 14h2" /><path d="M15 13v2" /><path d="M9 13v2" /></svg>
 );
 const LoaderIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/>
+        <line x1="12" y1="2" x2="12" y2="6" /><line x1="12" y1="18" x2="12" y2="22" /><line x1="4.93" y1="4.93" x2="7.76" y2="7.76" /><line x1="16.24" y1="16.24" x2="19.07" y2="19.07" /><line x1="2" y1="12" x2="6" y2="12" /><line x1="18" y1="12" x2="22" y2="12" /><line x1="4.93" y1="19.07" x2="7.76" y2="16.24" /><line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
     </svg>
 );
 const CheckIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
 );
 
-const FileUpIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M12 12v6"/><path d="m9 15 3-3 3 3"/></svg>;
-const FileIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>;
-const RotateCwIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>;
+const FileUpIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /><path d="M12 12v6" /><path d="m9 15 3-3 3 3" /></svg>;
+const FileIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /></svg>;
+const RotateCwIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" /><path d="M21 3v5h-5" /></svg>;
 const AlertTriangleIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-        <line x1="12" x2="12" y1="9" y2="13"/>
-        <line x1="12" x2="12.01" y1="17" y2="17"/>
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+        <line x1="12" x2="12" y1="9" y2="13" />
+        <line x1="12" x2="12.01" y1="17" y2="17" />
     </svg>
 );
-const PencilIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>;
+const PencilIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" /><path d="m15 5 4 4" /></svg>;
 
 const ErrorAlert = ({ message }: { message: string | null }) => {
     if (!message) return null;
@@ -182,7 +182,7 @@ const MentorGenerateQuiz: React.FC = () => {
             }
         };
     }, [generatedQuestions, quizTitle, duration, selectedCourse, isLoading]);
-    
+
     const clearDraft = () => {
         if (selectedCourse) {
             localStorage.removeItem(`${DRAFT_KEY_PREFIX}${selectedCourse.id}`);
@@ -207,9 +207,9 @@ const MentorGenerateQuiz: React.FC = () => {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            const files: UploadedFile[] = Array.from(e.target.files).map(f => ({ 
-                file: f as File, 
-                status: 'pending' as const 
+            const files: UploadedFile[] = Array.from(e.target.files).map(f => ({
+                file: f as File,
+                status: 'pending' as const
             }));
             setUploadedFiles(prev => [...prev, ...files]);
             processFiles(files);
@@ -221,7 +221,7 @@ const MentorGenerateQuiz: React.FC = () => {
         for (const f of files) {
             const index = updated.findIndex(u => u.file === f.file);
             if (index === -1) continue;
-            
+
             updated[index].status = 'processing';
             setUploadedFiles([...updated]);
 
@@ -256,7 +256,7 @@ const MentorGenerateQuiz: React.FC = () => {
     const removeFile = (index: number) => {
         setUploadedFiles(prev => prev.filter((_, i) => i !== index));
     };
-    
+
     const handleSuggestTopics = async () => {
         if (!selectedCourse) return;
         setIsSuggestingTopics(true);
@@ -265,7 +265,11 @@ const MentorGenerateQuiz: React.FC = () => {
             const topics = await api.generateQuizTopics(selectedCourse.title, selectedCourse.description, selectedCourse.materials);
             setSuggestedTopics(topics);
         } catch (err: any) {
-            setGenerationError(err.message || "Failed to suggest topics.");
+            let msg = err.message || "Failed to suggest topics.";
+            if (msg.includes('503') || msg.includes('Overloaded') || msg.includes('quota')) {
+                msg = "AI service is busy. Please try again in a moment.";
+            }
+            setGenerationError(msg);
         } finally {
             setIsSuggestingTopics(false);
         }
@@ -305,12 +309,16 @@ const MentorGenerateQuiz: React.FC = () => {
             setGeneratedQuestions(questions);
             setQuizTitle(`${topic.split(',')[0].trim()} Assessment`);
         } catch (err: any) {
-            setGenerationError(err.message);
+            let msg = err.message || "Failed to generate questions.";
+            if (msg.includes('503') || msg.includes('Overloaded') || msg.includes('quota')) {
+                msg = "The AI service is currently experiencing high demand. Please try again in a minute.";
+            }
+            setGenerationError(msg);
         } finally {
             setIsLoading(false);
         }
     };
-    
+
     const handleSaveQuiz = async () => {
         if (!selectedCourse || !user || generatedQuestions.length === 0 || !quizTitle) {
             setSaveError("Missing information to save the quiz.");
@@ -391,20 +399,20 @@ const MentorGenerateQuiz: React.FC = () => {
         try {
             const readyFiles = uploadedFiles.filter(f => f.status === 'ready');
             const combinedContext = readyFiles.map(f => `FILE: ${f.file.name}\n${f.text}`).join('\n\n---\n\n');
-            
+
             const newQ = await api.regenerateQuestionWithAI(
                 topic || q.question.substring(0, 50),
                 difficulty,
                 q.type,
                 combinedContext || undefined
             );
-            
+
             if (newQ) {
                 const newQuestions = [...generatedQuestions];
                 newQuestions[index] = newQ;
                 setGeneratedQuestions(newQuestions);
                 setFeedback(prev => {
-                    const next = {...prev};
+                    const next = { ...prev };
                     delete next[q.id];
                     return next;
                 });
@@ -419,7 +427,7 @@ const MentorGenerateQuiz: React.FC = () => {
     const handleQuestionChange = (index: number, field: string, value: string | string[] | number) => {
         const newQuestions = [...generatedQuestions];
         const questionToUpdate: Question = JSON.parse(JSON.stringify(newQuestions[index]));
-    
+
         if (field === 'question' && typeof value === 'string') {
             questionToUpdate.question = value;
         } else if (field === 'correctAnswer' && typeof value === 'string') {
@@ -432,7 +440,7 @@ const MentorGenerateQuiz: React.FC = () => {
                 questionToUpdate.options[optionIndex] = value;
             }
         }
-        
+
         newQuestions[index] = questionToUpdate;
         setGeneratedQuestions(newQuestions);
     };
@@ -463,11 +471,11 @@ const MentorGenerateQuiz: React.FC = () => {
 
                 <div className="grid md:grid-cols-2 gap-8">
                     {/* AI Mode Card */}
-                    <Card 
+                    <Card
                         className="group relative overflow-hidden border-2 border-transparent hover:border-indigo-500 transition-all cursor-pointer bg-white dark:bg-slate-950 shadow-xl"
                         onClick={() => setCreationMode('ai')}
                     >
-                         <div className="absolute top-0 right-0 p-3">
+                        <div className="absolute top-0 right-0 p-3">
                             <Badge className="bg-indigo-600 text-white border-0">Recommended</Badge>
                         </div>
                         <CardHeader className="text-center pt-10">
@@ -488,7 +496,7 @@ const MentorGenerateQuiz: React.FC = () => {
                     </Card>
 
                     {/* Manual Mode Card */}
-                    <Card 
+                    <Card
                         className="group relative overflow-hidden border-2 border-transparent hover:border-violet-500 transition-all cursor-pointer bg-white dark:bg-slate-950 shadow-xl"
                         onClick={() => navigate('/mentor/manual-quiz')}
                     >
@@ -549,10 +557,10 @@ const MentorGenerateQuiz: React.FC = () => {
                             <div>
                                 <label className="block text-sm font-semibold mb-2 text-slate-700 dark:text-slate-300">Topic Refinement <span className="text-indigo-500">*</span></label>
                                 <div className="flex gap-2">
-                                    <Input 
-                                        value={topic} 
-                                        onChange={e => setTopic(e.target.value)} 
-                                        placeholder="e.g., Specific focus area..." 
+                                    <Input
+                                        value={topic}
+                                        onChange={e => setTopic(e.target.value)}
+                                        placeholder="e.g., Specific focus area..."
                                         required
                                     />
                                     <Button type="button" variant="outline" size="icon" onClick={handleSuggestTopics} disabled={isSuggestingTopics || !selectedCourse} title="Suggest Topics from Course">
@@ -565,16 +573,16 @@ const MentorGenerateQuiz: React.FC = () => {
                         {/* File Upload Zone */}
                         <div>
                             <label className="block text-sm font-semibold mb-2 text-slate-700 dark:text-slate-300">Knowledge Source Materials</label>
-                            <div 
+                            <div
                                 className="border-2 border-dashed border-slate-300 dark:border-slate-800 rounded-xl p-8 bg-slate-50/50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-900/80 transition-all text-center cursor-pointer group"
                                 onClick={() => fileInputRef.current?.click()}
                             >
-                                <input 
-                                    type="file" 
-                                    multiple 
-                                    className="hidden" 
-                                    ref={fileInputRef} 
-                                    onChange={handleFileChange} 
+                                <input
+                                    type="file"
+                                    multiple
+                                    className="hidden"
+                                    ref={fileInputRef}
+                                    onChange={handleFileChange}
                                     accept=".txt,.pdf,.doc,.docx,.csv,.xlsx,.md,.json"
                                 />
                                 <div className="w-14 h-14 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
@@ -622,7 +630,7 @@ const MentorGenerateQuiz: React.FC = () => {
                         )}
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-slate-200 dark:border-slate-800">
-                             <div>
+                            <div>
                                 <label htmlFor="difficulty" className="block text-sm font-semibold mb-2">Target Difficulty</label>
                                 <Select id="difficulty" value={difficulty} onChange={e => setDifficulty(e.target.value as any)}>
                                     <option>Beginner</option>
@@ -680,7 +688,7 @@ const MentorGenerateQuiz: React.FC = () => {
                                     <label htmlFor="quizTitle" className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-1.5">Quiz Title</label>
                                     <Input id="quizTitle" value={quizTitle} onChange={e => setQuizTitle(e.target.value)} required className="font-semibold" />
                                 </div>
-                                 <div>
+                                <div>
                                     <label htmlFor="quiz-duration" className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-1.5">Time Limit (min)</label>
                                     <Select id="quiz-duration" value={duration} onChange={e => setDuration(parseInt(e.target.value))}>
                                         <option value={5}>5 Minutes</option>
@@ -735,7 +743,7 @@ const MentorGenerateQuiz: React.FC = () => {
                                                 className="h-8 w-8 text-red-500 hover:bg-red-50"
                                                 onClick={() => handleRemoveQuestion(index)}
                                             >
-                                                <Trash2Icon className="w-4 h-4"/>
+                                                <Trash2Icon className="w-4 h-4" />
                                             </Button>
                                         </div>
                                     </div>
@@ -744,16 +752,16 @@ const MentorGenerateQuiz: React.FC = () => {
                                             <label className="text-xs font-bold text-slate-400 uppercase mb-1 block">Question Text</label>
                                             <Textarea value={q.question} onChange={e => handleQuestionChange(index, 'question', e.target.value)} rows={2} className="resize-none" />
                                         </div>
-                                        
+
                                         {q.type === 'multiple-choice' && q.options && (
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                                 {q.options.map((opt, i) => (
                                                     <div key={i} className="flex gap-2">
                                                         <div className="flex-1">
                                                             <label className="text-[10px] font-bold text-slate-400 uppercase mb-0.5 block">Option {i + 1}</label>
-                                                            <Input 
-                                                                value={opt} 
-                                                                onChange={e => handleQuestionChange(index, `option-${i}`, e.target.value)} 
+                                                            <Input
+                                                                value={opt}
+                                                                onChange={e => handleQuestionChange(index, `option-${i}`, e.target.value)}
                                                                 className={cn(opt === q.correctAnswer && "border-green-500 bg-green-50/20")}
                                                             />
                                                         </div>
@@ -810,7 +818,7 @@ const MentorGenerateQuiz: React.FC = () => {
                     quiz={quizToAssign}
                 />
             )}
-            
+
             {draftToRestore && (
                 <Dialog
                     isOpen={isRestoreModalOpen}
@@ -840,7 +848,7 @@ const AssignQuizDialog: React.FC<AssignQuizDialogProps> = ({ isOpen, onClose, qu
     const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
-        if(isOpen) {
+        if (isOpen) {
             api.getUsers().then(allUsers => {
                 setStudents(allUsers.filter(u => u.role === 'student'));
             });
@@ -852,8 +860,8 @@ const AssignQuizDialog: React.FC<AssignQuizDialogProps> = ({ isOpen, onClose, qu
     }, [isOpen]);
 
     const handleStudentSelect = (studentId: string) => {
-        setSelectedStudentIds(prev => 
-            prev.includes(studentId) 
+        setSelectedStudentIds(prev =>
+            prev.includes(studentId)
                 ? prev.filter(id => id !== studentId)
                 : [...prev, studentId]
         );
@@ -880,15 +888,15 @@ const AssignQuizDialog: React.FC<AssignQuizDialogProps> = ({ isOpen, onClose, qu
             setTimeout(() => {
                 onClose();
             }, 2000);
-        } catch(err) {
+        } catch (err) {
             setError("Failed to assign quiz.");
             setIsAssigning(false);
         }
     };
-    
+
     return (
         <Dialog isOpen={isOpen} onClose={onClose} title={`Assign Quiz: ${quiz.title}`}>
-             <div className="space-y-4">
+            <div className="space-y-4">
                 {successMessage ? (
                     <div className="text-center p-8 bg-green-50 dark:bg-green-900/20 rounded-xl">
                         <CheckIcon className="w-12 h-12 text-green-500 mx-auto mb-4" />
@@ -900,9 +908,9 @@ const AssignQuizDialog: React.FC<AssignQuizDialogProps> = ({ isOpen, onClose, qu
                             <label className="block text-sm font-semibold mb-2">Select Target Students</label>
                             <div className="border rounded-xl max-h-60 overflow-y-auto p-2 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
                                 <div className="flex items-center p-3 border-b dark:border-slate-800">
-                                    <input 
-                                        type="checkbox" 
-                                        id="select-all" 
+                                    <input
+                                        type="checkbox"
+                                        id="select-all"
                                         className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                                         checked={selectedStudentIds.length === students.length && students.length > 0}
                                         onChange={handleSelectAll}
@@ -911,9 +919,9 @@ const AssignQuizDialog: React.FC<AssignQuizDialogProps> = ({ isOpen, onClose, qu
                                 </div>
                                 {students.map(student => (
                                     <div key={student.id} className="flex items-center p-3 rounded-lg hover:bg-white dark:hover:bg-slate-800 transition-colors">
-                                        <input 
-                                            type="checkbox" 
-                                            id={`student-${student.id}`} 
+                                        <input
+                                            type="checkbox"
+                                            id={`student-${student.id}`}
                                             className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                                             checked={selectedStudentIds.includes(student.id)}
                                             onChange={() => handleStudentSelect(student.id)}
