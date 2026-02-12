@@ -12,7 +12,7 @@ if (!rootElement) {
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
-    <ThemeProvider defaultTheme="system" storageKey="skillforge-ui-theme">
+    <ThemeProvider defaultTheme="dark" storageKey="skillforge-ui-theme">
       <App />
     </ThemeProvider>
   </React.StrictMode>
