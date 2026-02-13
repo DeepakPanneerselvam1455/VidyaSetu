@@ -1,6 +1,7 @@
 
 import { User, Course, Quiz, Question, QuizAttempt, ForumCategory, ForumThread, ForumPost, TutoringSession, MentorshipRequest, ChatMessage as AppChatMessage } from '../types';
 import { GoogleGenAI, Type } from "@google/genai";
+import { SignJWT } from 'jose';
 import { supabase } from './supabase';
 export { supabase };
 
@@ -50,27 +51,25 @@ export const register = async (userData: any, pass: string) => {
     const { data: authData, error: authError } = await supabase.auth.signUp({
         email: userData.email,
         password: pass,
+        options: {
+            data: {
+                name: userData.name,
+                role: userData.role || 'student', // Default to student
+            }
+        }
     });
 
     if (authError) throw authError;
     if (!authData.user) throw new Error("Registration failed");
 
-    // 2. Create Profile
+    // Profile creation is now handled by the 'on_auth_user_created' database trigger.
+    // We construct the user object to return it immediately to the UI.
     const newUser: User = {
         ...userData,
         id: authData.user.id,
         createdAt: new Date().toISOString(),
         accountStatus: 'ENABLED'
     };
-
-    const { error: profileError } = await supabase
-        .from('profiles')
-        .insert([newUser]);
-
-    if (profileError) {
-        // Cleanup auth user if profile creation fails? For now just throw.
-        throw profileError;
-    }
 
     return newUser;
 };
@@ -408,6 +407,19 @@ export const updateTutoringSession = async (data: any) => {
     if (error) throw error;
 };
 
+export const startTutoringSession = async (id: string) => {
+    // Only update to 'active' if it's currently 'scheduled'
+    // This simple update is good enough for now, but RLS should restrict this to the mentor.
+    // To prevent race conditions/duplicates, we could check status first or trust the UI + RLS.
+    const { error } = await supabase
+        .from('tutoring_sessions')
+        .update({ status: 'active' })
+        .eq('id', id)
+        .eq('status', 'scheduled'); // Optimistic concurrency control of sorts
+
+    if (error) throw error;
+};
+
 export const deleteTutoringSession = async (id: string) => {
     const { error } = await supabase.from('tutoring_sessions').delete().eq('id', id);
     if (error) throw error;
@@ -419,12 +431,83 @@ export const getSessionsForUser = async (userId: string, role: string) => {
     // Filtering client side for array check or building OR query
     // "studentIds" is array.
     if (role === 'mentor') return data.filter((s: any) => s.mentorId === userId);
+    // Return sessions where user is a participant OR session is status 'scheduled' (visible to all to join)
+    // Actually, distinct functions are better.
     return data.filter((s: any) => s.studentIds && s.studentIds.includes(userId));
+};
+
+export const getAvailableSessions = async () => {
+    // Fetch all sessions that are scheduled (and maybe active), so students can see them to join.
+    const { data, error } = await supabase
+        .from('tutoring_sessions')
+        .select('*')
+        .in('status', ['scheduled', 'active'])
+        .order('startTime', { ascending: true });
+
+    if (error) throw error;
+    return data as TutoringSession[];
+};
+
+export const joinTutoringSession = async (sessionId: string, studentId: string) => {
+    // 1. Get current session
+    const { data: session, error: fetchError } = await supabase
+        .from('tutoring_sessions')
+        .select('studentIds')
+        .eq('id', sessionId)
+        .single();
+
+    if (fetchError) throw fetchError;
+
+    // 2. Add student if not already present
+    const currentIds = session.studentIds || [];
+    if (!currentIds.includes(studentId)) {
+        const { error: updateError } = await supabase
+            .from('tutoring_sessions')
+            .update({ studentIds: [...currentIds, studentId] })
+            .eq('id', sessionId);
+
+        if (updateError) throw updateError;
+    }
 };
 
 // --- LOGS & SETTINGS ---
 export const logActivity = async (type: string, title: string, details?: any) => {
     await supabase.from('activity_logs').insert([{ type, title, details, timestamp: new Date().toISOString() }]);
+};
+
+// --- JITSI TOKEN GENERATION ---
+export const generateMeetingToken = async (user: User, sessionId: string) => {
+    // ⚠️ SECURITY WARNING: In a production app, this MUST be done on the server (e.g. Supabase Edge Function).
+    // Storing the secret here exposes it to the client.
+    // For this prototype/dev environment, we do it client-side to unblock the comprehensive Jitsi features.
+
+    // UPDATE: Now using local token server for Jitsi JaaS (vpaas)
+    // This removes the private key from the client bundle.
+
+    const roomName = `skillforge-${sessionId}`;
+    const tokenServerUrl = 'http://localhost:3002/api/jitsi-token'; // Port 3002 to avoid conflicts
+
+    try {
+        const params = new URLSearchParams({
+            room: roomName,
+            name: user.name,
+            email: user.email,
+            id: user.id,
+            role: user.role // Server will use this to determine moderator status (in this prototype)
+        });
+
+        const response = await fetch(`${tokenServerUrl}?${params.toString()}`);
+        if (!response.ok) {
+            throw new Error(`Token server error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log("[Jitsi] Token fetched from server");
+        return data.token; // The server-signed JWT
+    } catch (e) {
+        console.error("[Jitsi] Token fetch failed", e);
+        return null;
+    }
 };
 
 export const getSystemSettings = async (category: string) => {

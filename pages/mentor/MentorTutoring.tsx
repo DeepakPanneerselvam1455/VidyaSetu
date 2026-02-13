@@ -15,16 +15,16 @@ import { cn } from '../../lib/utils';
 import { SessionCalendar } from '../../components/SessionCalendar';
 
 // Icons
-const VideoIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg>;
-const CalendarIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>;
-const UsersIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>;
-const PlusIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>;
-const HistoryIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>;
-const ListIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>;
-const StickyNoteIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15.5 3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V8.5L15.5 3Z"/><path d="M15 3v6h6"/></svg>;
-const AlertTriangleIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>;
-const ClockIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>;
-const TrashIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>;
+const VideoIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 8-6 4 6 4V8Z" /><rect width="14" height="12" x="2" y="6" rx="2" ry="2" /></svg>;
+const CalendarIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2" /><line x1="16" x2="16" y1="2" y2="6" /><line x1="8" x2="8" y1="2" y2="6" /><line x1="3" x2="21" y1="10" y2="10" /></svg>;
+const UsersIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>;
+const PlusIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>;
+const HistoryIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l4 2" /></svg>;
+const ListIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>;
+const StickyNoteIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15.5 3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V8.5L15.5 3Z" /><path d="M15 3v6h6" /></svg>;
+const AlertTriangleIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>;
+const ClockIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>;
+const TrashIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></svg>;
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -39,6 +39,7 @@ const MentorTutoring: React.FC = () => {
     const [studentMap, setStudentMap] = useState<Record<string, string>>({});
     const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list');
     const [preselectedDate, setPreselectedDate] = useState<string>('');
+    const [startingSessionId, setStartingSessionId] = useState<string | null>(null);
 
     // Notes State
     const [isNotesModalOpen, setIsNotesModalOpen] = useState(false);
@@ -80,7 +81,7 @@ const MentorTutoring: React.FC = () => {
         try {
             const newSession: Omit<TutoringSession, 'id'> = {
                 mentorId: user.id,
-                studentIds: [], 
+                studentIds: [],
                 topic: data.topic,
                 description: data.description,
                 startTime: new Date(data.date + 'T' + data.time).toISOString(),
@@ -98,15 +99,36 @@ const MentorTutoring: React.FC = () => {
         }
     };
 
-    const handleStartSession = (sessionId: string) => {
-        navigate(`/room/${sessionId}`);
+    const handleStartSession = async (sessionId: string) => {
+        if (startingSessionId) return; // Prevent double clicks
+
+        const session = sessions.find(s => s.id === sessionId);
+        if (!session) return;
+
+        // If already active or completed, just navigate
+        if (session.status === 'active' || session.status === 'completed') {
+            navigate(`/room/${sessionId}`);
+            return;
+        }
+
+        setStartingSessionId(sessionId);
+
+        // If scheduled, start it then navigate
+        try {
+            // await api.startTutoringSession(sessionId); // MOVED TO ROOM JOIN
+            // Optimistic update locally - REMOVED to align with room logic
+            // setSessions(prev => prev.map(s => s.id === sessionId ? { ...s, status: 'active' } : s));
+            navigate(`/room/${sessionId}`);
+        } catch (error) {
+            console.error("Failed to navigate to session", error);
+            setStartingSessionId(null); // Re-enable on error
+        }
     };
 
     const handleCancelSession = (sessionId: string) => {
         const session = sessions.find(s => s.id === sessionId);
         if (session) {
             setSessionToCancel(session);
-            setCancelReason('');
             setIsCancelModalOpen(true);
         }
     };
@@ -115,12 +137,13 @@ const MentorTutoring: React.FC = () => {
         if (!sessionToCancel) return;
         setIsCancelling(true);
         try {
+            // Append cancel reason to private notes if provided
             let notes = sessionToCancel.privateNotes || '';
-            if (cancelReason.trim()) {
-                notes = `[Cancelled: ${cancelReason}] ${notes}`;
+            if (cancelReason) {
+                notes += `\n[Cancelled]: ${cancelReason}`;
             }
-            const updatedSession = { 
-                ...sessionToCancel, 
+            const updatedSession = {
+                ...sessionToCancel,
                 status: 'cancelled' as const,
                 privateNotes: notes
             };
@@ -192,17 +215,17 @@ const MentorTutoring: React.FC = () => {
                 </div>
                 <div className="flex flex-wrap gap-2">
                     <div className="flex bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
-                        <Button 
-                            variant="ghost" 
-                            size="sm" 
+                        <Button
+                            variant="ghost"
+                            size="sm"
                             className={cn("h-8 px-3", viewMode === 'list' && "bg-white dark:bg-slate-700 shadow-sm")}
                             onClick={() => setViewMode('list')}
                         >
                             <ListIcon className="w-4 h-4 mr-2" /> List
                         </Button>
-                        <Button 
-                            variant="ghost" 
-                            size="sm" 
+                        <Button
+                            variant="ghost"
+                            size="sm"
                             className={cn("h-8 px-3", viewMode === 'calendar' && "bg-white dark:bg-slate-700 shadow-sm")}
                             onClick={() => setViewMode('calendar')}
                         >
@@ -219,7 +242,7 @@ const MentorTutoring: React.FC = () => {
             </div>
 
             {viewMode === 'calendar' ? (
-                <SessionCalendar 
+                <SessionCalendar
                     sessions={sessions}
                     onSessionClick={(s) => handleStartSession(s.id)}
                     onDateClick={handleCalendarDateClick}
@@ -279,7 +302,7 @@ const MentorTutoring: React.FC = () => {
                                             <div className="flex items-start gap-2 text-slate-600 dark:text-slate-300">
                                                 <UsersIcon className="w-4 h-4 mt-0.5" />
                                                 <div className="text-xs">
-                                                    <span className="font-semibold">Participants:</span><br/>
+                                                    <span className="font-semibold">Participants:</span><br />
                                                     {session.studentIds.map(id => studentMap[id] || 'Unknown').join(', ')}
                                                 </div>
                                             </div>
@@ -295,7 +318,9 @@ const MentorTutoring: React.FC = () => {
                                                     </Button>
                                                     <Button variant="outline" size="sm" onClick={() => handleCancelSession(session.id)}>Cancel</Button>
                                                 </div>
-                                                <Button size="sm" onClick={() => handleStartSession(session.id)}>Start</Button>
+                                                <Button size="sm" onClick={() => handleStartSession(session.id)} disabled={startingSessionId === session.id}>
+                                                    {startingSessionId === session.id ? 'Starting...' : (session.status === 'active' ? 'Resume' : 'Start')}
+                                                </Button>
                                             </>
                                         ) : (
                                             <Button variant="outline" size="sm" className="w-full" onClick={() => handleOpenNotes(session)}>
@@ -324,11 +349,12 @@ const MentorTutoring: React.FC = () => {
                         </div>
                     )}
                 </>
-            )}
+            )
+            }
 
-            <CreateSessionDialog 
-                isOpen={isCreateModalOpen} 
-                onClose={() => setIsCreateModalOpen(false)} 
+            <CreateSessionDialog
+                isOpen={isCreateModalOpen}
+                onClose={() => setIsCreateModalOpen(false)}
                 onCreate={handleCreateSession}
                 initialDate={preselectedDate}
             />
@@ -340,20 +366,19 @@ const MentorTutoring: React.FC = () => {
                 currentAvailability={user?.availability || []}
             />
 
-            {/* Notes Dialog */}
-            <Dialog 
-                isOpen={isNotesModalOpen} 
-                onClose={() => setIsNotesModalOpen(false)} 
+            <Dialog
+                isOpen={isNotesModalOpen}
+                onClose={() => setIsNotesModalOpen(false)}
                 title={selectedSessionForNotes ? `Notes: ${selectedSessionForNotes.topic}` : 'Session Notes'}
             >
                 <div className="space-y-4">
                     <p className="text-sm text-slate-500 dark:text-slate-400">
                         These notes are private and only visible to you. Use them to track student progress, prepare for future sessions, or jot down reminders.
                     </p>
-                    <Textarea 
-                        value={noteContent} 
-                        onChange={e => setNoteContent(e.target.value)} 
-                        placeholder="Write your private notes here..." 
+                    <Textarea
+                        value={noteContent}
+                        onChange={e => setNoteContent(e.target.value)}
+                        placeholder="Write your private notes here..."
                         className="min-h-[200px]"
                     />
                     <div className="flex justify-end gap-2 pt-2">
@@ -365,7 +390,6 @@ const MentorTutoring: React.FC = () => {
                 </div>
             </Dialog>
 
-            {/* Cancel Session Confirmation Dialog */}
             <Dialog
                 isOpen={isCancelModalOpen}
                 onClose={() => setIsCancelModalOpen(false)}
@@ -383,11 +407,11 @@ const MentorTutoring: React.FC = () => {
                                 <p>Scheduled for: <span className="font-semibold">{new Date(sessionToCancel.startTime).toLocaleString()}</span></p>
                                 <p className="mt-2">This action cannot be undone and students will be notified.</p>
                             </div>
-                            
+
                             <div>
                                 <label className="block text-sm font-medium mb-1.5">Reason for Cancellation (Optional)</label>
-                                <Textarea 
-                                    value={cancelReason} 
+                                <Textarea
+                                    value={cancelReason}
                                     onChange={e => setCancelReason(e.target.value)}
                                     placeholder="e.g., Personal emergency, technical issues..."
                                     rows={2}
@@ -403,7 +427,7 @@ const MentorTutoring: React.FC = () => {
                     </div>
                 </div>
             </Dialog>
-        </div>
+        </div >
     );
 };
 
@@ -443,143 +467,160 @@ const ManageAvailabilityDialog: React.FC<{
     };
 
     return (
-        <Dialog isOpen={isOpen} onClose={onClose} title="Manage Your Preferred Times">
-            <div className="space-y-6">
-                <p className="text-sm text-slate-500 dark:text-slate-400">
-                    Set your typical weekly availability. Students will see these slots when booking 1-on-1 sessions.
-                </p>
-
-                <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl space-y-4 border border-slate-200 dark:border-slate-800">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Day</label>
-                            <Select value={newDay} onChange={e => setNewDay(e.target.value)}>
-                                {DAYS.map((d, i) => <option key={i} value={i}>{d}</option>)}
-                            </Select>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2">
-                             <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-1">From</label>
-                                <Input type="time" value={newStart} onChange={e => setNewStart(e.target.value)} />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-1">To</label>
-                                <Input type="time" value={newEnd} onChange={e => setNewEnd(e.target.value)} />
-                            </div>
-                        </div>
+        <Dialog isOpen={isOpen} onClose={onClose} title="Manage Weekly Availability">
+            <div className="space-y-4">
+                <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg space-y-3">
+                    <h3 className="font-medium text-sm">Add New Slot</h3>
+                    <div className="grid grid-cols-3 gap-2">
+                        <Select value={newDay} onChange={e => setNewDay(e.target.value)} className="col-span-1">
+                            {DAYS.map((day, i) => (
+                                <option key={i} value={i}>{day}</option>
+                            ))}
+                        </Select>
+                        <Input type="time" value={newStart} onChange={e => setNewStart(e.target.value)} />
+                        <Input type="time" value={newEnd} onChange={e => setNewEnd(e.target.value)} />
                     </div>
-                    <Button onClick={handleAddSlot} variant="secondary" className="w-full">
+                    <Button onClick={handleAddSlot} size="sm" className="w-full">
                         <PlusIcon className="w-4 h-4 mr-2" /> Add Time Slot
                     </Button>
                 </div>
 
-                <div className="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
-                    {slots.length > 0 ? slots.map(slot => (
-                        <div key={slot.id} className="flex items-center justify-between p-3 bg-white dark:bg-slate-800 border rounded-lg shadow-sm">
-                            <div>
-                                <p className="font-bold text-sm text-slate-900 dark:text-white">{DAYS[slot.dayOfWeek]}</p>
-                                <p className="text-xs text-slate-500">{slot.startTime} - {slot.endTime}</p>
-                            </div>
-                            <Button variant="ghost" size="icon" className="text-red-500" onClick={() => handleRemoveSlot(slot.id)}>
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                    <h3 className="font-medium text-sm">Current Slots</h3>
+                    {slots.length === 0 && <p className="text-sm text-slate-500 italic">No availability set.</p>}
+                    {slots.map(slot => (
+                        <div key={slot.id} className="flex justify-between items-center p-2 border rounded text-sm">
+                            <span>{DAYS[slot.dayOfWeek]}: {slot.startTime} - {slot.endTime}</span>
+                            <button onClick={() => handleRemoveSlot(slot.id)} className="text-red-500 hover:text-red-700">
                                 <TrashIcon className="w-4 h-4" />
-                            </Button>
+                            </button>
                         </div>
-                    )) : (
-                        <div className="text-center py-6 text-slate-400 italic text-sm">No availability slots set yet.</div>
-                    )}
+                    ))}
                 </div>
 
-                <div className="flex justify-end gap-2 pt-4 border-t dark:border-slate-800">
-                    <Button variant="outline" onClick={onClose}>Cancel</Button>
-                    <Button onClick={() => onSave(slots)}>Save Availability</Button>
+                <div className="flex justify-end pt-2">
+                    <Button onClick={() => onSave(slots)}>Save Changes</Button>
                 </div>
             </div>
         </Dialog>
     );
 };
 
+// --- CREATE SESSION DIALOG ---
 const CreateSessionDialog: React.FC<{
     isOpen: boolean;
     onClose: () => void;
     onCreate: (data: any) => void;
-    initialDate?: string;
+    initialDate: string;
 }> = ({ isOpen, onClose, onCreate, initialDate }) => {
-    const [topic, setTopic] = useState('');
-    const [date, setDate] = useState(initialDate || '');
-    const [time, setTime] = useState('');
-    const [duration, setDuration] = useState('60');
-    const [type, setType] = useState('group');
-    const [maxStudents, setMaxStudents] = useState('10');
-    const [description, setDescription] = useState('');
+    const today = new Date().toISOString().split('T')[0];
+    const [formData, setFormData] = useState({
+        topic: '',
+        description: '',
+        date: initialDate || today,
+        time: '10:00',
+        duration: '60',
+        type: 'one-on-one',
+        maxStudents: '1'
+    });
 
     useEffect(() => {
-        if (isOpen) {
-            setDate(initialDate || '');
+        if (initialDate) {
+            setFormData(prev => ({ ...prev, date: initialDate }));
         }
-    }, [isOpen, initialDate]);
+    }, [initialDate]);
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        onCreate({ topic, date, time, duration, type, maxStudents, description });
+    const handleSubmit = () => {
+        onCreate(formData);
     };
 
     return (
         <Dialog isOpen={isOpen} onClose={onClose} title="Schedule New Session">
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-sm font-medium mb-1">Topic</label>
-                    <Input value={topic} onChange={e => setTopic(e.target.value)} required placeholder="e.g., Weekly Q&A" />
+            <div className="space-y-4">
+                <div className="space-y-2">
+                    <label className="text-sm font-medium">Session Topic</label>
+                    <Input
+                        value={formData.topic}
+                        onChange={e => setFormData({ ...formData, topic: e.target.value })}
+                        placeholder="e.g., Intro to Python"
+                    />
+                </div>
+                <div className="space-y-2">
+                    <label className="text-sm font-medium">Description (Optional)</label>
+                    <Textarea
+                        value={formData.description}
+                        onChange={e => setFormData({ ...formData, description: e.target.value })}
+                        placeholder="What will be covered?"
+                        rows={2}
+                    />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Date</label>
-                        <Input type="date" value={date} onChange={e => setDate(e.target.value)} required />
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Date</label>
+                        <Input
+                            type="date"
+                            value={formData.date}
+                            min={today}
+                            onChange={e => setFormData({ ...formData, date: e.target.value })}
+                        />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Time</label>
-                        <Input type="time" value={time} onChange={e => setTime(e.target.value)} required />
-                    </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Session Type</label>
-                        <Select value={type} onChange={e => {
-                            setType(e.target.value);
-                            setMaxStudents(e.target.value === 'one-on-one' ? '1' : '10');
-                        }}>
-                            <option value="group">Group Class</option>
-                            <option value="one-on-one">1-on-1</option>
-                        </Select>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Max Students</label>
-                        <Input 
-                            type="number" 
-                            value={maxStudents} 
-                            onChange={e => setMaxStudents(e.target.value)} 
-                            disabled={type === 'one-on-one'} 
-                            min="1"
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Time</label>
+                        <Input
+                            type="time"
+                            value={formData.time}
+                            onChange={e => setFormData({ ...formData, time: e.target.value })}
                         />
                     </div>
                 </div>
-                <div>
-                    <label className="block text-sm font-medium mb-1">Duration (minutes)</label>
-                    <Select value={duration} onChange={e => setDuration(e.target.value)}>
-                        <option value="30">30 min</option>
-                        <option value="45">45 min</option>
-                        <option value="60">60 min</option>
-                        <option value="90">90 min</option>
-                    </Select>
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Duration (min)</label>
+                        <Select
+                            value={formData.duration}
+                            onChange={e => setFormData({ ...formData, duration: e.target.value })}
+                        >
+                            <option value="30">30 Minutes</option>
+                            <option value="45">45 Minutes</option>
+                            <option value="60">1 Hour</option>
+                            <option value="90">1.5 Hours</option>
+                            <option value="120">2 Hours</option>
+                        </Select>
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Session Type</label>
+                        <Select
+                            value={formData.type}
+                            onChange={e => {
+                                const type = e.target.value;
+                                setFormData({
+                                    ...formData,
+                                    type,
+                                    maxStudents: type === 'one-on-one' ? '1' : '10'
+                                });
+                            }}
+                        >
+                            <option value="one-on-one">1-on-1 Tutoring</option>
+                            <option value="group">Group Class</option>
+                        </Select>
+                    </div>
                 </div>
-                <div>
-                    <label className="block text-sm font-medium mb-1">Description</label>
-                    <Input value={description} onChange={e => setDescription(e.target.value)} />
+                {formData.type === 'group' && (
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Max Students</label>
+                        <Input
+                            type="number"
+                            min="2"
+                            max="50"
+                            value={formData.maxStudents}
+                            onChange={e => setFormData({ ...formData, maxStudents: e.target.value })}
+                        />
+                    </div>
+                )}
+                <div className="flex justify-end pt-2">
+                    <Button onClick={handleSubmit}>Schedule Session</Button>
                 </div>
-                <div className="flex justify-end gap-2 pt-4">
-                    <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-                    <Button type="submit">Schedule</Button>
-                </div>
-            </form>
+            </div>
         </Dialog>
     );
 };

@@ -14,12 +14,12 @@ import { cn } from '../../lib/utils';
 import { SessionCalendar } from '../../components/SessionCalendar';
 
 // Icons
-const VideoIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg>;
-const CalendarIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>;
-const ClockIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>;
-const PlusIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>;
-const HistoryIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>;
-const ListIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>;
+const VideoIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 8-6 4 6 4V8Z" /><rect width="14" height="12" x="2" y="6" rx="2" ry="2" /></svg>;
+const CalendarIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2" /><line x1="16" x2="16" y1="2" y2="6" /><line x1="8" x2="8" y1="2" y2="6" /><line x1="3" x2="21" y1="10" y2="10" /></svg>;
+const ClockIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>;
+const PlusIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>;
+const HistoryIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l4 2" /></svg>;
+const ListIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>;
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -37,11 +37,19 @@ const StudentTutoring: React.FC = () => {
         if (!user) return;
         setIsLoading(true);
         try {
-            const [userSessions, allUsers] = await Promise.all([
-                api.getSessionsForUser(user.id, 'student'),
+            // Fetch both "my history" and "all available upcoming sessions"
+            const [mySessions, availableSessions, allUsers] = await Promise.all([
+                api.getSessionsForUser(user.id, 'student'), // For history
+                api.getAvailableSessions(),                // For discovery
                 api.getUsers()
             ]);
-            setSessions(userSessions);
+
+            // Merge and deduplicate
+            const sessionMap = new Map();
+            mySessions.forEach((s: any) => sessionMap.set(s.id, s));
+            availableSessions.forEach((s: any) => sessionMap.set(s.id, s));
+
+            setSessions(Array.from(sessionMap.values()));
             setMentors(allUsers.filter(u => u.role === 'mentor'));
         } catch (error) {
             console.error("Failed to fetch tutoring data", error);
@@ -54,8 +62,21 @@ const StudentTutoring: React.FC = () => {
         fetchData();
     }, [user]);
 
-    const handleJoinSession = (sessionId: string) => {
-        navigate(`/room/${sessionId}`);
+    const handleJoinSession = async (session: TutoringSession) => {
+        if (!user) return;
+
+        // If not already a participant, join data-wise first
+        const isParticipant = session.studentIds && session.studentIds.includes(user.id);
+
+        if (!isParticipant) {
+            try {
+                await api.joinTutoringSession(session.id, user.id);
+            } catch (err) {
+                console.error("Failed to join session", err);
+                return; // Don't navigate if join failed
+            }
+        }
+        navigate(`/room/${session.id}`);
     };
 
     const handleBookSession = async (sessionData: any) => {
@@ -70,7 +91,7 @@ const StudentTutoring: React.FC = () => {
                 duration: parseInt(sessionData.duration),
                 status: 'scheduled',
                 type: 'one-on-one',
-                category: 'tutoring', 
+                category: 'tutoring',
                 focus: sessionData.focus,
                 maxStudents: 1,
             };
@@ -102,17 +123,17 @@ const StudentTutoring: React.FC = () => {
                 </div>
                 <div className="flex gap-2">
                     <div className="flex bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
-                        <Button 
-                            variant="ghost" 
-                            size="sm" 
+                        <Button
+                            variant="ghost"
+                            size="sm"
                             className={cn("h-8 px-3", viewMode === 'list' && "bg-white dark:bg-slate-700 shadow-sm")}
                             onClick={() => setViewMode('list')}
                         >
                             <ListIcon className="w-4 h-4 mr-2" /> List
                         </Button>
-                        <Button 
-                            variant="ghost" 
-                            size="sm" 
+                        <Button
+                            variant="ghost"
+                            size="sm"
                             className={cn("h-8 px-3", viewMode === 'calendar' && "bg-white dark:bg-slate-700 shadow-sm")}
                             onClick={() => setViewMode('calendar')}
                         >
@@ -126,9 +147,9 @@ const StudentTutoring: React.FC = () => {
             </div>
 
             {viewMode === 'calendar' ? (
-                <SessionCalendar 
+                <SessionCalendar
                     sessions={sessions}
-                    onSessionClick={(s) => handleJoinSession(s.id)}
+                    onSessionClick={(s) => handleJoinSession(s)}
                 />
             ) : (
                 <>
@@ -162,13 +183,14 @@ const StudentTutoring: React.FC = () => {
                     {isLoading ? <p>Loading sessions...</p> : (
                         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                             {displaySessions.length > 0 ? displaySessions.map(session => (
-                                <SessionCard 
-                                    key={session.id} 
-                                    session={session} 
-                                    isStudent={true} 
-                                    onJoin={() => handleJoinSession(session.id)}
+                                <SessionCard
+                                    key={session.id}
+                                    session={session}
+                                    isStudent={true}
+                                    onJoin={() => handleJoinSession(session)}
                                     mentors={mentors}
                                     isPast={activeTab === 'past'}
+                                    currentUser={user}
                                 />
                             )) : (
                                 <div className="col-span-full text-center py-12 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg">
@@ -192,9 +214,9 @@ const StudentTutoring: React.FC = () => {
                 </>
             )}
 
-            <BookSessionDialog 
-                isOpen={isBookingModalOpen} 
-                onClose={() => setIsBookingModalOpen(false)} 
+            <BookSessionDialog
+                isOpen={isBookingModalOpen}
+                onClose={() => setIsBookingModalOpen(false)}
                 mentors={mentors}
                 onBook={handleBookSession}
             />
@@ -202,19 +224,20 @@ const StudentTutoring: React.FC = () => {
     );
 };
 
-const SessionCard: React.FC<{ 
-    session: TutoringSession; 
-    isStudent: boolean; 
+const SessionCard: React.FC<{
+    session: TutoringSession;
+    isStudent: boolean;
     onJoin: () => void;
     mentors: User[];
     isPast?: boolean;
-}> = ({ session, isStudent, onJoin, mentors, isPast }) => {
+    currentUser: User | null;
+}> = ({ session, isStudent, onJoin, mentors, isPast, currentUser }) => {
     const startTime = new Date(session.startTime);
     const isToday = new Date().toDateString() === startTime.toDateString();
     const mentor = mentors.find(m => m.id === session.mentorId);
 
     const getStatusVariant = (status: string) => {
-        switch(status) {
+        switch (status) {
             case 'scheduled': return 'default';
             case 'active': return 'success';
             case 'completed': return 'secondary';
@@ -260,7 +283,9 @@ const SessionCard: React.FC<{
             {!isPast && (
                 <CardFooter>
                     <Button className="w-full" onClick={onJoin} disabled={session.status === 'cancelled'}>
-                        {session.status === 'active' ? 'Join Now' : 'Enter Room'}
+                        {currentUser && session.studentIds?.includes(currentUser.id)
+                            ? (session.status === 'active' ? 'Enter Room' : 'Enter Room (Scheduled)')
+                            : 'Join Session'}
                     </Button>
                 </CardFooter>
             )}
@@ -303,7 +328,7 @@ const BookSessionDialog: React.FC<{
                 {selectedMentor && selectedMentor.availability && selectedMentor.availability.length > 0 && (
                     <div className="p-3 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800 rounded-lg animate-in fade-in slide-in-from-top-1 duration-300">
                         <p className="text-xs font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-widest mb-2 flex items-center gap-2">
-                             <ClockIcon className="w-3 h-3" /> Preferred Tutoring Times
+                            <ClockIcon className="w-3 h-3" /> Preferred Tutoring Times
                         </p>
                         <div className="flex flex-wrap gap-2">
                             {selectedMentor.availability.map(slot => (

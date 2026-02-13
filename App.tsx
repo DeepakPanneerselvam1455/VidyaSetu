@@ -40,13 +40,13 @@ import MentorManualQuiz from './pages/mentor/MentorManualQuiz';
 import AdminStudentProgress from './pages/admin/AdminStudentProgress';
 
 const App: React.FC = () => {
-  return (
-    <AuthProvider>
-      <HashRouter>
-        <AppRoutes />
-      </HashRouter>
-    </AuthProvider>
-  );
+    return (
+        <AuthProvider>
+            <HashRouter>
+                <AppRoutes />
+            </HashRouter>
+        </AuthProvider>
+    );
 };
 
 const AppRoutes: React.FC = () => {
@@ -56,8 +56,9 @@ const AppRoutes: React.FC = () => {
         <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route 
-                path="/" 
+            <Route path="/" element={<LoginPage />} />
+            <Route
+                path="/dashboard"
                 element={
                     <ProtectedRoute>
                         <Layout>
@@ -66,7 +67,7 @@ const AppRoutes: React.FC = () => {
                     </ProtectedRoute>
                 }
             />
-            
+
             {/* User-specific common routes */}
             <Route path="/profile" element={
                 <ProtectedRoute><Layout><Profile /></Layout></ProtectedRoute>
@@ -106,7 +107,7 @@ const AppRoutes: React.FC = () => {
             <Route path="/student" element={
                 <ProtectedRoute roles={['student']}><Layout><StudentDashboard /></Layout></ProtectedRoute>
             } />
-            
+
             {/* Instructor Routes */}
             <Route path="/mentor/courses" element={
                 <ProtectedRoute roles={['mentor']}><Layout><MentorCourseManagement /></Layout></ProtectedRoute>

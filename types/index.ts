@@ -2,10 +2,11 @@
 export interface User {
   id: string;
   email: string;
-  name:string;
+  name: string;
   role: 'student' | 'mentor' | 'admin';
   createdAt: string;
   accountStatus: 'ENABLED' | 'DISABLED';
+  updatedAt?: string;
   dob?: string;
   education?: string;
   school?: string;
@@ -46,6 +47,7 @@ export interface Course {
   topics: string[];
   materials: CourseMaterial[];
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface Question {
@@ -78,10 +80,11 @@ export interface Quiz {
   sourceType?: 'manual' | 'topic-prompt' | 'uploaded-file';
   sourceFileNames?: string[];
   extractedTextHash?: string;
+  updatedAt?: string;
 }
 
 export interface QuizAttempt {
-  id:string;
+  id: string;
   quizId: string;
   studentId: string;
   answers: { [questionId: string]: string };
@@ -93,6 +96,7 @@ export interface QuizAttempt {
   gradedAt?: string;
   totalPoints: number;
   submittedAt: string;
+  updatedAt?: string;
 }
 
 export interface QuizAssignment {
@@ -107,7 +111,7 @@ export interface QuizAssignment {
 export interface TutoringSession {
   id: string;
   mentorId: string;
-  studentIds: string[]; 
+  studentIds: string[];
   topic: string;
   description?: string;
   startTime: string; // ISO string
@@ -119,47 +123,52 @@ export interface TutoringSession {
   maxStudents: number;
   meetingLink?: string;
   privateNotes?: string; // Private notes for the mentor
+  updatedAt?: string;
 }
 
 export interface MentorshipRequest {
-    id: string;
-    studentId: string;
-    mentorId: string;
-    status: 'pending' | 'accepted' | 'rejected';
-    message: string;
-    createdAt: string;
+  id: string;
+  studentId: string;
+  mentorId: string;
+  status: 'pending' | 'accepted' | 'rejected';
+  message: string;
+  createdAt: string;
+  updatedAt?: string;
 }
 
 // --- FORUM TYPES ---
 export interface ForumCategory {
-    id: string;
-    name: string;
-    description: string;
-    icon: string;
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  updatedAt?: string;
 }
 
 export interface ForumThread {
-    id: string;
-    categoryId: string;
-    authorId: string;
-    authorName: string;
-    title: string;
-    content: string;
-    createdAt: string;
-    views: number;
-    upvotes: string[];
-    tags: string[];
-    replyCount: number;
+  id: string;
+  categoryId: string;
+  authorId: string;
+  authorName: string;
+  title: string;
+  content: string;
+  createdAt: string;
+  views: number;
+  upvotes: string[];
+  tags: string[];
+  replyCount: number;
+  updatedAt?: string;
 }
 
 export interface ForumPost {
-    id: string;
-    threadId: string;
-    authorId: string;
-    authorName: string;
-    content: string;
-    createdAt: string;
-    upvotes: string[];
+  id: string;
+  threadId: string;
+  authorId: string;
+  authorName: string;
+  content: string;
+  createdAt: string;
+  upvotes: string[];
+  updatedAt?: string;
 }
 
 // --- CHATBOT TYPES ---
