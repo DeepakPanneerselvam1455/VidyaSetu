@@ -136,6 +136,15 @@ export interface MentorshipRequest {
   updatedAt?: string;
 }
 
+export interface DirectMessage {
+  id: string;
+  senderId: string;
+  receiverId: string;
+  message: string;
+  createdAt: string;
+  read?: boolean;
+}
+
 // --- FORUM TYPES ---
 export interface ForumCategory {
   id: string;

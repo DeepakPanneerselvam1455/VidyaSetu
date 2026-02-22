@@ -6,15 +6,14 @@ import { useAuth } from '../../lib/auth';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
-
-// Icons
-const CheckIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>;
-const XIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 18 18"/></svg>;
+import { CheckIcon, XIcon, MessageCircle } from '../../components/ui/Icons';
+import ChatModal from '../../components/ChatModal';
 
 const MentorMentorship: React.FC = () => {
     const { user } = useAuth();
     const [requests, setRequests] = useState<(MentorshipRequest & { studentName: string })[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [chatTarget, setChatTarget] = useState<{ id: string; name: string } | null>(null);
 
     const fetchData = async () => {
         if (!user) return;
@@ -24,13 +23,13 @@ const MentorMentorship: React.FC = () => {
                 api.getMentorshipRequests(user.id, 'mentor'),
                 api.getUsers()
             ]);
-            
+
             const userMap = new Map(allUsers.map(u => [u.id, u.name]));
             const enrichedRequests = myRequests.map(r => ({
                 ...r,
                 studentName: userMap.get(r.studentId) || 'Unknown Student'
             }));
-            
+
             setRequests(enrichedRequests);
         } catch (error) {
             console.error("Failed to fetch mentorship requests", error);
@@ -107,7 +106,14 @@ const MentorMentorship: React.FC = () => {
                                     <p className="text-xs text-slate-500">Connected since {new Date(req.createdAt).toLocaleDateString()}</p>
                                 </CardContent>
                                 <CardFooter>
-                                    <Button variant="outline" className="w-full">Message</Button>
+                                    <Button
+                                        variant="outline"
+                                        className="w-full"
+                                        onClick={() => setChatTarget({ id: req.studentId, name: req.studentName })}
+                                    >
+                                        <MessageCircle className="w-4 h-4 mr-2" />
+                                        Message
+                                    </Button>
                                 </CardFooter>
                             </Card>
                         ))}
@@ -116,6 +122,18 @@ const MentorMentorship: React.FC = () => {
                     <p className="text-slate-500 italic">No active mentees yet.</p>
                 )}
             </div>
+
+            {/* Chat Modal */}
+            {user && chatTarget && (
+                <ChatModal
+                    isOpen={!!chatTarget}
+                    onClose={() => setChatTarget(null)}
+                    currentUserId={user.id}
+                    currentUserName={user.name}
+                    recipientId={chatTarget.id}
+                    recipientName={chatTarget.name}
+                />
+            )}
         </div>
     );
 };

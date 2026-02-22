@@ -13,9 +13,9 @@ import { Textarea } from '../../components/ui/Textarea';
 import { Select } from '../../components/ui/Select';
 
 // Icons
-const MessageSquareIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>;
-const PlusIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>;
-const SearchIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>;
+const MessageSquareIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>;
+const PlusIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>;
+const SearchIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>;
 
 const CommunityForums: React.FC = () => {
     const { user } = useAuth();
@@ -48,8 +48,8 @@ const CommunityForums: React.FC = () => {
 
     const filteredThreads = threads.filter(t => {
         const matchesCategory = selectedCategory === 'all' || t.categoryId === selectedCategory;
-        const matchesSearch = t.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                              t.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+        const matchesSearch = t.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            t.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
         return matchesCategory && matchesSearch;
     });
 
@@ -75,8 +75,8 @@ const CommunityForums: React.FC = () => {
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight dark:text-white">Community Forums</h1>
-                    <p className="text-slate-500 dark:text-slate-400">Join the discussion, ask questions, and share knowledge.</p>
+                    <h1 className="text-3xl font-bold tracking-tight">Community Forums</h1>
+                    <p style={{ color: 'var(--text-secondary)' }}>Join the discussion, ask questions, and share knowledge.</p>
                 </div>
                 <Button onClick={() => setIsCreateModalOpen(true)}>
                     <PlusIcon className="w-4 h-4 mr-2" /> Start Discussion
@@ -88,9 +88,9 @@ const CommunityForums: React.FC = () => {
                 <div className="w-full md:w-64 space-y-4">
                     <div className="relative">
                         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                        <Input 
-                            placeholder="Search topics..." 
-                            className="pl-9" 
+                        <Input
+                            placeholder="Search topics..."
+                            className="pl-9"
                             value={searchTerm}
                             onChange={e => setSearchTerm(e.target.value)}
                         />
@@ -98,7 +98,7 @@ const CommunityForums: React.FC = () => {
                     <nav className="space-y-1">
                         <button
                             onClick={() => setSelectedCategory('all')}
-                            className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium ${selectedCategory === 'all' ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/20 dark:text-indigo-300' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800'}`}
+                            className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium ${selectedCategory === 'all' ? 'bg-[var(--kpi-icon-chip)] text-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--kpi-icon-chip)]'}`}
                         >
                             All Categories
                         </button>
@@ -106,7 +106,7 @@ const CommunityForums: React.FC = () => {
                             <button
                                 key={cat.id}
                                 onClick={() => setSelectedCategory(cat.id)}
-                                className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium ${selectedCategory === cat.id ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/20 dark:text-indigo-300' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800'}`}
+                                className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium ${selectedCategory === cat.id ? 'bg-[var(--kpi-icon-chip)] text-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--kpi-icon-chip)]'}`}
                             >
                                 {cat.name}
                             </button>
@@ -126,10 +126,10 @@ const CommunityForums: React.FC = () => {
                                                 <Badge variant="outline">{categories.find(c => c.id === thread.categoryId)?.name}</Badge>
                                                 <span className="text-xs text-slate-500">Posted by {thread.authorName}</span>
                                             </div>
-                                            <Link to={`/forums/thread/${thread.id}`} className="block text-xl font-semibold hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                                            <Link to={`/forums/thread/${thread.id}`} className="block text-xl font-semibold hover:text-[var(--primary)] transition-colors">
                                                 {thread.title}
                                             </Link>
-                                            <p className="text-slate-500 dark:text-slate-400 line-clamp-2 text-sm">{thread.content}</p>
+                                            <p style={{ color: 'var(--text-secondary)' }} className="line-clamp-2 text-sm">{thread.content}</p>
                                         </div>
                                         <div className="flex flex-col items-center min-w-[60px] text-slate-500">
                                             <MessageSquareIcon className="w-5 h-5 mb-1" />
@@ -138,14 +138,14 @@ const CommunityForums: React.FC = () => {
                                     </div>
                                     <div className="mt-4 flex gap-2">
                                         {thread.tags.map(tag => (
-                                            <span key={tag} className="text-xs bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded text-slate-600 dark:text-slate-400">#{tag}</span>
+                                            <span key={tag} className="text-xs px-2 py-1 rounded" style={{ backgroundColor: 'var(--kpi-icon-chip)', color: 'var(--text-secondary)' }}>#{tag}</span>
                                         ))}
                                     </div>
                                 </CardContent>
                             </Card>
                         ))
                     ) : (
-                        <div className="text-center py-12 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg">
+                        <div className="text-center py-12 border-2 border-dashed rounded-lg" style={{ borderColor: 'var(--border-strong)' }}>
                             <MessageSquareIcon className="w-12 h-12 mx-auto text-slate-400 mb-3" />
                             <p className="font-semibold text-lg">No Discussions Found</p>
                             <p className="text-slate-500">Be the first to start a conversation in this category!</p>
@@ -154,9 +154,9 @@ const CommunityForums: React.FC = () => {
                 </div>
             </div>
 
-            <CreateThreadDialog 
-                isOpen={isCreateModalOpen} 
-                onClose={() => setIsCreateModalOpen(false)} 
+            <CreateThreadDialog
+                isOpen={isCreateModalOpen}
+                onClose={() => setIsCreateModalOpen(false)}
                 categories={categories}
                 onCreate={handleCreateThread}
             />

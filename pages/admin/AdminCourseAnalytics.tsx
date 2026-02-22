@@ -62,7 +62,7 @@ const AdminCourseAnalytics: React.FC = () => {
                     const total = courseAttempts.reduce((sum, a) => sum + (a.score / a.totalPoints * 100), 0);
                     averageScore = Math.round(total / courseAttempts.length);
                 }
-                
+
                 return {
                     course,
                     mentorName: usersMap[course.mentorId] || 'Unknown',
@@ -79,7 +79,7 @@ const AdminCourseAnalytics: React.FC = () => {
             setIsLoading(false);
         }
     };
-    
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -90,16 +90,16 @@ const AdminCourseAnalytics: React.FC = () => {
         if (action === 'delete') setIsDeleteModalOpen(true);
         if (action === 'detail') setIsDetailModalOpen(true);
     };
-    
+
     const sortedAnalytics = useMemo(() => {
         let sortableItems = [...analytics];
         if (!sortConfig) return sortableItems;
 
         sortableItems.sort((a, b) => {
             const { key, direction } = sortConfig;
-            
+
             const getVal = (item: CourseAnalytics, key: SortKey) => {
-                switch(key) {
+                switch (key) {
                     case 'course.title': return item.course.title.toLowerCase();
                     case 'mentorName': return item.mentorName.toLowerCase();
                     default: return item[key];
@@ -135,11 +135,11 @@ const AdminCourseAnalytics: React.FC = () => {
 
 
     if (isLoading) {
-        return <div className="text-center p-8 dark:text-white">Loading analytics...</div>;
+        return <div className="text-center p-8" style={{ color: 'var(--text-main)' }}>Loading analytics...</div>;
     }
 
     const TableHeader: React.FC<{ sortKey: SortKey; children: React.ReactNode, className?: string }> = ({ sortKey, children, className }) => (
-        <th scope="col" className={`px-6 py-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors ${className}`} onClick={() => requestSort(sortKey)}>
+        <th scope="col" className={`px-6 py-3 cursor-pointer hover:bg-[var(--kpi-icon-chip)] transition-colors ${className}`} onClick={() => requestSort(sortKey)}>
             <div className="flex items-center">
                 {children}
                 {getSortIndicator(sortKey)}
@@ -151,8 +151,8 @@ const AdminCourseAnalytics: React.FC = () => {
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight dark:text-white">Course Management & Analytics</h1>
-                    <p className="text-slate-500 dark:text-slate-300">Oversee engagement, performance, and manage all courses.</p>
+                    <h1 className="text-3xl font-bold tracking-tight">Course Management & Analytics</h1>
+                    <p style={{ color: 'var(--text-secondary)' }}>Oversee engagement, performance, and manage all courses.</p>
                 </div>
                 <Button onClick={() => setIsCreateModalOpen(true)}>Create Course</Button>
             </div>
@@ -161,7 +161,7 @@ const AdminCourseAnalytics: React.FC = () => {
                 <CardContent className="p-0">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
-                            <thead className="text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-white">
+                            <thead className="text-xs uppercase" style={{ backgroundColor: 'var(--kpi-icon-chip)', color: 'var(--text-main)' }}>
                                 <tr>
                                     <TableHeader sortKey="course.title">Course</TableHeader>
                                     <TableHeader sortKey="mentorName">Instructor</TableHeader>
@@ -173,7 +173,7 @@ const AdminCourseAnalytics: React.FC = () => {
                             </thead>
                             <tbody>
                                 {sortedAnalytics.map(({ course, mentorName, quizCount, attemptCount, averageScore }) => (
-                                    <tr key={course.id} className="bg-white border-b dark:bg-slate-800 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600">
+                                    <tr key={course.id} className="border-b hover:bg-[var(--kpi-icon-chip)] transition-colors" style={{ borderColor: 'var(--border-default)' }}>
                                         <td className="px-6 py-4 font-medium">{course.title}</td>
                                         <td className="px-6 py-4">{mentorName}</td>
                                         <td className="px-6 py-4 text-center">{quizCount}</td>
@@ -202,7 +202,7 @@ const AdminCourseAnalytics: React.FC = () => {
             />
             {selectedCourse && (
                 <>
-                    <CourseDetailDialog 
+                    <CourseDetailDialog
                         isOpen={isDetailModalOpen}
                         onClose={() => setIsDetailModalOpen(false)}
                         course={selectedCourse}
@@ -258,12 +258,12 @@ const CourseForm: React.FC<{
                 materials: course?.materials || [],
                 mentorId,
                 instructorName: mentor?.name || '',
-                institutionName: course?.institutionName || 'SkillForge Academy',
+                institutionName: course?.institutionName || 'VidyaSetu Academy',
                 publishDate: course?.publishDate || new Date().toISOString().split('T')[0],
                 language: course?.language || 'English',
             });
             onClose();
-        } catch(err) {
+        } catch (err) {
             setError('Failed to save course. Please try again.');
         }
     };
@@ -278,7 +278,7 @@ const CourseForm: React.FC<{
                 <label htmlFor="description" className="block text-sm font-medium mb-1">Description</label>
                 <Input id="description" value={description} onChange={e => setDescription(e.target.value)} required />
             </div>
-             <div>
+            <div>
                 <label htmlFor="mentorId" className="block text-sm font-medium mb-1">Instructor</label>
                 <Select id="mentorId" value={mentorId} onChange={e => setMentorId(e.target.value)} required>
                     <option value="" disabled>Select an instructor</option>
@@ -335,7 +335,7 @@ const CreateCourseDialog: React.FC<CreateCourseDialogProps> = ({ isOpen, onClose
 interface EditCourseDialogProps { isOpen: boolean; onClose: () => void; onCourseUpdated: () => void; course: Course; mentors: User[]; }
 const EditCourseDialog: React.FC<EditCourseDialogProps> = ({ isOpen, onClose, onCourseUpdated, course, mentors }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
-    
+
     useEffect(() => {
         if (!isOpen) setIsSubmitting(false);
     }, [isOpen]);
@@ -378,9 +378,9 @@ const DeleteCourseDialog: React.FC<DeleteCourseDialogProps> = ({ isOpen, onClose
     };
 
     return (
-        <Dialog 
-            isOpen={isOpen} 
-            onClose={onClose} 
+        <Dialog
+            isOpen={isOpen}
+            onClose={onClose}
             title="Delete Course"
             description={`Are you sure you want to delete "${course.title}"? This will also remove associated quizzes and cannot be undone.`}
         >
@@ -395,10 +395,10 @@ const DeleteCourseDialog: React.FC<DeleteCourseDialogProps> = ({ isOpen, onClose
 const ProgressBar: React.FC<{ value: number }> = ({ value }) => (
     <div>
         <div className="flex justify-between mb-1">
-            <span className="text-xs font-medium text-slate-600 dark:text-slate-300">Course Progress</span>
-            <span className="text-xs font-medium text-slate-600 dark:text-slate-300">{value}%</span>
+            <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>Course Progress</span>
+            <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>{value}%</span>
         </div>
-        <div className="w-full bg-slate-200 rounded-full h-1.5 dark:bg-slate-700">
+        <div className="w-full rounded-full h-1.5" style={{ backgroundColor: 'var(--kpi-icon-chip)' }}>
             <div className="bg-indigo-600 h-1.5 rounded-full" style={{ width: `${value}%` }}></div>
         </div>
     </div>
@@ -426,14 +426,14 @@ const CourseDetailDialog: React.FC<CourseDetailDialogProps> = ({ isOpen, onClose
                 const courseAttempts = allAttempts.filter(a => courseQuizIds.has(a.quizId));
                 const studentIds = [...new Set(courseAttempts.map(a => a.studentId))];
                 const usersMap = new Map(allUsers.map(u => [u.id, u.name]));
-                
+
                 const progressData = studentIds.map(studentId => {
                     const attempts = courseAttempts.filter(a => a.studentId === studentId);
                     const viewedSet = new Set(allViewed[studentId] || []);
                     const progress = course.materials.length > 0
                         ? Math.round((course.materials.filter(m => viewedSet.has(m.id)).length / course.materials.length) * 100)
                         : 100;
-                    
+
                     return {
                         studentId,
                         studentName: usersMap.get(studentId) || 'Unknown',
@@ -441,7 +441,7 @@ const CourseDetailDialog: React.FC<CourseDetailDialogProps> = ({ isOpen, onClose
                         progress,
                     };
                 });
-                
+
                 setStudentProgress(progressData);
             } catch (err) {
                 console.error("Failed to load course details", err);
@@ -458,14 +458,14 @@ const CourseDetailDialog: React.FC<CourseDetailDialogProps> = ({ isOpen, onClose
             <div className="space-y-4 max-h-[60vh] overflow-y-auto mt-4 pr-4 -mr-4">
                 {isLoading ? <p>Loading details...</p> : studentProgress.length === 0 ? <p className="text-slate-500 text-center py-4">No students have attempted quizzes for this course yet.</p> : (
                     studentProgress.map(data => (
-                        <div key={data.studentId} className="p-4 border rounded-lg dark:border-slate-700">
+                        <div key={data.studentId} className="p-4 border rounded-lg" style={{ borderColor: 'var(--border-default)' }}>
                             <h4 className="font-semibold">{data.studentName}</h4>
                             <ProgressBar value={data.progress} />
                             <div className="mt-3">
                                 <p className="text-xs font-semibold uppercase text-slate-500">Attempt History</p>
                                 <ul className="text-sm space-y-1 mt-1">
                                     {data.attempts.map((att: QuizAttempt) => (
-                                        <li key={att.id} className="flex justify-between items-center p-1.5 bg-slate-50 dark:bg-slate-800/50 rounded">
+                                        <li key={att.id} className="flex justify-between items-center p-1.5 rounded" style={{ backgroundColor: 'var(--kpi-icon-chip)' }}>
                                             <span>Quiz on {new Date(att.submittedAt).toLocaleDateString()}</span>
                                             <span className="font-semibold">{Math.round((att.score / att.totalPoints) * 100)}%</span>
                                         </li>

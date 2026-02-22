@@ -21,7 +21,7 @@ const AdminUserManagement: React.FC = () => {
     const { user: currentUser } = useAuth();
     const [users, setUsers] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    
+
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false);
@@ -76,7 +76,7 @@ const AdminUserManagement: React.FC = () => {
         }
         return filteredUsers;
     }, [users, sortConfig, searchTerm]);
-    
+
     useEffect(() => {
         setCurrentPage(1);
     }, [searchTerm, itemsPerPage]);
@@ -112,7 +112,7 @@ const AdminUserManagement: React.FC = () => {
         setSelectedUser(user);
         setIsDeleteModalOpen(true);
     };
-    
+
     const handleResetPasswordClick = (user: User) => {
         setSelectedUser(user);
         setIsResetPasswordModalOpen(true);
@@ -128,7 +128,7 @@ const AdminUserManagement: React.FC = () => {
         if (role === 'mentor') return 'secondary'; // Gray/Secondary
         return 'success'; // Green
     }
-    
+
     const TableHeader: React.FC<{ sortKey: SortKey; children: React.ReactNode }> = ({ sortKey, children }) => (
         <th scope="col" className="px-6 py-4 cursor-pointer hover:text-white transition-colors uppercase tracking-wider text-xs font-semibold text-slate-400 text-left" onClick={() => requestSort(sortKey)}>
             <div className="flex items-center">
@@ -143,7 +143,7 @@ const AdminUserManagement: React.FC = () => {
         const maxVisiblePages = 5;
         let start = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
         let end = Math.min(totalPages, start + maxVisiblePages - 1);
-        
+
         if (end - start + 1 < maxVisiblePages) {
             start = Math.max(1, end - maxVisiblePages + 1);
         }
@@ -158,23 +158,23 @@ const AdminUserManagement: React.FC = () => {
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight dark:text-white">User Management</h1>
-                    <p className="text-slate-500 dark:text-slate-400">View, create, edit, and delete users.</p>
+                    <h1 className="text-3xl font-bold tracking-tight">User Management</h1>
+                    <p style={{ color: 'var(--text-secondary)' }}>View, create, edit, and delete users.</p>
                 </div>
                 <Link to="/admin/users/create" className={cn(buttonVariants({ variant: 'default' }), "bg-violet-600 hover:bg-violet-700 text-white")}>Create User</Link>
             </div>
-            
+
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                 <Input 
+                <Input
                     placeholder="Search by name or email..."
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
                     className="max-w-xs bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
                 />
-                <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
                     <span>Rows per page:</span>
-                    <Select 
-                        value={itemsPerPage.toString()} 
+                    <Select
+                        value={itemsPerPage.toString()}
                         onChange={e => setItemsPerPage(parseInt(e.target.value))}
                         className="w-20 h-9 bg-slate-900 border-slate-700 text-white"
                     >
@@ -224,7 +224,7 @@ const AdminUserManagement: React.FC = () => {
                                             <td className="px-6 py-4 text-right">
                                                 <div className="flex gap-3 justify-end items-center">
                                                     <button
-                                                        aria-label={`${user.accountStatus === 'ENABLED' ? 'Disable' : 'Enable'} ${user.name}`} 
+                                                        aria-label={`${user.accountStatus === 'ENABLED' ? 'Disable' : 'Enable'} ${user.name}`}
                                                         title={`${user.accountStatus === 'ENABLED' ? 'Disable' : 'Enable'} account`}
                                                         className={cn("transition-colors", user.accountStatus === 'ENABLED' ? "text-yellow-500 hover:text-yellow-400" : "text-green-500 hover:text-green-400")}
                                                         onClick={() => handleStatusClick(user)}
@@ -232,26 +232,26 @@ const AdminUserManagement: React.FC = () => {
                                                     >
                                                         {user.accountStatus === 'ENABLED' ? <BanIcon className="w-5 h-5" /> : <CheckCircleIcon className="w-5 h-5" />}
                                                     </button>
-                                                    
-                                                    <button 
-                                                        aria-label={`Edit ${user.name}`} 
+
+                                                    <button
+                                                        aria-label={`Edit ${user.name}`}
                                                         className="text-slate-400 hover:text-white transition-colors"
                                                         onClick={() => handleEditClick(user)}
                                                     >
                                                         <PencilIcon className="w-5 h-5" />
                                                     </button>
 
-                                                    <button 
-                                                        aria-label={`Reset password for ${user.name}`} 
+                                                    <button
+                                                        aria-label={`Reset password for ${user.name}`}
                                                         title="Reset Password"
-                                                        className="text-slate-400 hover:text-white transition-colors" 
+                                                        className="text-slate-400 hover:text-white transition-colors"
                                                         onClick={() => handleResetPasswordClick(user)}
                                                     >
                                                         <LockIcon className="w-5 h-5" />
                                                     </button>
-                                                    
-                                                    <button 
-                                                        aria-label={`Delete ${user.name}`} 
+
+                                                    <button
+                                                        aria-label={`Delete ${user.name}`}
                                                         className="text-red-500 hover:text-red-400 transition-colors disabled:opacity-50"
                                                         onClick={() => handleDeleteClick(user)}
                                                         disabled={user.id === currentUser?.id}
@@ -265,7 +265,7 @@ const AdminUserManagement: React.FC = () => {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={6} className="text-center p-8 text-slate-500 dark:text-slate-400">
+                                        <td colSpan={6} className="text-center p-8" style={{ color: 'var(--text-secondary)' }}>
                                             <div className="flex flex-col items-center gap-2">
                                                 <UserSearchIcon className="w-[38px] h-[38px] text-slate-500" />
                                                 <span className="font-semibold">No users found</span>
@@ -282,12 +282,12 @@ const AdminUserManagement: React.FC = () => {
 
             {totalPages > 1 && (
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                    <span className="text-sm text-slate-500 dark:text-slate-400">
+                    <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>
                         Showing <strong>{startIndex + 1}</strong> to <strong>{Math.min(startIndex + itemsPerPage, processedUsers.length)}</strong> of <strong>{processedUsers.length}</strong> users
                     </span>
                     <div className="flex items-center gap-2">
-                         <Button 
-                            variant="outline" 
+                        <Button
+                            variant="outline"
                             size="sm"
                             onClick={() => setCurrentPage(1)}
                             disabled={currentPage === 1}
@@ -295,8 +295,8 @@ const AdminUserManagement: React.FC = () => {
                         >
                             First
                         </Button>
-                        <Button 
-                            variant="outline" 
+                        <Button
+                            variant="outline"
                             size="sm"
                             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                             disabled={currentPage === 1}
@@ -304,7 +304,7 @@ const AdminUserManagement: React.FC = () => {
                         >
                             <ChevronLeftIcon className="w-4 h-4" />
                         </Button>
-                        
+
                         <div className="flex items-center gap-1 mx-2">
                             {getPageNumbers().map(pageNum => (
                                 <Button
@@ -328,8 +328,8 @@ const AdminUserManagement: React.FC = () => {
                         >
                             <ChevronRightIcon className="w-4 h-4" />
                         </Button>
-                         <Button 
-                            variant="outline" 
+                        <Button
+                            variant="outline"
                             size="sm"
                             onClick={() => setCurrentPage(totalPages)}
                             disabled={currentPage === totalPages}
@@ -340,7 +340,7 @@ const AdminUserManagement: React.FC = () => {
                     </div>
                 </div>
             )}
-            
+
             {selectedUser && (
                 <>
                     <EditUserDialog isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} onUserUpdated={fetchUsers} user={selectedUser} />
@@ -399,11 +399,11 @@ const ToggleStatusDialog: React.FC<ToggleStatusDialogProps> = ({ isOpen, onClose
     };
 
     return (
-        <Dialog 
-            isOpen={isOpen} 
-            onClose={onClose} 
+        <Dialog
+            isOpen={isOpen}
+            onClose={onClose}
             title={targetStatus === 'DISABLED' ? 'Disable User Account' : 'Enable User Account'}
-            description={targetStatus === 'DISABLED' 
+            description={targetStatus === 'DISABLED'
                 ? `Disabling ${user.name}'s account will block their access immediately but preserve all their data.`
                 : `Enabling ${user.name}'s account will restore their access immediately.`}
         >
@@ -415,9 +415,9 @@ const ToggleStatusDialog: React.FC<ToggleStatusDialogProps> = ({ isOpen, onClose
                 {error && <p className="text-sm text-red-500">{error}</p>}
                 <div className="flex justify-end gap-2 pt-4">
                     <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting}>Cancel</Button>
-                    <Button 
-                        variant={targetStatus === 'DISABLED' ? 'destructive' : 'default'} 
-                        type="submit" 
+                    <Button
+                        variant={targetStatus === 'DISABLED' ? 'destructive' : 'default'}
+                        type="submit"
                         disabled={isSubmitting}
                     >
                         {isSubmitting ? 'Updating...' : `Confirm ${targetStatus === 'DISABLED' ? 'Disable' : 'Enable'}`}
@@ -436,7 +436,7 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ isOpen, onClose, onUser
     const [role, setRole] = useState(user.role);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
-    
+
     useEffect(() => {
         if (isOpen) {
             setName(user.name);
@@ -464,7 +464,7 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ isOpen, onClose, onUser
             await api.updateUser({ ...user, name, email, role });
             onUserUpdated();
             onClose();
-        } catch(err) {
+        } catch (err) {
             setError('Failed to update user.');
         } finally {
             setIsSubmitting(false);
@@ -481,7 +481,7 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ isOpen, onClose, onUser
                 <div>
                     <label htmlFor="edit-email" className="block text-sm font-medium mb-1">Email Address</label>
                     <Input id="edit-email" type="email" value={email} onChange={e => setEmail(e.target.value)} required disabled />
-                    <p className="text-xs text-slate-500 dark:text-slate-300 mt-1">Email cannot be changed.</p>
+                    <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>Email cannot be changed.</p>
                 </div>
                 <div>
                     <label htmlFor="edit-role" className="block text-sm font-medium mb-1">Role</label>
@@ -519,9 +519,9 @@ const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({ isOpen, onClose, on
     };
 
     return (
-        <Dialog 
-            isOpen={isOpen} 
-            onClose={onClose} 
+        <Dialog
+            isOpen={isOpen}
+            onClose={onClose}
             title="Delete User"
             description={`Are you sure you want to delete ${user.name}? This action is permanent.`}
         >
@@ -538,9 +538,9 @@ const ResetPasswordDialog: React.FC<ResetPasswordDialogProps> = ({ isOpen, onClo
     const { user: adminUser } = useAuth();
     const [newPassword, setNewPassword] = useState('');
     const [passwordStrength, setPasswordStrength] = useState<{
-      score: number;
-      level: 'none' | 'very weak' | 'weak' | 'medium' | 'strong' | 'very strong';
-      text: string;
+        score: number;
+        level: 'none' | 'very weak' | 'weak' | 'medium' | 'strong' | 'very strong';
+        text: string;
     }>({ score: 0, level: 'none', text: '' });
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -560,7 +560,7 @@ const ResetPasswordDialog: React.FC<ResetPasswordDialogProps> = ({ isOpen, onClo
         }
     }, [isOpen]);
 
-     useEffect(() => {
+    useEffect(() => {
         setPasswordStrength(checkPasswordStrength(newPassword));
     }, [newPassword]);
 
@@ -630,7 +630,7 @@ const ResetPasswordDialog: React.FC<ResetPasswordDialogProps> = ({ isOpen, onClo
                         </div>
                     </div>
                     {error && <p className="text-sm text-red-500">{error}</p>}
-                     {isPasswordWeak && (
+                    {isPasswordWeak && (
                         <p className="text-xs text-orange-500">Password must be at least 'Medium' strength.</p>
                     )}
                     <div className="flex justify-end gap-2 pt-4">
@@ -640,9 +640,9 @@ const ResetPasswordDialog: React.FC<ResetPasswordDialogProps> = ({ isOpen, onClo
                 </form>
             ) : (
                 <div className="space-y-6">
-                    <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 dark:border-yellow-600 rounded-md">
-                        <h4 className="font-semibold text-yellow-800 dark:text-yellow-300">Warning</h4>
-                        <p className="text-sm text-yellow-700 dark:text-yellow-400">
+                    <div className="p-4 border-l-4 rounded-md" style={{ backgroundColor: 'color-mix(in srgb, #f59e0b 10%, transparent)', borderColor: '#f59e0b' }}>
+                        <h4 className="font-semibold" style={{ color: '#b45309' }}>Warning</h4>
+                        <p className="text-sm" style={{ color: '#92400e' }}>
                             Are you sure you want to reset the password for <strong className="font-semibold">{user.name}</strong>?
                             This action cannot be undone.
                         </p>
@@ -663,35 +663,35 @@ const ResetPasswordDialog: React.FC<ResetPasswordDialogProps> = ({ isOpen, onClo
 
 // --- Icon Components ---
 const PencilIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" /><path d="m15 5 4 4" /></svg>
 );
 const Trash2Icon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" x2="10" y1="11" y2="17" /><line x1="14" x2="14" y1="11" y2="17" /></svg>
 );
 const LockIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
 );
 const BanIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="m4.9 4.9 14.2 14.2" /></svg>
 );
 const CheckCircleIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
 );
 const UserSearchIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="10" cy="10" r="4" />
-    <path d="M10 16c-3.9 0-7 2-7 4" />
-    <circle cx="17" cy="17" r="3" />
-    <path d="m21 21-1.9-1.9" />
-  </svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="10" cy="10" r="4" />
+        <path d="M10 16c-3.9 0-7 2-7 4" />
+        <circle cx="17" cy="17" r="3" />
+        <path d="m21 21-1.9-1.9" />
+    </svg>
 );
 const EyeIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></svg>
 );
 const EyeOffIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" /><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" /><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" /><line x1="2" x2="22" y1="2" y2="22" /></svg>
 );
-const ChevronLeftIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>;
-const ChevronRightIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>;
+const ChevronLeftIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>;
+const ChevronRightIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>;
 
 export default AdminUserManagement;

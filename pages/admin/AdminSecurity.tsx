@@ -41,9 +41,9 @@ const AdminSecurity: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-bold tracking-tight dark:text-white">Security Settings</h1>
+            <h1 className="text-3xl font-bold tracking-tight">Security Settings</h1>
 
-            <div className="border-b border-slate-200 dark:border-slate-700">
+            <div className="border-b" style={{ borderColor: 'var(--border-default)' }}>
                 <nav className="-mb-px flex space-x-6" aria-label="Tabs">
                     <SecurityTabButton tab="access" activeTab={activeTab} onClick={setActiveTab}>Access Control (RBAC)</SecurityTabButton>
                     <SecurityTabButton tab="policy" activeTab={activeTab} onClick={setActiveTab}>Password Policy</SecurityTabButton>
@@ -66,8 +66,8 @@ const SecurityTabButton: React.FC<{ tab: SecurityTab; activeTab: SecurityTab; on
             className={cn(
                 'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
                 activeTab === tab
-                    ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
-                    : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-300 dark:hover:text-white dark:hover:border-slate-600'
+                    ? 'border-[var(--primary)] text-[var(--primary)]'
+                    : 'border-transparent tab-themed'
             )}
         >
             {children}
@@ -123,7 +123,7 @@ const AccessControl = () => {
             </CardHeader>
             <CardContent className="overflow-x-auto">
                 <table className="w-full text-left">
-                    <thead className="bg-slate-50 dark:bg-slate-800">
+                    <thead style={{ backgroundColor: 'var(--kpi-icon-chip)' }}>
                         <tr>
                             <th className="p-3 font-medium">Permission</th>
                             <th className="p-3 font-medium text-center">Student</th>
@@ -157,7 +157,7 @@ const PermissionRow: React.FC<{
     permissions: typeof initialPermissions;
     onChange: (role: 'student' | 'instructor' | 'admin', key: string, value: boolean) => void;
 }> = ({ permission, permissionKey, permissions, onChange }) => (
-    <tr className="border-b dark:border-slate-700">
+    <tr className="border-b" style={{ borderColor: 'var(--border-default)' }}>
         <td className="p-3">{permission}</td>
         <td className="p-3 text-center"><input type="checkbox" checked={permissions.student[permissionKey as keyof typeof permissions.student]} onChange={e => onChange('student', permissionKey, e.target.checked)} className="w-4 h-4" /></td>
         <td className="p-3 text-center"><input type="checkbox" checked={permissions.instructor[permissionKey as keyof typeof permissions.instructor]} onChange={e => onChange('instructor', permissionKey, e.target.checked)} className="w-4 h-4" /></td>
@@ -226,7 +226,7 @@ const PasswordPolicy = () => {
                 <div>
                     <label className="font-medium text-sm">Password Expiration (days)</label>
                     <Input type="number" value={policy.expirationDays} onChange={e => handleChange('expirationDays', parseInt(e.target.value) || 0)} />
-                    <p className="text-xs text-slate-500 dark:text-slate-300 mt-1">Set to 0 to disable expiration.</p>
+                    <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>Set to 0 to disable expiration.</p>
                 </div>
             </CardContent>
             <CardFooter className="flex justify-end">
@@ -288,7 +288,7 @@ const AuditLog = () => {
                 </div>
                 <div className="overflow-x-auto border rounded-lg max-h-96">
                     <table className="w-full text-left text-sm">
-                        <thead className="bg-slate-50 dark:bg-slate-800 sticky top-0">
+                        <thead style={{ backgroundColor: 'var(--kpi-icon-chip)' }} className="sticky top-0">
                             <tr>
                                 <th className="p-3 font-medium">Timestamp</th>
                                 <th className="p-3 font-medium">Action</th>
@@ -299,15 +299,15 @@ const AuditLog = () => {
                         </thead>
                         <tbody>
                             {filteredLogs.length > 0 ? filteredLogs.map(log => (
-                                <tr key={log.id} className="border-b dark:border-slate-700">
+                                <tr key={log.id} className="border-b" style={{ borderColor: 'var(--border-default)' }}>
                                     <td className="p-3 whitespace-nowrap" title={new Date(log.timestamp).toLocaleString()}>{formatTimeAgo(log.timestamp)}</td>
-                                    <td className="p-3"><span className="font-mono text-xs bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 rounded">{log.type}</span></td>
+                                    <td className="p-3"><span className="font-mono text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: 'var(--kpi-icon-chip)' }}>{log.type}</span></td>
                                     <td className="p-3">{log.title}</td>
-                                    <td className="p-3 text-slate-500 dark:text-slate-300">{log.details?.userName || log.details?.userId || 'N/A'}</td>
-                                    <td className="p-3 text-slate-500 dark:text-slate-300">{log.details?.adminName || 'System'}</td>
+                                    <td className="p-3" style={{ color: 'var(--text-secondary)' }}>{log.details?.userName || log.details?.userId || 'N/A'}</td>
+                                    <td className="p-3" style={{ color: 'var(--text-secondary)' }}>{log.details?.adminName || 'System'}</td>
                                 </tr>
                             )) : (
-                                <tr><td colSpan={5} className="text-center p-8 text-slate-500 dark:text-slate-300">No security logs found.</td></tr>
+                                <tr><td colSpan={5} className="text-center p-8" style={{ color: 'var(--text-secondary)' }}>No security logs found.</td></tr>
                             )}
                         </tbody>
                     </table>

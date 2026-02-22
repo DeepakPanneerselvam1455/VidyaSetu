@@ -9,22 +9,22 @@ import { Badge } from '../../components/ui/Badge';
 
 // Data structure for aggregated student progress
 interface StudentProgressData {
-  studentId: string;
-  studentName: string;
-  courses: {
-    [courseId: string]: {
-      course: Course;
-      attempts: QuizAttempt[];
-      progress: number; // Material completion
-      lastActivity: string;
-      performance: {
-        status: 'Excellent' | 'Average' | 'Poor' | 'N/A';
-        avgScore: number;
-        color: string;
-      };
-      chartData: { name: string, score: number, date: string }[];
+    studentId: string;
+    studentName: string;
+    courses: {
+        [courseId: string]: {
+            course: Course;
+            attempts: QuizAttempt[];
+            progress: number; // Material completion
+            lastActivity: string;
+            performance: {
+                status: 'Excellent' | 'Average' | 'Poor' | 'N/A';
+                avgScore: number;
+                color: string;
+            };
+            chartData: { name: string, score: number, date: string }[];
+        }
     }
-  }
 }
 
 // Reusable Line Chart Component (adapted from StudentProgress page)
@@ -59,7 +59,7 @@ const LineChart: React.FC<{ data: { name: string, score: number, date: string }[
                 {[0, 25, 50, 75, 100].map(label => {
                     const y = (SVG_HEIGHT - PADDING) - (label / 100) * (SVG_HEIGHT - 2 * PADDING);
                     return (
-                        <g key={label} className="text-slate-400 dark:text-slate-600">
+                        <g key={label} style={{ color: 'var(--text-muted)' }}>
                             <text x={PADDING - 8} y={y + 3} textAnchor="end" className="text-xs fill-current">{label}%</text>
                             <line x1={PADDING} x2={SVG_WIDTH - PADDING} y1={y} y2={y} className="stroke-current opacity-50" strokeDasharray="2,4" />
                         </g>
@@ -67,7 +67,7 @@ const LineChart: React.FC<{ data: { name: string, score: number, date: string }[
                 })}
                 {/* X-Axis Labels */}
                 {pointCoordinates.map(({ x }, index) => (
-                    <text key={`x-label-${index}`} x={x} y={SVG_HEIGHT - PADDING + 15} textAnchor="middle" className="text-xs fill-current text-slate-500 dark:text-slate-400">
+                    <text key={`x-label-${index}`} x={x} y={SVG_HEIGHT - PADDING + 15} textAnchor="middle" className="text-xs fill-current" style={{ color: 'var(--text-secondary)' }}>
                         {data[index].date}
                     </text>
                 ))}
@@ -76,7 +76,7 @@ const LineChart: React.FC<{ data: { name: string, score: number, date: string }[
                 {/* Points & Hover Area */}
                 {pointCoordinates.map(({ x, y }, index) => (
                     <g key={index}>
-                        <circle cx={x} cy={y} r={hoveredIndex === index ? 6 : 4} className="text-indigo-500 fill-current transition-all stroke-white dark:stroke-slate-900" strokeWidth={2} />
+                        <circle cx={x} cy={y} r={hoveredIndex === index ? 6 : 4} className="text-indigo-500 fill-current transition-all stroke-white" strokeWidth={2} />
                         <rect x={x - 10} y={y - 10} width="20" height="20" fill="transparent" onMouseEnter={() => setHoveredIndex(index)} />
                     </g>
                 ))}
@@ -103,15 +103,15 @@ const getPerformanceStatus = (avgScore: number): { status: 'Excellent' | 'Averag
 };
 
 
-const StudentProgressCard: React.FC<{ 
-    studentData: StudentProgressData; 
-    isExpanded: boolean; 
-    onToggle: () => void; 
+const StudentProgressCard: React.FC<{
+    studentData: StudentProgressData;
+    isExpanded: boolean;
+    onToggle: () => void;
 }> = ({ studentData, isExpanded, onToggle }) => {
-    
+
     return (
         <Card>
-            <CardHeader onClick={onToggle} className="cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+            <CardHeader onClick={onToggle} className="cursor-pointer hover:bg-[var(--kpi-icon-chip)] transition-colors">
                 <div className="flex justify-between items-center">
                     <CardTitle>{studentData.studentName}</CardTitle>
                     <div className="flex items-center gap-4 text-sm text-slate-500">
@@ -121,9 +121,9 @@ const StudentProgressCard: React.FC<{
                 </div>
             </CardHeader>
             {isExpanded && (
-                <CardContent className="pt-4 border-t dark:border-slate-700 space-y-6">
+                <CardContent className="pt-4 border-t space-y-6" style={{ borderColor: 'var(--border-default)' }}>
                     {Object.values(studentData.courses).map(({ course, progress, attempts, lastActivity, performance, chartData }) => (
-                        <div key={course.id} className="p-4 border dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-900/30">
+                        <div key={course.id} className="p-4 border rounded-lg" style={{ backgroundColor: 'var(--kpi-icon-chip)', borderColor: 'var(--border-default)' }}>
                             <h3 className="text-lg font-semibold">{course.title}</h3>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-3 text-sm">
                                 <div>
@@ -143,7 +143,7 @@ const StudentProgressCard: React.FC<{
                                     <Badge style={{ backgroundColor: performance.color }} className="text-white">{performance.status}</Badge>
                                 </div>
                             </div>
-                            
+
                             <h4 className="text-md font-semibold mt-4 mb-2">Quiz Score Trend</h4>
                             <LineChart data={chartData} />
                         </div>
@@ -178,7 +178,7 @@ const AdminStudentProgress: React.FC = () => {
                 const quizMap = new Map(allQuizzes.map(q => [q.id, q]));
                 const studentUsers = allUsers.filter(u => u.role === 'student');
                 const usersMap = new Map(studentUsers.map(u => [u.id, u.name]));
-                
+
                 // Aggregate data by student
                 const analyticsData: { [studentId: string]: StudentProgressData } = {};
 
@@ -196,7 +196,7 @@ const AdminStudentProgress: React.FC = () => {
                     if (!analyticsData[studentId]) {
                         analyticsData[studentId] = { studentId, studentName: usersMap.get(studentId)!, courses: {} };
                     }
-                    
+
                     // Initialize course entry for the student if it doesn't exist
                     if (!analyticsData[studentId].courses[course.id]) {
                         analyticsData[studentId].courses[course.id] = {
@@ -216,12 +216,12 @@ const AdminStudentProgress: React.FC = () => {
                     const studentViewed = new Set(allViewedMaterials[studentId] || []);
                     for (const courseId in analyticsData[studentId].courses) {
                         const courseData = analyticsData[studentId].courses[courseId];
-                        
+
                         // 1. Material Progress
                         courseData.progress = courseData.course.materials.length > 0
                             ? Math.round((courseData.course.materials.filter(m => studentViewed.has(m.id)).length / courseData.course.materials.length) * 100)
                             : 100;
-                        
+
                         if (courseData.attempts.length > 0) {
                             // Sort attempts by date to find last activity and create chart
                             courseData.attempts.sort((a, b) => new Date(a.submittedAt).getTime() - new Date(b.submittedAt).getTime());
@@ -270,7 +270,7 @@ const AdminStudentProgress: React.FC = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">Student Progress</h1>
-                    <p className="text-slate-500 dark:text-slate-400">Global view of all student performance across the platform.</p>
+                    <p style={{ color: 'var(--text-secondary)' }}>Global view of all student performance across the platform.</p>
                 </div>
                 <Input
                     placeholder="Search by student name..."
@@ -279,11 +279,11 @@ const AdminStudentProgress: React.FC = () => {
                     className="max-w-xs"
                 />
             </div>
-            
+
             {filteredStudentData.length > 0 ? (
                 <div className="space-y-4">
                     {filteredStudentData.map(data => (
-                        <StudentProgressCard 
+                        <StudentProgressCard
                             key={data.studentId}
                             studentData={data}
                             isExpanded={expandedStudentId === data.studentId}
@@ -306,9 +306,9 @@ const AdminStudentProgress: React.FC = () => {
     );
 };
 
-const ChevronDownIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>;
+const ChevronDownIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>;
 const UsersIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
 );
 
 

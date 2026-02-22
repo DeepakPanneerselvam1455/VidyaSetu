@@ -1,9 +1,7 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../lib/auth';
-import { Button } from '../components/ui/Button';
-import { Input } from '../components/ui/Input';
 
 const DEMO_CREDENTIALS = {
   student: { email: 'student@skillforge.com', password: 'student123' },
@@ -15,15 +13,34 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showDemoPanel, setShowDemoPanel] = useState(false);
 
+  const emailRef = useRef<HTMLInputElement>(null);
   const { login, user } = useAuth();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    emailRef.current?.focus();
+  }, []);
+
   // Redirect if already logged in
   if (user) {
-    navigate('/dashboard');
+    switch (user.role) {
+      case 'admin':
+        navigate('/admin');
+        break;
+      case 'mentor':
+        navigate('/mentor');
+        break;
+      case 'student':
+        navigate('/student');
+        break;
+      default:
+        break;
+    }
     return null;
   }
 
@@ -32,10 +49,25 @@ const LoginPage: React.FC = () => {
     setError(null);
     setIsLoading(true);
     try {
-      await login(email, password);
-      await login(email, password);
-      navigate('/dashboard');
+      const loggedInUser = await login(email, password);
+
+      // Role-based redirect
+      switch (loggedInUser.role) {
+        case 'admin':
+          navigate('/admin');
+          break;
+        case 'mentor':
+          navigate('/mentor');
+          break;
+        case 'student':
+          navigate('/student');
+          break;
+        default:
+          setError('Account has no valid role assigned. Please contact support.');
+          break;
+      }
     } catch (err: any) {
+      console.error("Login Check Failed:", err);
       setError(err.message || 'Invalid credentials. Please try again.');
     } finally {
       setIsLoading(false);
@@ -50,125 +82,239 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div
-      className="min-h-screen bg-cover bg-center p-4 flex flex-col items-center justify-center"
-      style={{ backgroundImage: "url('https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=2070&auto=format&fit=crop')" }}
-    >
-      <div className="w-full max-w-5xl">
-        <div className="bg-slate-900/40 backdrop-blur-xl rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden border border-slate-700">
-          {/* Left Side */}
-          <div className="w-full md:w-1/2 p-8 sm:p-12 text-white flex flex-col justify-center">
-            <div className="mb-8">
-              <h1 className="text-4xl font-bold text-white">SkillForge</h1>
-              <p className="text-white/80 mt-2">Sign in to your learning dashboard</p>
+    <div className="auth-page">
+      <div className="w-full max-w-[1040px]">
+        <div className="auth-card flex flex-col lg:flex-row overflow-hidden">
+
+          {/* ─── Left: Auth Form ─── */}
+          <div className="flex-1 p-8 sm:p-10 lg:p-12 flex flex-col justify-center">
+            {/* Logo */}
+            <div className="flex items-center gap-2.5 mb-8">
+              <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(250 60% 50%), hsl(260 55% 45%))' }}>
+                <FlameIcon className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-lg font-bold auth-text-heading">VidyaSetu</span>
             </div>
 
-            <div className="mb-6 p-3 bg-indigo-500/20 border border-indigo-500/50 rounded-lg text-indigo-100 text-sm">
-              <p className="font-semibold flex items-center gap-2">
-                <InfoIcon className="w-4 h-4" /> Secure Cloud Storage
-              </p>
-              <p className="mt-1 opacity-80">Your progress is synced securely to the cloud.</p>
+            <div className="mb-7">
+              <h1 className="text-[1.625rem] font-bold auth-text-heading leading-tight">Welcome back</h1>
+              <p className="auth-text-muted text-sm mt-1.5">Sign in to continue to your dashboard</p>
             </div>
 
-            <form onSubmit={handleLogin} className="space-y-6">
-              <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-semibold text-white/90">Email Address*</label>
+            {/* Error Banner */}
+            {error && (
+              <div className="auth-error-banner mb-5">
+                <AlertCircleIcon className="w-4 h-4 flex-shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleLogin} className="space-y-5">
+              {/* Email */}
+              <div>
+                <label htmlFor="email" className="auth-label">Email address</label>
                 <div className="relative">
-                  <MailIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-slate-400" />
-                  <Input
+                  <MailIcon className="auth-input-icon" />
+                  <input
+                    ref={emailRef}
                     id="email"
                     type="email"
-                    className="pl-10 h-11 bg-black/20 border-slate-500 placeholder:text-slate-400 focus:border-violet-400 focus:ring-violet-400"
-                    placeholder="Enter your email"
+                    className="auth-input"
+                    placeholder="you@example.com"
                     required
+                    autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    style={{ paddingLeft: '3rem' }}
                   />
                 </div>
               </div>
-              <div className="space-y-2">
-                <label htmlFor="password" className="text-sm font-semibold text-white/90">Password*</label>
+
+              {/* Password */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label htmlFor="password" className="auth-label" style={{ marginBottom: 0 }}>Password</label>
+                  <button type="button" className="auth-link text-xs" tabIndex={-1}>Forgot password?</button>
+                </div>
                 <div className="relative">
-                  <LockIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-slate-400" />
-                  <Input
+                  <LockIcon className="auth-input-icon" />
+                  <input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
-                    className="pl-10 pr-10 h-11 bg-black/20 border-slate-500 placeholder:text-slate-400 focus:border-violet-400 focus:ring-violet-400"
+                    className="auth-input"
                     placeholder="Enter your password"
                     required
+                    autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    style={{ paddingLeft: '3rem', paddingRight: '2.75rem' }}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                    className="auth-toggle-btn"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOffIcon className="w-[18px] h-[18px]" /> : <EyeIcon className="w-[18px] h-[18px]" />}
                   </button>
                 </div>
               </div>
-              {error && <p className="text-sm text-red-400">{error}</p>}
-              <Button type="submit" className="w-full !mt-8 text-base py-3 h-auto" disabled={isLoading}>
-                {isLoading ? 'Processing...' : 'Sign In'}
-              </Button>
+
+              {/* Remember me */}
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="remember"
+                  className="auth-checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                />
+                <label htmlFor="remember" className="text-sm auth-text-muted cursor-pointer select-none">Remember me</label>
+              </div>
+
+              {/* Submit */}
+              <button type="submit" className="auth-btn" disabled={isLoading}>
+                {isLoading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="auth-spinner" />
+                    Signing in...
+                  </span>
+                ) : (
+                  'Sign In'
+                )}
+              </button>
             </form>
-            <p className="text-center text-sm text-white/80 mt-6">
+
+            {/* Divider */}
+            <div className="flex items-center gap-3 my-6">
+              <div className="auth-divider flex-1" />
+              <span className="text-xs auth-text-muted uppercase tracking-wider font-medium">Demo Accounts</span>
+              <div className="auth-divider flex-1" />
+            </div>
+
+            {/* Demo accounts toggle */}
+            <button
+              type="button"
+              onClick={() => setShowDemoPanel(!showDemoPanel)}
+              className="w-full text-sm auth-text-muted flex items-center justify-center gap-1.5 mb-3 hover:opacity-80 transition-opacity"
+            >
+              <BeakerIcon className="w-4 h-4" />
+              {showDemoPanel ? 'Hide sandbox accounts' : 'Try with sandbox accounts'}
+              <ChevronIcon className={`w-3.5 h-3.5 transition-transform ${showDemoPanel ? 'rotate-180' : ''}`} />
+            </button>
+
+            {showDemoPanel && (
+              <div className="space-y-2.5">
+                <button type="button" className="demo-card" onClick={() => handleDemoLogin('student')}>
+                  <div className="demo-card-icon" style={{ background: 'hsla(240, 60%, 55%, 0.1)' }}>
+                    <GraduationCapIcon className="w-[18px] h-[18px]" style={{ color: 'hsl(240 60% 55%)' }} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold auth-text-heading">Student</p>
+                    <p className="text-xs auth-text-muted">student@skillforge.com</p>
+                  </div>
+                </button>
+                <button type="button" className="demo-card" onClick={() => handleDemoLogin('instructor')}>
+                  <div className="demo-card-icon" style={{ background: 'hsla(145, 60%, 40%, 0.1)' }}>
+                    <PresentationIcon className="w-[18px] h-[18px]" style={{ color: 'hsl(145 60% 40%)' }} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold auth-text-heading">Instructor</p>
+                    <p className="text-xs auth-text-muted">instructor@skillforge.com</p>
+                  </div>
+                </button>
+                <button type="button" className="demo-card" onClick={() => handleDemoLogin('admin')}>
+                  <div className="demo-card-icon" style={{ background: 'hsla(0, 65%, 50%, 0.1)' }}>
+                    <UserCogIcon className="w-[18px] h-[18px]" style={{ color: 'hsl(0 65% 50%)' }} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold auth-text-heading">Administrator</p>
+                    <p className="text-xs auth-text-muted">admin@skillforge.com</p>
+                  </div>
+                </button>
+              </div>
+            )}
+
+            {/* Sign up link */}
+            <p className="text-center text-sm auth-text-muted mt-6">
               Don't have an account?{' '}
-              <Link to="/register" className="font-semibold text-violet-400 hover:underline">
-                Sign up here
-              </Link>
+              <Link to="/register" className="auth-link">Create one</Link>
             </p>
           </div>
-          {/* Right Side */}
-          <div className="w-full md:w-1/2 p-8 sm:p-12 flex flex-col justify-center md:border-l border-slate-700">
-            <div className="space-y-6">
+
+          {/* ─── Right: Image Branding Panel ─── */}
+          <div
+            className="hidden lg:flex w-[440px] flex-shrink-0 relative overflow-hidden"
+            style={{
+              backgroundImage: "url('https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=1000&auto=format&fit=crop')",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center top',
+            }}
+          >
+            {/* Dark gradient overlay for text readability */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background: 'linear-gradient(180deg, rgba(20,18,60,0.78) 0%, rgba(20,18,60,0.55) 40%, rgba(20,18,60,0.82) 100%)',
+              }}
+            />
+            {/* Extra dark-mode dim overlay */}
+            <div
+              className="absolute inset-0 hidden dark:block"
+              style={{
+                background: 'rgba(8, 10, 20, 0.38)',
+              }}
+            />
+
+            {/* Content over image */}
+            <div className="relative z-10 flex flex-col justify-between p-10 text-white w-full">
               <div>
-                <h2 className="text-2xl font-bold text-white">Select Role</h2>
-                <p className="text-white/80 mt-2">Click a role to automatically fill credentials for the built-in sandbox accounts.</p>
+                <h2 className="text-2xl font-bold leading-snug mb-3">
+                  Your learning<br />journey starts here.
+                </h2>
+                <p className="text-white/80 text-[0.9375rem] leading-relaxed">
+                  Access courses, track progress, and connect with instructors — all in one place.
+                </p>
               </div>
-              <div className="space-y-4">
-                <RoleInfoCard
-                  icon={<GraduationCapIcon className="w-[22px] h-[22px] text-indigo-400" />}
-                  title="Students"
-                  description="student@skillforge.com"
-                  onClick={() => handleDemoLogin('student')}
-                />
-                <RoleInfoCard
-                  icon={<PresentationIcon className="w-[22px] h-[22px] text-green-400" />}
-                  title="Instructors"
-                  description="instructor@skillforge.com"
-                  onClick={() => handleDemoLogin('instructor')}
-                />
-                <RoleInfoCard
-                  icon={<UserCogIcon className="w-[22px] h-[22px] text-red-400" />}
-                  title="Administrators"
-                  description="admin@skillforge.com"
-                  onClick={() => handleDemoLogin('admin')}
-                />
+
+              <div className="space-y-4 mt-10">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center backdrop-blur-sm">
+                    <CheckIcon className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-sm text-white/90">AI-powered quiz generation</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center backdrop-blur-sm">
+                    <CheckIcon className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-sm text-white/90">Live 1-on-1 tutoring sessions</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center backdrop-blur-sm">
+                    <CheckIcon className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-sm text-white/90">Real-time progress tracking</span>
+                </div>
+              </div>
+
+              {/* Testimonial quote */}
+              <div className="mt-10 pt-6 border-t border-white/15">
+                <p className="text-sm text-white/85 italic leading-relaxed">
+                  "VidyaSetu has completely transformed how I manage my courses and connect with students."
+                </p>
+                <p className="text-xs text-white/60 mt-2">— Instructor, Computer Science</p>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
   );
 };
 
-const RoleInfoCard: React.FC<{ icon: React.ReactNode; title: string; description: string; onClick: () => void; }> = ({ icon, title, description, onClick }) => (
-  <button
-    type="button"
-    onClick={onClick}
-    className="flex w-full items-start gap-4 p-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/20 transition-colors text-left focus:outline-none focus:ring-2 focus:ring-indigo-400"
-  >
-    <div className="bg-slate-800/50 rounded-lg p-3 shadow-sm shrink-0">{icon}</div>
-    <div>
-      <h3 className="font-semibold text-white">{title}</h3>
-      <p className="text-sm text-white/80">{description}</p>
-    </div>
-  </button>
-)
-
+/* ─── Icons ─── */
 const EyeIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></svg>
 );
@@ -190,8 +336,20 @@ const PresentationIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 const UserCogIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="15" r="3" /><circle cx="9" cy="7" r="4" /><path d="M10 15H6a4 4 0 0 0-4 4v2" /><path d="m21.7 16.4-.9-.3" /><path d="m15.2 13.9-.9-.3" /><path d="m16.6 18.7.3-.9" /><path d="m19.1 12.2.3-.9" /><path d="m19.5 17.3-.3-.9" /><path d="m16.8 12.3-.3-.9" /><path d="m14.3 16.6 1-2.7" /><path d="m20.7 13.8 1-2.7" /></svg>
 );
-const InfoIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>
+const FlameIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></svg>
+);
+const AlertCircleIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
+);
+const CheckIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+);
+const BeakerIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4.5 3h15" /><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3" /><path d="M6 14h12" /></svg>
+);
+const ChevronIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
 );
 
 export default LoginPage;

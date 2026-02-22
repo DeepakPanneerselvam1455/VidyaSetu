@@ -53,44 +53,32 @@ const MentorCourseDetail: React.FC = () => {
     return (
         <div className="space-y-6">
             <div>
-                <Link to="/mentor/courses" className="text-sm text-indigo-600 hover:underline">← Back to Courses</Link>
+                <Link to="/mentor/courses" className="text-sm hover:underline" style={{ color: 'var(--primary)' }}>← Back to Courses</Link>
                 <h1 className="text-4xl font-bold tracking-tight mt-1">{course.title}</h1>
-                <p className="text-lg text-slate-500 dark:text-slate-400 mt-1">{course.description}</p>
+                <p className="text-lg mt-1" style={{ color: 'var(--text-secondary)' }}>{course.description}</p>
             </div>
 
             {/* Tab Navigation */}
-            <div className="border-b border-slate-200 dark:border-slate-700">
+            <div style={{ borderBottom: '1px solid var(--border-color)' }}>
                 <nav className="-mb-px flex space-x-6" aria-label="Tabs">
                     <button
                         onClick={() => setActiveTab('quizzes')}
-                        className={cn(
-                            'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
-                            activeTab === 'quizzes'
-                                ? 'border-indigo-500 text-indigo-600'
-                                : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:border-slate-600'
-                        )}
+                        className="tab-themed whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+                        style={activeTab === 'quizzes' ? { borderColor: 'var(--primary)', color: 'var(--primary)' } : { borderColor: 'transparent', color: 'var(--text-secondary)' }}
                     >
                         Quizzes
                     </button>
                     <button
                         onClick={() => setActiveTab('materials')}
-                        className={cn(
-                            'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
-                             activeTab === 'materials'
-                                ? 'border-indigo-500 text-indigo-600'
-                                : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:border-slate-600'
-                        )}
+                        className="tab-themed whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+                        style={activeTab === 'materials' ? { borderColor: 'var(--primary)', color: 'var(--primary)' } : { borderColor: 'transparent', color: 'var(--text-secondary)' }}
                     >
                         Materials
                     </button>
                      <button
                         onClick={() => setActiveTab('grading')}
-                        className={cn(
-                            'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
-                             activeTab === 'grading'
-                                ? 'border-indigo-500 text-indigo-600'
-                                : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:border-slate-600'
-                        )}
+                        className="tab-themed whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+                        style={activeTab === 'grading' ? { borderColor: 'var(--primary)', color: 'var(--primary)' } : { borderColor: 'transparent', color: 'var(--text-secondary)' }}
                     >
                         Grading
                     </button>
@@ -197,9 +185,9 @@ const CourseMaterialsView: React.FC<{ course: Course; onUpdate: () => void }> = 
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-col lg:flex-row gap-4 p-4 bg-slate-50 dark:bg-slate-900/50 border rounded-xl border-dashed border-slate-300 dark:border-slate-800">
+            <div className="flex flex-col lg:flex-row gap-4 p-4 rounded-xl border-2 border-dashed" style={{ backgroundColor: 'var(--sidebar-bg)', borderColor: 'var(--border-color)' }}>
                 <div className="flex-1 space-y-1">
-                    <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Quick Add Video Material</p>
+                    <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-secondary)' }}>Quick Add Video Material</p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <Input 
                             placeholder="Video Title (e.g., Intro to JSX)" 
@@ -239,10 +227,10 @@ const CourseMaterialsView: React.FC<{ course: Course; onUpdate: () => void }> = 
                             onDragEnter={() => (dragOverItem.current = index)}
                             onDragEnd={handleDragSort}
                             onDragOver={(e) => e.preventDefault()}
-                            className="cursor-grab active:cursor-grabbing transition-shadow"
+                            className="cursor-grab active:cursor-grabbing transition-shadow card-themed"
                         >
                             <CardHeader className="flex flex-row items-start gap-4">
-                                <GripVerticalIcon className="w-5 h-5 text-slate-400 shrink-0 mt-1 cursor-grab" />
+                                <GripVerticalIcon className="w-5 h-5 shrink-0 mt-1 cursor-grab" style={{ color: 'var(--text-muted)' }} />
                                 {getMaterialIcon(material.type)}
                                 <div className="flex-1 overflow-hidden">
                                     <CardTitle className="text-lg">{material.title}</CardTitle>
@@ -258,9 +246,9 @@ const CourseMaterialsView: React.FC<{ course: Course; onUpdate: () => void }> = 
                     ))}
                 </div>
             ) : (
-                <div className="text-center py-16 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg">
-                    <p className="text-lg font-semibold">No materials for this course yet.</p>
-                    <p className="text-slate-500 dark:text-slate-400">Use the quick add bar above or click "Other Material" to upload content.</p>
+                <div className="empty-state">
+                    <p className="text-lg font-semibold" style={{ color: 'var(--text-main)' }}>No materials for this course yet.</p>
+                    <p style={{ color: 'var(--text-secondary)' }}>Use the quick add bar above or click "Other Material" to upload content.</p>
                 </div>
             )}
             <AddMaterialDialog

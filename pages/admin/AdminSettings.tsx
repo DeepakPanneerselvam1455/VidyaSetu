@@ -10,17 +10,17 @@ import { logActivity } from '../../lib/activityLog';
 
 type SettingsTab = 'general' | 'appearance' | 'notifications' | 'integrations';
 
-const SETTINGS_KEY = 'skillforge_settings';
+const SETTINGS_KEY = 'vidyasetu_settings';
 
 const defaultSettings = {
     general: {
-        platformName: 'SkillForge',
-        platformUrl: 'https://skillforge.ai',
+        platformName: 'VidyaSetu',
+        platformUrl: 'https://vidyasetu.ai',
         publicRegistration: true,
     },
     appearance: {
         logo: '',
-        primaryColor: '#6B73FF',
+        primaryColor: '#7B1FA2', // Purple - updated default
     },
     notifications: {
         newUser: true,
@@ -73,8 +73,8 @@ const AdminSettings: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-bold tracking-tight dark:text-white">System Settings</h1>
-            
+            <h1 className="text-3xl font-bold tracking-tight">System Settings</h1>
+
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div className="md:col-span-1">
                     <nav className="flex flex-col space-y-1">
@@ -102,7 +102,7 @@ const AdminSettings: React.FC = () => {
                             {activeTab === 'notifications' && <NotificationSettings settings={settings.notifications} onChange={(key, value) => handleSettingsChange('notifications', key, value)} />}
                             {activeTab === 'integrations' && <IntegrationSettings settings={settings.integrations} onChange={(key, value) => handleSettingsChange('integrations', key, value)} />}
                         </CardContent>
-                        <CardFooter className="border-t dark:border-slate-800 pt-6 flex justify-end items-center gap-4">
+                        <CardFooter className="border-t pt-6 flex justify-end items-center gap-4" style={{ borderColor: 'var(--border-default)' }}>
                             {saveSuccess && <p className="text-sm text-green-600">Settings saved successfully!</p>}
                             <Button onClick={handleSaveChanges} disabled={isSaving}>
                                 {isSaving ? 'Saving...' : 'Save Changes'}
@@ -121,9 +121,9 @@ const SettingsTabButton: React.FC<{ tab: SettingsTab; activeTab: SettingsTab; on
             onClick={() => onClick(tab)}
             className={cn(
                 'px-3 py-2 text-left rounded-md text-sm font-medium transition-colors',
-                activeTab === tab 
-                    ? 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-white' 
-                    : 'hover:bg-slate-100/50 dark:text-white/80 dark:hover:bg-slate-800/50'
+                activeTab === tab
+                    ? 'bg-[var(--kpi-icon-chip)] text-[var(--text-main)]'
+                    : 'hover:bg-[var(--kpi-icon-chip)] text-[var(--text-secondary)]'
             )}
         >
             {children}
@@ -137,7 +137,7 @@ const GeneralSettings = ({ settings, onChange }: { settings: typeof defaultSetti
             <label className="block text-sm font-medium mb-1">Platform Name</label>
             <Input value={settings.platformName} onChange={e => onChange('platformName', e.target.value)} />
         </div>
-         <div>
+        <div>
             <label className="block text-sm font-medium mb-1">Platform URL</label>
             <Input type="url" value={settings.platformUrl} onChange={e => onChange('platformUrl', e.target.value)} />
         </div>
@@ -153,14 +153,14 @@ const AppearanceSettings = ({ settings, onChange }: { settings: typeof defaultSe
         <div>
             <label className="block text-sm font-medium mb-1">Platform Logo</label>
             <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-slate-200 dark:bg-slate-700 rounded-md flex items-center justify-center font-bold text-slate-500">SF</div>
+                <div className="w-16 h-16 rounded-md flex items-center justify-center font-bold" style={{ backgroundColor: 'var(--kpi-icon-chip)', color: 'var(--text-secondary)' }}>VS</div>
                 <Input type="file" className="max-w-xs" />
             </div>
         </div>
-         <div>
+        <div>
             <label className="block text-sm font-medium mb-1">Primary Theme Color</label>
             <div className="flex items-center gap-2">
-                <Input type="color" value={settings.primaryColor} onChange={e => onChange('primaryColor', e.target.value)} className="w-12 h-10 p-1"/>
+                <Input type="color" value={settings.primaryColor} onChange={e => onChange('primaryColor', e.target.value)} className="w-12 h-10 p-1" />
                 <Input value={settings.primaryColor} onChange={e => onChange('primaryColor', e.target.value)} className="max-w-xs" />
             </div>
         </div>
@@ -172,21 +172,21 @@ const NotificationSettings = ({ settings, onChange }: { settings: typeof default
         <div className="flex items-center justify-between">
             <div>
                 <label htmlFor="new-user-notif" className="font-medium">New User Registration</label>
-                <p className="text-sm text-slate-500 dark:text-slate-300">Send a welcome email to new users.</p>
+                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Send a welcome email to new users.</p>
             </div>
             <ToggleSwitch id="new-user-notif" checked={settings.newUser} onChange={e => onChange('newUser', e.target.checked)} />
         </div>
         <div className="flex items-center justify-between">
-             <div>
+            <div>
                 <label htmlFor="quiz-submit-notif" className="font-medium">Quiz Submission Confirmation</label>
-                <p className="text-sm text-slate-500 dark:text-slate-300">Send a confirmation email to students after they submit a quiz.</p>
+                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Send a confirmation email to students after they submit a quiz.</p>
             </div>
             <ToggleSwitch id="quiz-submit-notif" checked={settings.quizSubmit} onChange={e => onChange('quizSubmit', e.target.checked)} />
         </div>
-         <div className="flex items-center justify-between">
-             <div>
+        <div className="flex items-center justify-between">
+            <div>
                 <label htmlFor="mentor-notif" className="font-medium">Instructor Notifications</label>
-                <p className="text-sm text-slate-500 dark:text-slate-300">Notify instructors when a student completes one of their quizzes.</p>
+                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Notify instructors when a student completes one of their quizzes.</p>
             </div>
             <ToggleSwitch id="mentor-notif" checked={settings.mentorNotify} onChange={e => onChange('mentorNotify', e.target.checked)} />
         </div>
@@ -194,16 +194,16 @@ const NotificationSettings = ({ settings, onChange }: { settings: typeof default
 );
 
 const IntegrationSettings = ({ settings, onChange }: { settings: typeof defaultSettings.integrations, onChange: (key: string, value: any) => void }) => (
-     <div className="space-y-4">
+    <div className="space-y-4">
         <div>
             <label className="block text-sm font-medium mb-1">Google Analytics</label>
             <Input placeholder="UA-XXXXXXXXX-X" value={settings.googleAnalytics} onChange={e => onChange('googleAnalytics', e.target.value)} />
-            <p className="text-xs text-slate-500 dark:text-slate-300 mt-1">Enable tracking of platform usage and user behavior.</p>
+            <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>Enable tracking of platform usage and user behavior.</p>
         </div>
         <div>
             <label className="block text-sm font-medium mb-1">Stripe API Key</label>
             <Input type="password" placeholder="sk_test_... or pk_test_..." value={settings.stripe} onChange={e => onChange('stripe', e.target.value)} />
-             <p className="text-xs text-slate-500 dark:text-slate-300 mt-1">Connect your Stripe account for course payments (feature coming soon).</p>
+            <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>Connect your Stripe account for course payments (feature coming soon).</p>
         </div>
     </div>
 );
@@ -212,7 +212,7 @@ const IntegrationSettings = ({ settings, onChange }: { settings: typeof defaultS
 const ToggleSwitch = ({ id, ...props }: { id: string } & React.InputHTMLAttributes<HTMLInputElement>) => (
     <div className="relative inline-block w-10 mr-2 align-middle select-none">
         <input type="checkbox" name={id} id={id} className="peer toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer checked:right-0 checked:border-indigo-600 focus:outline-none" {...props} />
-        <label htmlFor={id} className="toggle-label block overflow-hidden h-6 rounded-full bg-slate-300 dark:bg-slate-700 cursor-pointer peer-checked:bg-indigo-600 dark:peer-checked:bg-indigo-500"></label>
+        <label htmlFor={id} className="toggle-label block overflow-hidden h-6 rounded-full cursor-pointer peer-checked:bg-indigo-600" style={{ backgroundColor: 'var(--kpi-icon-chip)' }}></label>
     </div>
 );
 

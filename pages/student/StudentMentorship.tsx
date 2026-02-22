@@ -9,10 +9,8 @@ import { Badge } from '../../components/ui/Badge';
 import { Input } from '../../components/ui/Input';
 import Dialog from '../../components/ui/Dialog';
 import { Textarea } from '../../components/ui/Textarea';
-
-// Icons
-const SearchIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>;
-const MapPinIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>;
+import { SearchIcon, MapPinIcon, MessageCircle } from '../../components/ui/Icons';
+import ChatModal from '../../components/ChatModal';
 
 const StudentMentorship: React.FC = () => {
     const { user } = useAuth();
@@ -22,6 +20,7 @@ const StudentMentorship: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedMentor, setSelectedMentor] = useState<User | null>(null);
     const [requestMessage, setRequestMessage] = useState('');
+    const [chatTarget, setChatTarget] = useState<{ id: string; name: string } | null>(null);
 
     const fetchData = async () => {
         if (!user) return;
@@ -65,22 +64,26 @@ const StudentMentorship: React.FC = () => {
         return req ? req.status : null;
     };
 
-    const filteredMentors = mentors.filter(m => 
-        m.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    const filteredMentors = mentors.filter(m =>
+        m.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         m.expertise?.some(e => e.toLowerCase().includes(searchTerm.toLowerCase()))
     );
+
+    const handleMessageMentor = (mentor: User) => {
+        setChatTarget({ id: mentor.id, name: mentor.name });
+    };
 
     return (
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight dark:text-white">Find a Mentor</h1>
-                    <p className="text-slate-500 dark:text-slate-400">Connect with experts for career advice and academic guidance.</p>
+                    <h1 className="text-3xl font-bold tracking-tight" style={{ color: 'var(--text-main)' }}>Find a Mentor</h1>
+                    <p style={{ color: 'var(--text-secondary)' }}>Connect with experts for career advice and academic guidance.</p>
                 </div>
                 <div className="relative w-full md:w-64">
-                    <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                    <Input 
-                        placeholder="Search by name or skill..." 
+                    <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--text-muted)' }} />
+                    <Input
+                        placeholder="Search by name or skill..."
                         className="pl-9"
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
@@ -88,15 +91,15 @@ const StudentMentorship: React.FC = () => {
                 </div>
             </div>
 
-            {isLoading ? <p>Loading mentors...</p> : (
+            {isLoading ? <p style={{ color: 'var(--text-main)' }}>Loading mentors...</p> : (
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {filteredMentors.map(mentor => {
                         const status = getRequestStatus(mentor.id);
                         return (
-                            <Card key={mentor.id} className="flex flex-col">
+                            <Card key={mentor.id} className="flex flex-col card-themed">
                                 <CardHeader>
                                     <div className="flex justify-between items-start">
-                                        <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold text-lg">
+                                        <div className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg kpi-icon-chip">
                                             {mentor.name.charAt(0)}
                                         </div>
                                         {status && (
@@ -115,20 +118,30 @@ const StudentMentorship: React.FC = () => {
                                         ))}
                                     </div>
                                     {mentor.state && (
-                                        <div className="flex items-center gap-2 text-sm text-slate-500">
+                                        <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
                                             <MapPinIcon className="w-4 h-4" />
                                             <span>{mentor.state}</span>
                                         </div>
                                     )}
                                 </CardContent>
                                 <CardFooter>
-                                    <Button 
-                                        className="w-full" 
-                                        onClick={() => setSelectedMentor(mentor)}
-                                        disabled={!!status}
-                                    >
-                                        {status === 'accepted' ? 'Message Mentor' : status ? 'Request Pending' : 'Request Mentorship'}
-                                    </Button>
+                                    {status === 'accepted' ? (
+                                        <Button
+                                            className="w-full"
+                                            onClick={() => handleMessageMentor(mentor)}
+                                        >
+                                            <MessageCircle className="w-4 h-4 mr-2" />
+                                            Message Mentor
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            className="w-full"
+                                            onClick={() => setSelectedMentor(mentor)}
+                                            disabled={!!status}
+                                        >
+                                            {status ? 'Request Pending' : 'Request Mentorship'}
+                                        </Button>
+                                    )}
                                 </CardFooter>
                             </Card>
                         );
@@ -136,16 +149,16 @@ const StudentMentorship: React.FC = () => {
                 </div>
             )}
 
-            <Dialog 
-                isOpen={!!selectedMentor} 
-                onClose={() => setSelectedMentor(null)} 
+            <Dialog
+                isOpen={!!selectedMentor}
+                onClose={() => setSelectedMentor(null)}
                 title={`Request Mentorship from ${selectedMentor?.name}`}
             >
                 <div className="space-y-4">
-                    <p className="text-sm text-slate-500">Introduce yourself and explain why you'd like them as your mentor.</p>
-                    <Textarea 
-                        value={requestMessage} 
-                        onChange={e => setRequestMessage(e.target.value)} 
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Introduce yourself and explain why you'd like them as your mentor.</p>
+                    <Textarea
+                        value={requestMessage}
+                        onChange={e => setRequestMessage(e.target.value)}
                         placeholder="Hi, I'm interested in..."
                         rows={4}
                     />
@@ -155,6 +168,18 @@ const StudentMentorship: React.FC = () => {
                     </div>
                 </div>
             </Dialog>
+
+            {/* Chat Modal */}
+            {user && chatTarget && (
+                <ChatModal
+                    isOpen={!!chatTarget}
+                    onClose={() => setChatTarget(null)}
+                    currentUserId={user.id}
+                    currentUserName={user.name}
+                    recipientId={chatTarget.id}
+                    recipientName={chatTarget.name}
+                />
+            )}
         </div>
     );
 };

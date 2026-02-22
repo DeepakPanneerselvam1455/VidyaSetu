@@ -5,13 +5,19 @@ import { cn } from '../../lib/utils';
 export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {}
 
 const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, children, style, ...props }, ref) => {
     return (
       <select
         className={cn(
-          'flex h-10 w-full items-center justify-between rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 ring-offset-white focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:ring-offset-slate-950',
+          'flex h-10 w-full items-center justify-between rounded-md border-2 px-3 py-2 text-sm focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 select-themed',
           className
         )}
+        style={{
+          backgroundColor: 'var(--card-bg)',
+          borderColor: 'var(--border-default)',
+          color: 'var(--text-main)',
+          ...style
+        }}
         ref={ref}
         {...props}
       >

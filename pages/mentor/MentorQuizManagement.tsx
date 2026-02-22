@@ -11,6 +11,7 @@ import Dialog from '../../components/ui/Dialog';
 import { Input } from '../../components/ui/Input';
 import { Select } from '../../components/ui/Select';
 import { cn } from '../../lib/utils';
+import { HelpCircleIcon } from '../../components/ui/Icons';
 
 interface MentorQuizManagementProps {
     isTabView?: boolean;
@@ -92,9 +93,9 @@ const MentorQuizManagement: React.FC<MentorQuizManagementProps> = ({ isTabView =
             {!isTabView ? (
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
-                        <Link to="/mentor/courses" className="text-sm text-indigo-600 hover:underline">← Back to Courses</Link>
+                        <Link to="/mentor/courses" className="text-sm hover:underline" style={{ color: 'var(--primary)' }}>← Back to Courses</Link>
                         <h1 className="text-3xl font-bold tracking-tight">{course.title} Quizzes</h1>
-                        <p className="text-slate-500 dark:text-slate-400">Manage and assign quizzes for this course.</p>
+                        <p style={{ color: 'var(--text-secondary)' }}>Manage and assign quizzes for this course.</p>
                     </div>
                      <Link to="/mentor/generate-quiz"><Button>Create New Quiz</Button></Link>
                 </div>
@@ -107,7 +108,7 @@ const MentorQuizManagement: React.FC<MentorQuizManagementProps> = ({ isTabView =
             {quizzes.length > 0 ? (
                 <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                     {quizzes.map(quiz => (
-                       <Card key={quiz.id} className="flex flex-col">
+                       <Card key={quiz.id} className="flex flex-col card-themed">
                             <CardHeader>
                                 <CardTitle>{quiz.title}</CardTitle>
                                 <CardDescription>A quiz based on this course's topics.</CardDescription>
@@ -120,7 +121,7 @@ const MentorQuizManagement: React.FC<MentorQuizManagementProps> = ({ isTabView =
                                 </div>
                                 {course.topics.length > 0 && (
                                     <div>
-                                        <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Course Topics</p>
+                                        <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--text-secondary)' }}>Course Topics</p>
                                         <div className="flex flex-wrap gap-1">
                                             {course.topics.map(topic => (
                                                 <Badge key={topic} variant="outline">{topic}</Badge>
@@ -144,10 +145,10 @@ const MentorQuizManagement: React.FC<MentorQuizManagementProps> = ({ isTabView =
                     ))}
                 </div>
             ) : (
-                 <div className="text-center py-16 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg">
-                    <HelpCircleIcon className="w-[62px] h-[62px] mx-auto text-indigo-500" />
-                    <p className="mt-4 text-lg font-semibold">No Quizzes Yet</p>
-                    <p className="text-slate-500 dark:text-slate-400">Click "Create New Quiz" to start building assessments.</p>
+                 <div className="empty-state">
+                    <HelpCircleIcon className="w-[62px] h-[62px] mx-auto" style={{ color: 'var(--primary)' }} />
+                    <p className="mt-4 text-lg font-semibold" style={{ color: 'var(--text-main)' }}>No Quizzes Yet</p>
+                    <p style={{ color: 'var(--text-secondary)' }}>Click "Create New Quiz" to start building assessments.</p>
                 </div>
             )}
             
@@ -242,8 +243,8 @@ const AssignQuizDialog: React.FC<AssignQuizDialogProps> = ({ isOpen, onClose, qu
                     <>
                         <div>
                             <label className="block text-sm font-medium mb-2">Select Students</label>
-                            <div className="border rounded-md max-h-60 overflow-y-auto p-2 dark:border-slate-700">
-                                <div className="flex items-center p-2 border-b dark:border-slate-700">
+                            <div className="rounded-md max-h-60 overflow-y-auto p-2" style={{ border: '1px solid var(--border-color)' }}>
+                                <div className="flex items-center p-2" style={{ borderBottom: '1px solid var(--border-color)' }}>
                                     <input 
                                         type="checkbox" 
                                         id="select-all" 
@@ -254,7 +255,7 @@ const AssignQuizDialog: React.FC<AssignQuizDialogProps> = ({ isOpen, onClose, qu
                                     <label htmlFor="select-all" className="font-medium">Select All</label>
                                 </div>
                                 {students.map(student => (
-                                    <div key={student.id} className="flex items-center p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800">
+                                    <div key={student.id} className="flex items-center p-2 rounded transition-colors" style={{ backgroundColor: 'transparent' }}>
                                         <input 
                                             type="checkbox" 
                                             id={`student-${student.id}`} 
@@ -316,8 +317,5 @@ const DeleteQuizDialog: React.FC<DeleteQuizDialogProps> = ({ isOpen, onClose, qu
 }
 
 
-
-// ICONS
-const HelpCircleIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>;
 
 export default MentorQuizManagement;

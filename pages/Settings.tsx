@@ -11,7 +11,7 @@ const Settings: React.FC = () => {
                     <CardDescription>Manage your account settings and preferences.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-slate-500 dark:text-slate-400">
+                    <p style={{ color: 'var(--text-secondary)' }}>
                         Account settings functionality will be implemented here in a future update. You will be able to manage your password, notification preferences, and more.
                     </p>
                 </CardContent>

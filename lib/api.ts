@@ -1,5 +1,5 @@
 
-import { User, Course, Quiz, Question, QuizAttempt, ForumCategory, ForumThread, ForumPost, TutoringSession, MentorshipRequest, ChatMessage as AppChatMessage } from '../types';
+import { User, Course, Quiz, Question, QuizAttempt, ForumCategory, ForumThread, ForumPost, TutoringSession, MentorshipRequest, DirectMessage, ChatMessage as AppChatMessage } from '../types';
 import { GoogleGenAI, Type } from "@google/genai";
 import { SignJWT } from 'jose';
 import { supabase } from './supabase';
@@ -16,13 +16,27 @@ export const login = async (email: string, pass: string) => {
 
     // Fetch user profile
     if (data.user) {
+        console.log(`[Auth] User authenticated: ${data.user.id}. Fetching profile...`);
         const { data: profile, error: profileError } = await supabase
             .from('profiles')
-            .select('*')
+            .select('*, role') // Explicitly verify role selection
             .eq('id', data.user.id)
             .single();
 
-        if (profileError) throw profileError;
+        if (profileError) {
+            console.error("[Auth] Profile fetch failed:", profileError);
+            throw profileError;
+        }
+
+        if (!profile) throw new Error("User profile not found.");
+
+        console.log(`[Auth] Profile loaded. Role: ${profile.role}`);
+
+        if (!profile.role) {
+            console.error("[Auth] Critical: User has no role assigned in database.");
+            throw new Error("User has no role assigned.");
+        }
+
         return { user: profile as User };
     }
 
@@ -38,6 +52,10 @@ export const getProfile = async () => {
         .select('*')
         .eq('id', user.id)
         .single();
+
+    if (profile) {
+        console.log(`[Auth] Session restored for user ${profile.id}. Role: ${profile.role}`);
+    }
 
     return profile as User | null;
 };
@@ -61,6 +79,24 @@ export const register = async (userData: any, pass: string) => {
 
     if (authError) throw authError;
     if (!authData.user) throw new Error("Registration failed");
+
+    // HARDENING: Explicitly set the role in the profiles table immediately.
+    // This handles cases where the DB trigger fails or is slow.
+    const { error: profileUpdateError } = await supabase
+        .from('profiles')
+        .upsert({
+            id: authData.user.id,
+            email: userData.email,
+            name: userData.name,
+            role: userData.role || 'student',
+            accountStatus: 'ENABLED',
+            createdAt: new Date().toISOString()
+        }, { onConflict: 'id' });
+
+    if (profileUpdateError) {
+        console.warn("Manual profile creation/update failed (Trigger might have handled it):", profileUpdateError.message);
+        // Continue anyway as the trigger might have succeeded or it's a non-blocking issue
+    }
 
     // Profile creation is now handled by the 'on_auth_user_created' database trigger.
     // We construct the user object to return it immediately to the UI.
@@ -380,6 +416,86 @@ export const updateMentorshipRequest = async (data: any) => {
     if (error) throw error;
 };
 
+// --- DIRECT MESSAGING ---
+export const getMessages = async (userId1: string, userId2: string): Promise<DirectMessage[]> => {
+    console.log('[DM] Fetching messages between', userId1, 'and', userId2);
+    const { data, error } = await supabase
+        .from('direct_messages')
+        .select('*')
+        .or(`and(sender_id.eq.${userId1},receiver_id.eq.${userId2}),and(sender_id.eq.${userId2},receiver_id.eq.${userId1})`)
+        .order('created_at', { ascending: true });
+    if (error) {
+        console.error('[DM] getMessages error:', error);
+        throw error;
+    }
+    console.log('[DM] Fetched', data?.length ?? 0, 'messages');
+    return (data || []).map((m: any) => ({
+        id: m.id,
+        senderId: m.sender_id,
+        receiverId: m.receiver_id,
+        message: m.message,
+        createdAt: m.created_at,
+        read: m.read
+    })) as DirectMessage[];
+};
+
+export const sendMessage = async (senderId: string, receiverId: string, message: string): Promise<DirectMessage> => {
+    console.log('[DM] Sending message from', senderId, 'to', receiverId);
+    const { data, error } = await supabase
+        .from('direct_messages')
+        .insert([{ sender_id: senderId, receiver_id: receiverId, message }])
+        .select()
+        .single();
+    if (error) {
+        console.error('[DM] sendMessage error:', error);
+        throw error;
+    }
+    return {
+        id: data.id,
+        senderId: data.sender_id,
+        receiverId: data.receiver_id,
+        message: data.message,
+        createdAt: data.created_at,
+        read: data.read
+    } as DirectMessage;
+};
+
+export const subscribeToDirectMessages = (
+    currentUserId: string,
+    partnerId: string,
+    onMessage: (msg: DirectMessage) => void
+) => {
+    const channel = supabase
+        .channel(`dm_${[currentUserId, partnerId].sort().join('_')}`)
+        .on(
+            'postgres_changes',
+            { event: 'INSERT', schema: 'public', table: 'direct_messages' },
+            (payload) => {
+                const row = payload.new as any;
+                // Only handle messages belonging to this conversation
+                const isThisConversation =
+                    (row.sender_id === currentUserId && row.receiver_id === partnerId) ||
+                    (row.sender_id === partnerId && row.receiver_id === currentUserId);
+                if (!isThisConversation) return;
+                onMessage({
+                    id: row.id,
+                    senderId: row.sender_id,
+                    receiverId: row.receiver_id,
+                    message: row.message,
+                    createdAt: row.created_at,
+                    read: row.read
+                } as DirectMessage);
+            }
+        )
+        .subscribe((status) => {
+            console.log('[DM] Realtime channel status:', status);
+        });
+
+    return () => {
+        supabase.removeChannel(channel);
+    };
+};
+
 export const getTutoringSessions = async () => {
     const { data, error } = await supabase.from('tutoring_sessions').select('*');
     if (error) throw error;
@@ -484,8 +600,8 @@ export const generateMeetingToken = async (user: User, sessionId: string) => {
     // UPDATE: Now using local token server for Jitsi JaaS (vpaas)
     // This removes the private key from the client bundle.
 
-    const roomName = `skillforge-${sessionId}`;
-    const tokenServerUrl = 'http://localhost:3002/api/jitsi-token'; // Port 3002 to avoid conflicts
+    const roomName = `vidyasetu-${sessionId}`;
+    const tokenServerUrl = 'http://localhost:3002/api/jitsi-token'; // Port 3002 as configured in .env
 
     try {
         const params = new URLSearchParams({

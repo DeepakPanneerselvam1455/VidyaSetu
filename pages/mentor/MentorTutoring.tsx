@@ -13,18 +13,18 @@ import { Textarea } from '../../components/ui/Textarea';
 import Dialog from '../../components/ui/Dialog';
 import { cn } from '../../lib/utils';
 import { SessionCalendar } from '../../components/SessionCalendar';
-
-// Icons
-const VideoIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 8-6 4 6 4V8Z" /><rect width="14" height="12" x="2" y="6" rx="2" ry="2" /></svg>;
-const CalendarIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2" /><line x1="16" x2="16" y1="2" y2="6" /><line x1="8" x2="8" y1="2" y2="6" /><line x1="3" x2="21" y1="10" y2="10" /></svg>;
-const UsersIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>;
-const PlusIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>;
-const HistoryIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l4 2" /></svg>;
-const ListIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>;
-const StickyNoteIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15.5 3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V8.5L15.5 3Z" /><path d="M15 3v6h6" /></svg>;
-const AlertTriangleIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>;
-const ClockIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>;
-const TrashIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></svg>;
+import {
+    VideoIcon,
+    CalendarIcon,
+    UsersIcon,
+    PlusIcon,
+    HistoryIcon,
+    ListIcon,
+    StickyNoteIcon,
+    AlertTriangleIcon,
+    ClockIcon,
+    TrashIcon
+} from '../../components/ui/Icons';
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -210,15 +210,16 @@ const MentorTutoring: React.FC = () => {
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight dark:text-white">Tutoring Management</h1>
-                    <p className="text-slate-500 dark:text-slate-400">Schedule classes, manage bookings, and set your availability.</p>
+                    <h1 className="text-3xl font-bold tracking-tight" style={{ color: 'var(--text-heading, var(--text-main))' }}>Tutoring Management</h1>
+                    <p style={{ color: 'var(--text-secondary)' }}>Schedule classes, manage bookings, and set your availability.</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                    <div className="flex bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
+                    <div className="flex rounded-lg p-1" style={{ backgroundColor: 'var(--kpi-icon-chip)' }}>
                         <Button
                             variant="ghost"
                             size="sm"
-                            className={cn("h-8 px-3", viewMode === 'list' && "bg-white dark:bg-slate-700 shadow-sm")}
+                            className={cn("h-8 px-3", viewMode === 'list' && "shadow-sm")}
+                            style={viewMode === 'list' ? { backgroundColor: 'var(--card-bg)' } : undefined}
                             onClick={() => setViewMode('list')}
                         >
                             <ListIcon className="w-4 h-4 mr-2" /> List
@@ -226,7 +227,8 @@ const MentorTutoring: React.FC = () => {
                         <Button
                             variant="ghost"
                             size="sm"
-                            className={cn("h-8 px-3", viewMode === 'calendar' && "bg-white dark:bg-slate-700 shadow-sm")}
+                            className={cn("h-8 px-3", viewMode === 'calendar' && "shadow-sm")}
+                            style={viewMode === 'calendar' ? { backgroundColor: 'var(--card-bg)' } : undefined}
                             onClick={() => setViewMode('calendar')}
                         >
                             <CalendarIcon className="w-4 h-4 mr-2" /> Calendar
@@ -250,15 +252,15 @@ const MentorTutoring: React.FC = () => {
             ) : (
                 <>
                     {/* Tabs */}
-                    <div className="border-b border-slate-200 dark:border-slate-700">
+                    <div className="border-b" style={{ borderColor: 'var(--border-default)' }}>
                         <nav className="-mb-px flex space-x-6">
                             <button
                                 onClick={() => setActiveTab('upcoming')}
                                 className={cn(
                                     'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors',
                                     activeTab === 'upcoming'
-                                        ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
-                                        : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-slate-200'
+                                        ? 'tab-active'
+                                        : 'tab-themed'
                                 )}
                             >
                                 Upcoming & Active ({upcomingSessions.length})
@@ -268,8 +270,8 @@ const MentorTutoring: React.FC = () => {
                                 className={cn(
                                     'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors',
                                     activeTab === 'past'
-                                        ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
-                                        : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-slate-200'
+                                        ? 'tab-active'
+                                        : 'tab-themed'
                                 )}
                             >
                                 Session History
@@ -294,12 +296,12 @@ const MentorTutoring: React.FC = () => {
                                         </CardDescription>
                                     </CardHeader>
                                     <CardContent className="flex-grow space-y-3 text-sm">
-                                        <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                                        <div className="flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
                                             <CalendarIcon className="w-4 h-4" />
                                             <span>{new Date(session.startTime).toLocaleString()}</span>
                                         </div>
                                         {session.studentIds.length > 0 && (
-                                            <div className="flex items-start gap-2 text-slate-600 dark:text-slate-300">
+                                            <div className="flex items-start gap-2" style={{ color: 'var(--text-secondary)' }}>
                                                 <UsersIcon className="w-4 h-4 mt-0.5" />
                                                 <div className="text-xs">
                                                     <span className="font-semibold">Participants:</span><br />
@@ -309,7 +311,7 @@ const MentorTutoring: React.FC = () => {
                                         )}
                                         {session.description && <p className="text-slate-500 mt-2">{session.description}</p>}
                                     </CardContent>
-                                    <CardFooter className="flex justify-between gap-2 pt-2 border-t dark:border-slate-800">
+                                    <CardFooter className="flex justify-between gap-2 pt-2 border-t" style={{ borderColor: 'var(--border-default)' }}>
                                         {activeTab === 'upcoming' ? (
                                             <>
                                                 <div className="flex gap-2">
@@ -330,7 +332,7 @@ const MentorTutoring: React.FC = () => {
                                     </CardFooter>
                                 </Card>
                             )) : (
-                                <div className="col-span-full text-center py-12 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg">
+                                <div className="col-span-full text-center py-12 border-2 border-dashed rounded-lg" style={{ borderColor: 'var(--border-strong)' }}>
                                     {activeTab === 'upcoming' ? (
                                         <>
                                             <UsersIcon className="w-12 h-12 mx-auto text-slate-400 mb-3" />
@@ -372,7 +374,7 @@ const MentorTutoring: React.FC = () => {
                 title={selectedSessionForNotes ? `Notes: ${selectedSessionForNotes.topic}` : 'Session Notes'}
             >
                 <div className="space-y-4">
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
                         These notes are private and only visible to you. Use them to track student progress, prepare for future sessions, or jot down reminders.
                     </p>
                     <Textarea
@@ -469,7 +471,7 @@ const ManageAvailabilityDialog: React.FC<{
     return (
         <Dialog isOpen={isOpen} onClose={onClose} title="Manage Weekly Availability">
             <div className="space-y-4">
-                <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg space-y-3">
+                <div className="p-4 rounded-lg space-y-3" style={{ backgroundColor: 'var(--kpi-icon-chip)' }}>
                     <h3 className="font-medium text-sm">Add New Slot</h3>
                     <div className="grid grid-cols-3 gap-2">
                         <Select value={newDay} onChange={e => setNewDay(e.target.value)} className="col-span-1">

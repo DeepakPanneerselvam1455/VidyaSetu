@@ -6,6 +6,14 @@ import { QuizAttempt, Quiz, Course } from '../../types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { cn } from '../../lib/utils';
+import {
+    PercentIcon,
+    CheckCircle2Icon,
+    AwardIcon,
+    TrendingDownIcon,
+    BarChartIcon,
+    HistoryIcon
+} from '../../components/ui/Icons';
 
 interface TopicPerformance {
     topic: string;
@@ -29,9 +37,9 @@ const StudentProgress: React.FC = () => {
                     api.getQuizzes(),
                     api.getCourses()
                 ]);
-                
+
                 setAttempts(userAttempts.sort((a, b) => new Date(a.submittedAt).getTime() - new Date(b.submittedAt).getTime()));
-                
+
                 const quizzesMap = allQuizzes.reduce((acc, quiz) => {
                     acc[quiz.id] = quiz;
                     return acc;
@@ -84,9 +92,9 @@ const StudentProgress: React.FC = () => {
             topic,
             attempts: data.count,
             averageScore: Math.round(data.totalScore / data.count),
-        })).sort((a,b) => b.averageScore - a.averageScore);
+        })).sort((a, b) => b.averageScore - a.averageScore);
     }, [attempts, quizzes, courses]);
-    
+
     const summaryStats = useMemo(() => {
         if (attempts.length === 0) {
             return {
@@ -109,7 +117,7 @@ const StudentProgress: React.FC = () => {
             topicToImprove,
         };
     }, [attempts, topicPerformance]);
-    
+
     const detailedAttempts = useMemo(() => {
         return [...attempts]
             .reverse()
@@ -148,41 +156,41 @@ const StudentProgress: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">My Progress</h1>
+            <h1 className="text-3xl font-bold tracking-tight" style={{ color: 'var(--text-main)' }}>My Progress</h1>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                 <StatCard 
-                    icon={<PercentIcon className="w-[30px] h-[30px] text-blue-500" />} 
-                    title="Overall Average Score" 
-                    value={`${summaryStats.overallAverageScore}%`} 
+                <StatCard
+                    icon={<PercentIcon className="w-[30px] h-[30px] text-blue-500" />}
+                    title="Overall Average Score"
+                    value={`${summaryStats.overallAverageScore}%`}
                     description="Across all completed quizzes"
                 />
-                <StatCard 
-                    icon={<CheckCircle2Icon className="w-[30px] h-[30px] text-green-500" />} 
-                    title="Quizzes Completed" 
-                    value={summaryStats.completedQuizzes} 
+                <StatCard
+                    icon={<CheckCircle2Icon className="w-[30px] h-[30px] text-green-500" />}
+                    title="Quizzes Completed"
+                    value={summaryStats.completedQuizzes}
                     description="Total quizzes you have taken"
                 />
-                <StatCard 
-                    icon={<AwardIcon className="w-[30px] h-[30px] text-yellow-500" />} 
-                    title="Best Topic" 
+                <StatCard
+                    icon={<AwardIcon className="w-[30px] h-[30px] text-yellow-500" />}
+                    title="Best Topic"
                     value={summaryStats.bestTopic ? summaryStats.bestTopic.topic : 'N/A'}
                     description={summaryStats.bestTopic ? `Avg score: ${summaryStats.bestTopic.averageScore}%` : 'Complete a quiz to find out'}
                 />
-                <StatCard 
-                    icon={<TrendingDownIcon className="w-[30px] h-[30px] text-red-500" />} 
-                    title="Needs Improvement" 
+                <StatCard
+                    icon={<TrendingDownIcon className="w-[30px] h-[30px] text-red-500" />}
+                    title="Needs Improvement"
                     value={summaryStats.topicToImprove ? summaryStats.topicToImprove.topic : 'N/A'}
                     description={summaryStats.topicToImprove ? `Avg score: ${summaryStats.topicToImprove.averageScore}%` : 'Keep learning!'}
                 />
             </div>
-            
+
             <div className="grid lg:grid-cols-3 gap-6">
                 <Card className="lg:col-span-2">
                     <CardHeader>
                         <CardTitle>Performance Trend</CardTitle>
                         <CardDescription>
-                            Your scores on the last {chartData.length} quizzes. 
+                            Your scores on the last {chartData.length} quizzes.
                             {chartData.length > 2 && <span className="ml-1 text-slate-500 font-normal text-xs">(Dashed line indicates trend)</span>}
                         </CardDescription>
                     </CardHeader>
@@ -204,8 +212,8 @@ const StudentProgress: React.FC = () => {
                                             <span className="text-sm font-medium truncate max-w-[150px]">{item.topic}</span>
                                             <span className="text-sm font-bold">{item.averageScore}%</span>
                                         </div>
-                                        <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
-                                            <div 
+                                        <div className="w-full rounded-full h-2" style={{ backgroundColor: 'var(--kpi-icon-chip)' }}>
+                                            <div
                                                 className={`h-2 rounded-full ${getPerformanceColor(item.averageScore)}`}
                                                 style={{ width: `${item.averageScore}%` }}
                                             ></div>
@@ -215,7 +223,7 @@ const StudentProgress: React.FC = () => {
                                 ))}
                             </ul>
                         ) : (
-                             <p className="text-slate-500 dark:text-slate-400 text-center py-8">No topic data available yet.</p>
+                            <p style={{ color: 'var(--text-secondary)' }} className="text-center py-8">No topic data available yet.</p>
                         )}
                     </CardContent>
                 </Card>
@@ -231,13 +239,13 @@ const StudentProgress: React.FC = () => {
                     {detailedAttempts.length > 0 ? (
                         <div className="space-y-4">
                             {detailedAttempts.slice(0, 5).map(attempt => (
-                                <div key={attempt.id} className="p-4 border rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-50 dark:bg-slate-900/50">
+                                <div key={attempt.id} className="p-4 border rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4" style={{ backgroundColor: 'var(--kpi-icon-chip)', borderColor: 'var(--border-default)' }}>
                                     <div className="flex-1">
                                         <div className="flex items-center gap-2 mb-1">
                                             <h3 className="font-semibold">{attempt.quizTitle}</h3>
                                             {attempt.difficulty && <Badge variant={getDifficultyBadgeVariant(attempt.difficulty)}>{attempt.difficulty}</Badge>}
                                         </div>
-                                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                                        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
                                             From course: {attempt.courseTitle}
                                         </p>
                                     </div>
@@ -246,10 +254,10 @@ const StudentProgress: React.FC = () => {
                                             <span className="text-sm font-medium">Score: {attempt.score}/{attempt.totalPoints}</span>
                                             <span className="text-lg font-bold">{attempt.percentage}%</span>
                                         </div>
-                                        <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2.5">
+                                        <div className="w-full rounded-full h-2.5" style={{ backgroundColor: 'var(--kpi-icon-chip)' }}>
                                             <div className="bg-indigo-600 h-2.5 rounded-full" style={{ width: `${attempt.percentage}%` }}></div>
                                         </div>
-                                         <p className="text-xs text-slate-500 text-right">
+                                        <p className="text-xs text-slate-500 text-right">
                                             Submitted on: {new Date(attempt.submittedAt).toLocaleDateString()}
                                         </p>
                                     </div>
@@ -257,10 +265,10 @@ const StudentProgress: React.FC = () => {
                             ))}
                         </div>
                     ) : (
-                         <div className="text-center py-16">
+                        <div className="text-center py-16">
                             <HistoryIcon className="w-[46px] h-[46px] text-slate-400 mx-auto mb-2" />
                             <p className="font-semibold">No History Yet</p>
-                            <p className="text-slate-500 dark:text-slate-400 text-sm">Your quiz attempts will be logged here once you complete them.</p>
+                            <p style={{ color: 'var(--text-secondary)' }} className="text-sm">Your quiz attempts will be logged here once you complete them.</p>
                         </div>
                     )}
                 </CardContent>
@@ -272,7 +280,7 @@ const StudentProgress: React.FC = () => {
 // --- Enhanced Chart Component ---
 const ProgressTrendChart: React.FC<{ data: { name: string, score: number, date: string }[] }> = ({ data }) => {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-    
+
     // Dimensions & Padding
     const SVG_WIDTH = 600;
     const SVG_HEIGHT = 280;
@@ -313,10 +321,10 @@ const ProgressTrendChart: React.FC<{ data: { name: string, score: number, date: 
     // Calculate Linear Regression Trend Line
     const trendLine = useMemo(() => {
         if (data.length < 3) return null; // Need at least 3 points for a meaningful trend
-        
+
         const n = data.length;
         let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
-        
+
         // X is index (0, 1, 2...), Y is score
         data.forEach((d, i) => {
             sumX += i;
@@ -324,10 +332,10 @@ const ProgressTrendChart: React.FC<{ data: { name: string, score: number, date: 
             sumXY += i * d.score;
             sumXX += i * i;
         });
-        
+
         const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
         const intercept = (sumY - slope * sumX) / n;
-        
+
         const y1 = intercept;
         const y2 = slope * (n - 1) + intercept;
 
@@ -346,10 +354,10 @@ const ProgressTrendChart: React.FC<{ data: { name: string, score: number, date: 
 
     if (data.length < 2) {
         return (
-            <div className="text-center py-16 h-72 flex flex-col items-center justify-center border border-dashed rounded-lg border-slate-300 dark:border-slate-700">
-                <BarChartIcon className="w-[46px] h-[46px] text-slate-300 dark:text-slate-600 mb-2" />
-                <p className="font-semibold text-slate-700 dark:text-slate-300">Not Enough Data</p>
-                <p className="text-slate-500 dark:text-slate-400 text-sm">
+            <div className="text-center py-16 h-72 flex flex-col items-center justify-center border border-dashed rounded-lg" style={{ borderColor: 'var(--border-strong)' }}>
+                <BarChartIcon className="w-[46px] h-[46px] mb-2" style={{ color: 'var(--text-muted)' }} />
+                <p className="font-semibold" style={{ color: 'var(--text-main)' }}>Not Enough Data</p>
+                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
                     Complete at least two quizzes to see your performance trend.
                 </p>
             </div>
@@ -383,9 +391,9 @@ const ProgressTrendChart: React.FC<{ data: { name: string, score: number, date: 
                 {/* Date Labels (Only show start and end to avoid clutter if many points, or all if few) */}
                 {pointCoordinates.map(({ x, date }, index) => {
                     // Show roughly 5 labels max
-                    const showLabel = pointCoordinates.length <= 5 || index === 0 || index === pointCoordinates.length - 1 || index % Math.ceil(pointCoordinates.length/4) === 0;
+                    const showLabel = pointCoordinates.length <= 5 || index === 0 || index === pointCoordinates.length - 1 || index % Math.ceil(pointCoordinates.length / 4) === 0;
                     if (!showLabel) return null;
-                    
+
                     return (
                         <text key={index} x={x} y={SVG_HEIGHT - PADDING + 20} textAnchor="middle" className="text-[10px] fill-slate-500 dark:fill-slate-400">
                             {date}
@@ -398,10 +406,10 @@ const ProgressTrendChart: React.FC<{ data: { name: string, score: number, date: 
 
                 {/* Trend Line */}
                 {trendLine && (
-                    <line 
-                        x1={trendLine.x1} y1={trendLine.y1} 
-                        x2={trendLine.x2} y2={trendLine.y2} 
-                        className={cn("stroke-2 stroke-slate-400/60 dark:stroke-slate-500/60")}
+                    <line
+                        x1={trendLine.x1} y1={trendLine.y1}
+                        x2={trendLine.x2} y2={trendLine.y2}
+                        className={cn("stroke-2 stroke-slate-400/60")}
                         strokeDasharray="5,5"
                     />
                 )}
@@ -420,8 +428,8 @@ const ProgressTrendChart: React.FC<{ data: { name: string, score: number, date: 
                             cy={y}
                             r={hoveredIndex === index ? 6 : 4}
                             className={cn(
-                                "fill-white dark:fill-slate-950 stroke-indigo-500 stroke-[3px] transition-all duration-200 ease-out",
-                                hoveredIndex === index && "fill-indigo-100 dark:fill-indigo-900"
+                                "fill-white stroke-indigo-500 stroke-[3px] transition-all duration-200 ease-out",
+                                hoveredIndex === index && "fill-indigo-100"
                             )}
                         />
                     </g>
@@ -441,7 +449,7 @@ const ProgressTrendChart: React.FC<{ data: { name: string, score: number, date: 
                     <div className="font-bold text-sm mb-1">{pointCoordinates[hoveredIndex].score}%</div>
                     <div className="font-medium text-slate-300 mb-0.5 whitespace-nowrap">{pointCoordinates[hoveredIndex].name}</div>
                     <div className="text-slate-400">{pointCoordinates[hoveredIndex].date}</div>
-                    
+
                     {/* Tooltip Arrow */}
                     <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900 border-r border-b border-slate-700"></div>
                 </div>
@@ -451,26 +459,19 @@ const ProgressTrendChart: React.FC<{ data: { name: string, score: number, date: 
 };
 
 const StatCard: React.FC<{
-    icon: React.ReactNode; 
-    title: string; 
+    icon: React.ReactNode;
+    title: string;
     value: string | number;
     description?: string;
 }> = ({ icon, title, value, description }) => (
-    <Card className="flex items-center p-6 gap-6">
-        <div className="p-3 bg-slate-100 dark:bg-slate-800/50 rounded-lg shrink-0">{icon}</div>
+    <Card className="flex items-center p-6 gap-6 card-themed">
+        <div className="p-3 rounded-lg shrink-0 kpi-icon-chip">{icon}</div>
         <div className="overflow-hidden">
-            <dt className="text-sm font-medium text-slate-500 dark:text-slate-400 truncate">{title}</dt>
-            <dd className="text-3xl font-bold truncate">{value}</dd>
-            {description && <p className="text-xs text-slate-500 truncate">{description}</p>}
+            <dt className="text-sm font-medium truncate" style={{ color: 'var(--text-secondary)' }}>{title}</dt>
+            <dd className="text-3xl font-bold truncate" style={{ color: 'var(--text-main)' }}>{value}</dd>
+            {description && <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>{description}</p>}
         </div>
     </Card>
 );
-
-const PercentIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>;
-const CheckCircle2Icon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>;
-const AwardIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>;
-const TrendingDownIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>;
-const BarChartIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg>;
-const HistoryIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>;
 
 export default StudentProgress;

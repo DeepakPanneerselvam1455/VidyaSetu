@@ -64,7 +64,7 @@ const MentorGradingView: React.FC<{ course: Course }> = ({ course }) => {
                 }
 
                 const quiz = quizMap[attempt.quizId];
-                if(quiz) {
+                if (quiz) {
                     submissionsByStudent[studentId].submissions.push({
                         attempt,
                         quizTitle: quiz.title,
@@ -78,9 +78,9 @@ const MentorGradingView: React.FC<{ course: Course }> = ({ course }) => {
                 const totalScore = studentData.submissions.reduce((acc, sub) => acc + (sub.attempt.score / sub.attempt.totalPoints * 100), 0);
                 studentData.averageScore = studentData.submissions.length > 0 ? Math.round(totalScore / studentData.submissions.length) : 0;
                 studentData.submissionCount = studentData.submissions.length;
-                studentData.submissions.sort((a,b) => new Date(b.attempt.submittedAt).getTime() - new Date(a.attempt.submittedAt).getTime());
+                studentData.submissions.sort((a, b) => new Date(b.attempt.submittedAt).getTime() - new Date(a.attempt.submittedAt).getTime());
                 return studentData;
-            }).sort((a,b) => a.studentName.localeCompare(b.studentName));
+            }).sort((a, b) => a.studentName.localeCompare(b.studentName));
 
 
             setStudentSubmissions(formattedData);
@@ -90,7 +90,7 @@ const MentorGradingView: React.FC<{ course: Course }> = ({ course }) => {
             setIsLoading(false);
         }
     };
-    
+
     useEffect(() => {
         fetchSubmissions();
     }, [course]);
@@ -110,10 +110,10 @@ const MentorGradingView: React.FC<{ course: Course }> = ({ course }) => {
                     />
                 ))
             ) : (
-                <div className="text-center py-16 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg">
-                    <CoffeeIcon className="w-12 h-12 mx-auto text-slate-400" />
+                <div className="text-center py-16 border-2 border-dashed rounded-lg" style={{ borderColor: 'var(--border-strong)' }}>
+                    <CoffeeIcon className="w-12 h-12 mx-auto" style={{ color: 'var(--text-muted)' }} />
                     <p className="mt-4 text-lg font-semibold">All Caught Up!</p>
-                    <p className="text-slate-500 dark:text-slate-400">No submissions are waiting for your review in this course.</p>
+                    <p style={{ color: 'var(--text-secondary)' }}>No submissions are waiting for your review in this course.</p>
                 </div>
             )}
         </div>
@@ -121,28 +121,28 @@ const MentorGradingView: React.FC<{ course: Course }> = ({ course }) => {
 };
 
 // --- STUDENT EXPANDABLE CARD ---
-const StudentGradingCard: React.FC<{ 
-    studentData: StudentSubmissions; 
-    isExpanded: boolean; 
-    onToggle: () => void; 
+const StudentGradingCard: React.FC<{
+    studentData: StudentSubmissions;
+    isExpanded: boolean;
+    onToggle: () => void;
     onGradingComplete: () => void;
 }> = ({ studentData, isExpanded, onToggle, onGradingComplete }) => {
     const [expandedAttemptId, setExpandedAttemptId] = useState<string | null>(null);
 
     const getPerformanceStatus = (score: number) => {
-        if (score >= 80) return { label: 'Excellent', className: 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300' };
-        if (score >= 50) return { label: 'Average', className: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300' };
-        return { label: 'Needs Improvement', className: 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300' };
+        if (score >= 80) return { label: 'Excellent', className: 'badge-success-themed' };
+        if (score >= 50) return { label: 'Average', className: 'bg-yellow-100 text-yellow-800' };
+        return { label: 'Needs Improvement', className: 'bg-red-100 text-red-800' };
     };
 
     const performance = getPerformanceStatus(studentData.averageScore);
 
     return (
         <Card>
-            <CardHeader onClick={onToggle} className="cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+            <CardHeader onClick={onToggle} className="cursor-pointer transition-colors" style={{ ['--tw-bg-opacity' as any]: 1 }}>
                 <div className="flex justify-between items-center">
                     <CardTitle>{studentData.studentName}</CardTitle>
-                     <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+                    <div className="flex items-center gap-4 text-sm" style={{ color: 'var(--text-secondary)' }}>
                         <Badge variant="outline">{studentData.submissionCount} Submission(s)</Badge>
                         <Badge className={performance.className}>{performance.label} ({studentData.averageScore}%)</Badge>
                         <ChevronDownIcon className={cn("w-5 h-5 transition-transform", isExpanded && "rotate-180")} />
@@ -150,7 +150,7 @@ const StudentGradingCard: React.FC<{
                 </div>
             </CardHeader>
             {isExpanded && (
-                <CardContent className="pt-4 border-t dark:border-slate-700 space-y-3">
+                <CardContent className="pt-4 border-t space-y-3" style={{ borderColor: 'var(--border-default)' }}>
                     {studentData.submissions.map(submission => {
                         const unansweredCount = submission.quiz.questions.reduce((count, q) => {
                             const answer = submission.attempt.answers[q.id];
@@ -159,17 +159,17 @@ const StudentGradingCard: React.FC<{
                             }
                             return count;
                         }, 0);
-                        
+
                         return (
-                            <div 
-                                key={submission.attempt.id} 
+                            <div
+                                key={submission.attempt.id}
                                 className={cn(
-                                    "border dark:border-slate-700 rounded-lg",
-                                    unansweredCount > 0 && !submission.attempt.gradedAt && "bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800"
+                                    "border rounded-lg",
+                                    unansweredCount > 0 && !submission.attempt.gradedAt ? "bg-yellow-50 border-yellow-200" : ""
                                 )}
                             >
-                                <div 
-                                    className="flex justify-between items-center p-4 cursor-pointer hover:bg-slate-50/50 dark:hover:bg-slate-800/20"
+                                <div
+                                    className="flex justify-between items-center p-4 cursor-pointer"
                                     onClick={() => setExpandedAttemptId(prev => prev === submission.attempt.id ? null : submission.attempt.id)}
                                 >
                                     <div>
@@ -178,7 +178,7 @@ const StudentGradingCard: React.FC<{
                                     </div>
                                     <div className="flex items-center gap-4">
                                         {unansweredCount > 0 && (
-                                            <Badge variant="secondary" className="bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
+                                            <Badge variant="secondary" className="bg-amber-100 text-amber-800">
                                                 {unansweredCount} Unanswered
                                             </Badge>
                                         )}
@@ -188,7 +188,7 @@ const StudentGradingCard: React.FC<{
                                     </div>
                                 </div>
                                 {expandedAttemptId === submission.attempt.id && (
-                                    <div className="p-4 border-t dark:border-slate-700 bg-slate-50/30 dark:bg-slate-900/20">
+                                    <div className="p-4 border-t" style={{ borderColor: 'var(--border-default)', backgroundColor: 'var(--kpi-icon-chip)' }}>
                                         <AttemptGradingForm
                                             key={submission.attempt.id} // Re-mount component on selection change
                                             submission={submission}
@@ -230,7 +230,7 @@ const AttemptGradingForm: React.FC<{ submission: SubmissionData; onSave: () => v
             feedback: { ...prev.feedback, [questionId]: text },
         }));
     };
-    
+
     const handleSnippetClick = (questionId: string, snippet: string) => {
         setEditableAttempt(prev => {
             const currentFeedback = prev.feedback?.[questionId] || '';
@@ -245,12 +245,12 @@ const AttemptGradingForm: React.FC<{ submission: SubmissionData; onSave: () => v
     const handleOverrideScore = (question: Question, isCorrect: boolean) => {
         const studentAnswer = editableAttempt.answers[question.id] || "";
         const wasCorrect = studentAnswer.toLowerCase().trim() === question.correctAnswer.toLowerCase().trim();
-        
+
         if (isCorrect === wasCorrect) return; // No change needed
 
         const scoreChange = isCorrect ? question.points : -question.points;
         const currentScore = editableAttempt.overriddenScore ?? editableAttempt.score;
-        
+
         setEditableAttempt(prev => ({
             ...prev,
             overriddenScore: currentScore + scoreChange,
@@ -282,7 +282,7 @@ const AttemptGradingForm: React.FC<{ submission: SubmissionData; onSave: () => v
                 const studentAnswer = editableAttempt.answers[q.id] || "Not Answered";
                 const isCorrect = studentAnswer.toLowerCase().trim() === q.correctAnswer.toLowerCase().trim();
                 return (
-                    <Card key={q.id} className={cn(isCorrect ? 'bg-green-50/50 dark:bg-green-900/10' : 'bg-red-50/50 dark:bg-red-900/10')}>
+                    <Card key={q.id} className={cn(isCorrect ? 'bg-green-50/50' : 'bg-red-50/50')}>
                         <CardHeader>
                             <p className="font-semibold">{index + 1}. {q.question}</p>
                         </CardHeader>
@@ -295,7 +295,7 @@ const AttemptGradingForm: React.FC<{ submission: SubmissionData; onSave: () => v
                                     <Button size="sm" variant="outline" onClick={() => handleOverrideScore(q, false)}>Mark Incorrect</Button>
                                 </div>
                             )}
-                             <Textarea
+                            <Textarea
                                 value={editableAttempt.feedback?.[q.id] || ''}
                                 onChange={e => handleFeedbackChange(q.id, e.target.value)}
                                 placeholder="Provide feedback for this question..."
@@ -330,9 +330,9 @@ const AttemptGradingForm: React.FC<{ submission: SubmissionData; onSave: () => v
                     <CardTitle className="text-base">Overall Feedback & Score</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                     <Textarea
+                    <Textarea
                         value={editableAttempt.overallFeedback || ''}
-                        onChange={e => setEditableAttempt(prev => ({...prev, overallFeedback: e.target.value}))}
+                        onChange={e => setEditableAttempt(prev => ({ ...prev, overallFeedback: e.target.value }))}
                         placeholder="Provide overall feedback for the attempt..."
                         rows={3}
                     />
@@ -342,14 +342,14 @@ const AttemptGradingForm: React.FC<{ submission: SubmissionData; onSave: () => v
                             type="number"
                             className="w-24"
                             value={editableAttempt.overriddenScore ?? editableAttempt.score}
-                            onChange={e => setEditableAttempt(prev => ({...prev, overriddenScore: parseInt(e.target.value) || 0}))}
+                            onChange={e => setEditableAttempt(prev => ({ ...prev, overriddenScore: parseInt(e.target.value) || 0 }))}
                         />
-                         <span className="text-slate-500">/ {editableAttempt.totalPoints}</span>
+                        <span className="text-slate-500">/ {editableAttempt.totalPoints}</span>
                     </div>
                 </CardContent>
             </Card>
 
-            <div className="flex justify-end gap-2 pt-4 mt-4 border-t dark:border-slate-700">
+            <div className="flex justify-end gap-2 pt-4 mt-4 border-t" style={{ borderColor: 'var(--border-default)' }}>
                 <Button variant="outline" onClick={onCancel}>Cancel</Button>
                 <Button onClick={handleSave} disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Grade'}</Button>
             </div>
@@ -358,7 +358,7 @@ const AttemptGradingForm: React.FC<{ submission: SubmissionData; onSave: () => v
 }
 
 // --- ICONS ---
-const CoffeeIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/></svg>;
-const ChevronDownIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>;
+const CoffeeIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1" /><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z" /><line x1="6" x2="6" y1="2" y2="4" /><line x1="10" x2="10" y1="2" y2="4" /><line x1="14" x2="14" y1="2" y2="4" /></svg>;
+const ChevronDownIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>;
 
 export default MentorGradingView;

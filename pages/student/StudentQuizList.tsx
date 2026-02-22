@@ -109,15 +109,15 @@ const StudentQuizList: React.FC = () => {
     }, [searchTerm, difficultyFilter, quizzes, sortConfig]);
     
     if (isLoading) {
-        return <div className="text-center p-8 dark:text-white">Loading quizzes...</div>;
+        return <div className="text-center p-8" style={{ color: 'var(--text-main)' }}>Loading quizzes...</div>;
     }
 
     return (
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight dark:text-white">My Assigned Quizzes</h1>
-                    <p className="text-slate-500 dark:text-slate-300">Quizzes assigned to you by your instructors.</p>
+                    <h1 className="text-3xl font-bold tracking-tight" style={{ color: 'var(--text-main)' }}>My Assigned Quizzes</h1>
+                    <p style={{ color: 'var(--text-secondary)' }}>Quizzes assigned to you by your instructors.</p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
                     <Input 
@@ -135,11 +135,11 @@ const StudentQuizList: React.FC = () => {
                 </div>
             </div>
 
-            <Card>
+            <Card className="table-themed overflow-hidden">
                 <CardContent className="p-0">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
-                            <thead className="text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-white">
+                            <thead className="text-xs uppercase table-header-themed">
                                 <tr>
                                     <th scope="col" className="px-6 py-3 cursor-pointer" onClick={() => setSortConfig({key: 'title', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending'})}>Quiz Title</th>
                                     <th scope="col" className="px-6 py-3 cursor-pointer" onClick={() => setSortConfig({key: 'courseTitle', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending'})}>Course</th>
@@ -151,9 +151,9 @@ const StudentQuizList: React.FC = () => {
                             <tbody>
                                 {filteredQuizzes.length > 0 ? (
                                     filteredQuizzes.map((quiz) => (
-                                        <tr key={quiz.id} className="bg-white border-b dark:bg-slate-800 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600">
-                                            <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">{quiz.title}</td>
-                                            <td className="px-6 py-4">{quiz.courseTitle}</td>
+                                        <tr key={quiz.id} className="table-row-themed">
+                                            <td className="px-6 py-4 font-medium" style={{ color: 'var(--text-main)' }}>{quiz.title}</td>
+                                            <td className="px-6 py-4" style={{ color: 'var(--text-secondary)' }}>{quiz.courseTitle}</td>
                                             <td className="px-6 py-4">
                                                 <Badge variant="outline">{quiz.difficulty}</Badge>
                                             </td>
@@ -175,7 +175,7 @@ const StudentQuizList: React.FC = () => {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={5} className="text-center p-8 text-slate-500">No quizzes found.</td>
+                                        <td colSpan={5} className="text-center p-8" style={{ color: 'var(--text-secondary)' }}>No quizzes found.</td>
                                     </tr>
                                 )}
                             </tbody>

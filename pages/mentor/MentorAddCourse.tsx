@@ -20,7 +20,7 @@ interface TempMaterial {
 const MentorAddCourse: React.FC = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
-    
+
     // Form state
     const [courseName, setCourseName] = useState('');
     const [publishDate, setPublishDate] = useState(new Date().toISOString().split('T')[0]);
@@ -30,7 +30,7 @@ const MentorAddCourse: React.FC = () => {
     const [description, setDescription] = useState('');
     const [language, setLanguage] = useState('English');
     const [topics, setTopics] = useState('');
-    
+
     // Materials State
     const [materials, setMaterials] = useState<TempMaterial[]>([]);
     const [newMaterialTitle, setNewMaterialTitle] = useState('');
@@ -43,10 +43,10 @@ const MentorAddCourse: React.FC = () => {
     useEffect(() => {
         if (user) {
             setInstructorName(user.name);
-            setInstitutionName(`${user.name}-SkillForge`);
+            setInstitutionName(`${user.name}-VidyaSetu`);
         }
     }, [user]);
-    
+
     const handleAddMaterial = () => {
         if (!newMaterialTitle || !newMaterialResource) {
             alert('Please provide a title and a resource for the material.');
@@ -62,7 +62,7 @@ const MentorAddCourse: React.FC = () => {
         setNewMaterialType('Youtube');
         setNewMaterialResource('');
     };
-    
+
     const handleRemoveMaterial = (tempId: number) => {
         setMaterials(prev => prev.filter(m => m.tempId !== tempId));
     };
@@ -85,7 +85,7 @@ const MentorAddCourse: React.FC = () => {
             const processedMaterials: CourseMaterial[] = materials.map((mat, index) => {
                 let url = '';
                 let type: CourseMaterial['type'] = 'link';
-                switch(mat.type) {
+                switch (mat.type) {
                     case 'Youtube':
                         type = 'video';
                         url = `https://www.youtube.com/watch?v=${mat.resource}`;
@@ -122,9 +122,9 @@ const MentorAddCourse: React.FC = () => {
             setIsSubmitting(false);
         }
     };
-    
+
     const renderResourceInput = () => {
-        switch(newMaterialType) {
+        switch (newMaterialType) {
             case 'Youtube':
                 return (
                     <FormField label="YouTube Video ID">
@@ -132,14 +132,14 @@ const MentorAddCourse: React.FC = () => {
                     </FormField>
                 );
             case 'PDF':
-                 return (
-                     <FormField label="PDF Document">
+                return (
+                    <FormField label="PDF Document">
                         <Input type="file" onChange={handleFileChange} accept=".pdf" />
                     </FormField>
                 );
             case 'Link':
-                 return (
-                     <FormField label="External Link URL">
+                return (
+                    <FormField label="External Link URL">
                         <Input type="url" value={newMaterialResource} onChange={e => setNewMaterialResource(e.target.value)} placeholder="https://example.com/resource" />
                     </FormField>
                 );
@@ -166,7 +166,7 @@ const MentorAddCourse: React.FC = () => {
                         <Input value={instructorName} readOnly disabled />
                     </FormField>
                     <FormField label="Institution Name" required>
-                         <Input value={institutionName} readOnly disabled />
+                        <Input value={institutionName} readOnly disabled />
                     </FormField>
                     <FormField label="Skill Level" required>
                         <Select value={difficulty} onChange={e => setDifficulty(e.target.value as any)} required>
@@ -184,13 +184,13 @@ const MentorAddCourse: React.FC = () => {
                         </Select>
                     </FormField>
                     <div className="md:col-span-2">
-                         <FormField label="Topics (comma separated)" required>
+                        <FormField label="Topics (comma separated)" required>
                             <Input value={topics} onChange={e => setTopics(e.target.value)} placeholder="e.g. React, Hooks, Props, State" required />
                         </FormField>
                     </div>
                     <div className="md:col-span-2">
-                         <FormField label="Course Description" required>
-                            <Textarea value={description} onChange={e => setDescription(e.target.value)} required rows={4}/>
+                        <FormField label="Course Description" required>
+                            <Textarea value={description} onChange={e => setDescription(e.target.value)} required rows={4} />
                         </FormField>
                     </div>
 
@@ -254,7 +254,7 @@ const FormField: React.FC<{ label: string; required?: boolean; children: React.R
 );
 
 const getMaterialIcon = (type: MaterialType) => {
-    switch(type) {
+    switch (type) {
         case 'Link': return <LinkIcon className="w-5 h-5 text-blue-400 shrink-0" />;
         case 'PDF': return <FileTextIcon className="w-5 h-5 text-red-400 shrink-0" />;
         case 'Youtube': return <VideoIcon className="w-5 h-5 text-purple-400 shrink-0" />;
@@ -262,9 +262,9 @@ const getMaterialIcon = (type: MaterialType) => {
     }
 }
 
-const FileTextIcon = (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>;
-const PlusCircleIcon = (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>;
-const LinkIcon = (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"/></svg>;
-const VideoIcon = (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg>;
+const FileTextIcon = (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /></svg>;
+const PlusCircleIcon = (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="16" /><line x1="8" y1="12" x2="16" y2="12" /></svg>;
+const LinkIcon = (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72" /></svg>;
+const VideoIcon = (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 8-6 4 6 4V8Z" /><rect width="14" height="12" x="2" y="6" rx="2" ry="2" /></svg>;
 
 export default MentorAddCourse;

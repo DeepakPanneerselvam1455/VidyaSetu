@@ -5,7 +5,92 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SkillForge - AI Learning Platform</title>
+  <title>VidyaSetu - AI Learning Platform</title>
+  <script>
+    // Safeguard 4: LocalStorage Key Migration
+    try {
+      const oldKey = 'skillforge-ui-theme';
+      const newKey = 'vidyasetu-ui-theme';
+      if (localStorage.getItem(oldKey) && !localStorage.getItem(newKey)) {
+        localStorage.setItem(newKey, localStorage.getItem(oldKey));
+        // Optional: localStorage.removeItem(oldKey); // Keep for safety for now
+      }
+    } catch (e) {
+      console.warn("Theme migration failed", e);
+    }
+  </script>
+  <script>
+    // Safeguard 2: Tailwind Config MUST be defined BEFORE the CDN script
+    // Role-Based Theme System: Student (Teal), Instructor (Indigo), Admin (Amber)
+    tailwind = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            // VidyaSetu Brand
+            'vidyasetu-purple': '#7B1FA2',
+            
+            // Student Theme (Teal + Purple)
+            'student': {
+              'page': '#F0FDFA',
+              'page-dark': '#042F2E',
+              'card': '#FFFFFF',
+              'card-dark': '#064E4E',
+              'sidebar': '#CCFBF1',
+              'sidebar-dark': '#053634',
+              'primary': '#0EA5A4',
+              'primary-dark': '#14B8A6',
+              'text': '#083344',
+              'text-dark': '#ECFEFF',
+              'text-secondary': '#155E63',
+              'text-secondary-dark': '#99F6E4',
+            },
+            
+            // Instructor/Mentor Theme (Indigo + Purple)
+            'instructor': {
+              'page': '#EEF2FF',
+              'page-dark': '#0B1026',
+              'card': '#FFFFFF',
+              'card-dark': '#11183A',
+              'sidebar': '#E0E7FF',
+              'sidebar-dark': '#0F1535',
+              'primary': '#4F46E5',
+              'primary-dark': '#6366F1',
+              'text': '#1E1B4B',
+              'text-dark': '#EEF2FF',
+              'text-secondary': '#3730A3',
+              'text-secondary-dark': '#C7D2FE',
+            },
+            
+            // Admin Theme (Amber + Purple)
+            'admin': {
+              'page': '#FFFBEB',
+              'page-dark': '#1A1206',
+              'card': '#FFFFFF',
+              'card-dark': '#241806',
+              'sidebar': '#FEF3C7',
+              'sidebar-dark': '#1F1508',
+              'primary': '#D97706',
+              'primary-dark': '#F59E0B',
+              'text': '#3F2A00',
+              'text-dark': '#FFFBEB',
+              'text-secondary': '#92400E',
+              'text-secondary-dark': '#FCD34D',
+            },
+            
+            // Legacy support
+            primary: '#7B1FA2',
+            background: '#F4ECF7',
+            'secondary-background': '#E8DAEF',
+            text: '#2E1437',
+          },
+          fontFamily: {
+             sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script type="importmap">
 {
@@ -26,7 +111,7 @@
   <script>
     // Prevents FOUC (Flash of Unstyled Content)
     (function () {
-      const theme = localStorage.getItem('skillforge-ui-theme') || 'dark';
+      const theme = localStorage.getItem('vidyasetu-ui-theme') || 'dark';
       if (theme === 'dark') {
         document.documentElement.classList.add('dark');
       } else {

@@ -1,0 +1,75 @@
+﻿components/Layout.tsx(230,56): error TS2322: Type '{ children: string; style: { color: string; }; }' is not assignable to type 'IntrinsicAttributes & { children: ReactNode; className?: string; }'.
+  Property 'style' does not exist on type 'IntrinsicAttributes & { children: ReactNode; className?: string; }'.
+pages/mentor/MentorCourseManagement.tsx(14,10): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'FileIcon'.
+pages/mentor/MentorCourseManagement.tsx(14,20): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'LightbulbIcon'.
+pages/mentor/MentorEditQuiz.tsx(13,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'LoaderIcon'.
+pages/mentor/MentorEditQuiz.tsx(14,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'Wand2Icon'.
+pages/mentor/MentorEditQuiz.tsx(15,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'TrashIcon'.
+pages/mentor/MentorEditQuiz.tsx(16,5): error TS2724: '"../../components/ui/Icons"' has no exported member named 'PlusCircleIcon'. Did you mean 'PlusCircle'?
+pages/mentor/MentorEditQuiz.tsx(17,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'GitCompareArrowsIcon'.
+pages/mentor/MentorGenerateQuiz.tsx(17,5): error TS2724: '"../../components/ui/Icons"' has no exported member named 'SparklesIcon'. Did you mean 'Sparkles'?
+pages/mentor/MentorGenerateQuiz.tsx(18,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'Trash2Icon'.
+pages/mentor/MentorGenerateQuiz.tsx(19,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'BotIcon'.
+pages/mentor/MentorGenerateQuiz.tsx(20,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'LoaderIcon'.
+pages/mentor/MentorGenerateQuiz.tsx(21,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'CheckIcon'.
+pages/mentor/MentorGenerateQuiz.tsx(22,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'FileUpIcon'.
+pages/mentor/MentorGenerateQuiz.tsx(23,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'FileIcon'.
+pages/mentor/MentorGenerateQuiz.tsx(24,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'RotateCwIcon'.
+pages/mentor/MentorGenerateQuiz.tsx(25,5): error TS2724: '"../../components/ui/Icons"' has no exported member named 'AlertTriangleIcon'. Did you mean 'AlertTriangle'?
+pages/mentor/MentorGenerateQuiz.tsx(26,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'PencilIcon'.
+pages/mentor/MentorManualQuiz.tsx(15,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'LoaderIcon'.
+pages/mentor/MentorManualQuiz.tsx(16,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'Wand2Icon'.
+pages/mentor/MentorManualQuiz.tsx(17,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'TrashIcon'.
+pages/mentor/MentorManualQuiz.tsx(18,5): error TS2724: '"../../components/ui/Icons"' has no exported member named 'PlusCircleIcon'. Did you mean 'PlusCircle'?
+pages/mentor/MentorManualQuiz.tsx(19,5): error TS2724: '"../../components/ui/Icons"' has no exported member named 'SparklesIcon'. Did you mean 'Sparkles'?
+pages/mentor/MentorManualQuiz.tsx(20,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'CheckIcon'.
+pages/mentor/MentorManualQuiz.tsx(21,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'XIcon'.
+pages/mentor/MentorManualQuiz.tsx(22,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'BotIcon'.
+pages/mentor/MentorMentorship.tsx(9,10): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'CheckIcon'.
+pages/mentor/MentorMentorship.tsx(9,21): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'XIcon'.
+pages/mentor/MentorQuizManagement.tsx(14,10): error TS2724: '"../../components/ui/Icons"' has no exported member named 'HelpCircleIcon'. Did you mean 'HelpCircle'?
+pages/mentor/MentorTutoring.tsx(17,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'VideoIcon'.
+pages/mentor/MentorTutoring.tsx(18,5): error TS2724: '"../../components/ui/Icons"' has no exported member named 'CalendarIcon'. Did you mean 'Calendar'?
+pages/mentor/MentorTutoring.tsx(19,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'UsersIcon'.
+pages/mentor/MentorTutoring.tsx(20,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'PlusIcon'.
+pages/mentor/MentorTutoring.tsx(21,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'HistoryIcon'.
+pages/mentor/MentorTutoring.tsx(22,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'ListIcon'.
+pages/mentor/MentorTutoring.tsx(23,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'StickyNoteIcon'.
+pages/mentor/MentorTutoring.tsx(24,5): error TS2724: '"../../components/ui/Icons"' has no exported member named 'AlertTriangleIcon'. Did you mean 'AlertTriangle'?
+pages/mentor/MentorTutoring.tsx(25,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'ClockIcon'.
+pages/mentor/MentorTutoring.tsx(26,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'TrashIcon'.
+pages/student/StudentMentorship.tsx(12,10): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'SearchIcon'.
+pages/student/StudentMentorship.tsx(12,22): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'MapPinIcon'.
+pages/student/StudentMyCourses.tsx(11,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'SearchIcon'.
+pages/student/StudentMyCourses.tsx(12,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'SearchXIcon'.
+pages/student/StudentMyCourses.tsx(13,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'BookIcon'.
+pages/student/StudentMyCourses.tsx(14,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'LinkIcon'.
+pages/student/StudentMyCourses.tsx(15,5): error TS2724: '"../../components/ui/Icons"' has no exported member named 'FileTextIcon'. Did you mean 'FileText'?
+pages/student/StudentMyCourses.tsx(16,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'VideoIcon'.
+pages/student/StudentMyCourses.tsx(17,5): error TS2724: '"../../components/ui/Icons"' has no exported member named 'CheckCircleIcon'. Did you mean 'CheckCircle'?
+pages/student/StudentMyCourses.tsx(18,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'ArrowRightIcon'.
+pages/student/StudentMyCourses.tsx(19,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'PlayIcon'.
+pages/student/StudentMyCourses.tsx(20,5): error TS2724: '"../../components/ui/Icons"' has no exported member named 'ChevronDownIcon'. Did you mean 'ChevronDown'?
+pages/student/StudentProgress.tsx(10,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'PercentIcon'.
+pages/student/StudentProgress.tsx(11,5): error TS2724: '"../../components/ui/Icons"' has no exported member named 'CheckCircle2Icon'. Did you mean 'CheckCircle'?
+pages/student/StudentProgress.tsx(12,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'AwardIcon'.
+pages/student/StudentProgress.tsx(13,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'TrendingDownIcon'.
+pages/student/StudentProgress.tsx(14,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'BarChartIcon'.
+pages/student/StudentProgress.tsx(15,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'HistoryIcon'.
+pages/student/StudentQuizView.tsx(13,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'BookCopyIcon'.
+pages/student/StudentQuizView.tsx(14,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'ClockIcon'.
+pages/student/StudentQuizView.tsx(15,5): error TS2724: '"../../components/ui/Icons"' has no exported member named 'AlertTriangleIcon'. Did you mean 'AlertTriangle'?
+pages/student/StudentQuizView.tsx(16,5): error TS2724: '"../../components/ui/Icons"' has no exported member named 'CheckCircle2Icon'. Did you mean 'CheckCircle'?
+pages/student/StudentQuizView.tsx(17,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'XCircleIcon'.
+pages/student/StudentQuizView.tsx(18,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'BotIcon'.
+pages/student/StudentQuizView.tsx(19,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'LoaderIcon'.
+pages/student/StudentQuizView.tsx(20,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'TimerIcon'.
+pages/student/StudentQuizView.tsx(21,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'AwardIcon'.
+pages/student/StudentQuizView.tsx(22,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'TargetIcon'.
+pages/student/StudentQuizView.tsx(23,5): error TS2724: '"../../components/ui/Icons"' has no exported member named 'SparklesIcon'. Did you mean 'Sparkles'?
+pages/student/StudentTutoring.tsx(16,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'VideoIcon'.
+pages/student/StudentTutoring.tsx(17,5): error TS2724: '"../../components/ui/Icons"' has no exported member named 'CalendarIcon'. Did you mean 'Calendar'?
+pages/student/StudentTutoring.tsx(18,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'ClockIcon'.
+pages/student/StudentTutoring.tsx(19,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'PlusIcon'.
+pages/student/StudentTutoring.tsx(20,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'HistoryIcon'.
+pages/student/StudentTutoring.tsx(21,5): error TS2305: Module '"../../components/ui/Icons"' has no exported member 'ListIcon'.

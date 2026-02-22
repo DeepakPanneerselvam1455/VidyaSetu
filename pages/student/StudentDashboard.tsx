@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import * as api from '../../lib/api';
@@ -8,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { buttonVariants } from '../../components/ui/Button';
 import { cn } from '../../lib/utils';
 import { ActivityLogEntry, subscribe, unsubscribe, getActivityLog, formatTimeAgo } from '../../lib/activityLog';
+import { BookOpen, CheckCircle, TrendingUp, Check, LogIn, Info, Sparkles, ClipboardList } from '../../components/ui/Icons';
 
 
 interface QuizWithCourse extends Quiz {
@@ -25,18 +25,34 @@ const StudentDashboard: React.FC = () => {
     const [isSuggestionLoading, setIsSuggestionLoading] = useState(true);
 
 
+    const [error, setError] = useState<string | null>(null);
+
     useEffect(() => {
-        const fetchAllData = async () => {
+        let isMounted = true;
+
+        const fetchCoreData = async () => {
             if (!user) return;
             setIsLoading(true);
-            setIsSuggestionLoading(true);
+            setError(null);
 
             try {
-                const [userAttempts, studentQuizzes, allCourses] = await Promise.all([
+                // Critical Data Fetch with Timeout
+                const fetchPromise = Promise.all([
                     api.getStudentProgress(user.id),
                     api.getAssignedQuizzesForStudent(user.id),
                     api.getCourses()
                 ]);
+
+                const timeoutPromise = new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Gateway Timeout')), 8000)
+                );
+
+                const [userAttempts, studentQuizzes, allCourses] = await Promise.race([
+                    fetchPromise,
+                    timeoutPromise
+                ]) as [QuizAttempt[], Quiz[], Course[]];
+
+                if (!isMounted) return;
 
                 setAttempts(userAttempts);
 
@@ -53,41 +69,58 @@ const StudentDashboard: React.FC = () => {
                     courseTitle: courseMap.get(q.courseId) || 'Unknown Course'
                 }));
 
-                const sortedQuizzes = enrichedQuizzes.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+                const sortedQuizzes = enrichedQuizzes.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
                 setAssignedQuizzes(sortedQuizzes.slice(0, 3));
 
+                // Trigger AI Insights separately after core data
                 if (userAttempts.length > 0) {
-                    const latestAttempt = [...userAttempts].sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime())[0];
-                    const quiz = await api.getQuizById(latestAttempt.quizId);
-                    if (quiz) {
-                        const course = await api.getCourseById(quiz.courseId);
-                        if (course) {
-                            try {
-                                const suggestion = await api.getLearningSuggestion(latestAttempt, quiz, course, allCourses);
-                                setLearningSuggestion(suggestion);
-                            } catch {
-                                setLearningSuggestion("Continue exploring advanced topics in your current courses.");
-                            }
-                        }
-                    }
+                    fetchInsights(userAttempts, allCourses);
                 } else {
                     setLearningSuggestion("Welcome! Complete your first assessment to unlock personalized AI learning pathways.");
+                    setIsSuggestionLoading(false);
                 }
 
             } catch (error) {
                 console.error("Failed to fetch student dashboard data", error);
-                setLearningSuggestion("Unable to load insights at this moment.");
+                if (isMounted) setError("Failed to load dashboard data. Please try again.");
             } finally {
-                setIsLoading(false);
-                setIsSuggestionLoading(false);
+                if (isMounted) setIsLoading(false);
             }
         };
 
+        const fetchInsights = async (userAttempts: QuizAttempt[], allCourses: Course[]) => {
+            if (!isMounted) return;
+            setIsSuggestionLoading(true);
+            try {
+                const latestAttempt = [...userAttempts].sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime())[0];
+                const quiz = await api.getQuizById(latestAttempt.quizId);
+
+                if (quiz) {
+                    const course = await api.getCourseById(quiz.courseId);
+                    if (course) {
+                        // AI Call - Independent, does not block dashboard
+                        const suggestion = await api.getLearningSuggestion(latestAttempt, quiz, course, allCourses);
+                        if (isMounted) setLearningSuggestion(suggestion);
+                    }
+                }
+            } catch (err) {
+                console.warn("AI Suggestion failed silently:", err);
+                if (isMounted) setLearningSuggestion("Continue exploring advanced topics in your current courses.");
+            } finally {
+                if (isMounted) setIsSuggestionLoading(false);
+            }
+        };
 
         const fetchActivityLog = async () => {
             if (!user) return;
-            const allLogs = await getActivityLog();
-            setRecentActivity(allLogs.filter(log => log.details?.studentId === user.id || (log.type === 'user_login' && log.details?.userId === user.id)).slice(0, 8));
+            try {
+                const allLogs = await getActivityLog();
+                if (isMounted) {
+                    setRecentActivity(allLogs.filter(log => log.details?.studentId === user.id || (log.type === 'user_login' && log.details?.userId === user.id)).slice(0, 8));
+                }
+            } catch (e) {
+                console.error("Failed to fetch activity log", e);
+            }
         }
 
         const handleNewLog = (newLog: ActivityLogEntry) => {
@@ -97,18 +130,21 @@ const StudentDashboard: React.FC = () => {
             }
         };
 
-        fetchAllData();
+        fetchCoreData();
         fetchActivityLog();
         subscribe(handleNewLog);
 
-        return () => unsubscribe(handleNewLog);
+        return () => {
+            isMounted = false;
+            unsubscribe(handleNewLog);
+        };
     }, [user]);
 
     const getActivityIcon = (type: ActivityLogEntry['type']) => {
         switch (type) {
-            case 'quiz_submit': return <CheckIcon className="w-[18px] h-[18px] text-green-500" />;
-            case 'user_login': return <LogInIcon className="w-[18px] h-[18px] text-blue-500" />;
-            default: return <InfoIcon className="w-[18px] h-[18px] text-slate-500" />;
+            case 'quiz_submit': return <Check className="w-[18px] h-[18px]" style={{ color: 'var(--color-success)' }} />;
+            case 'user_login': return <LogIn className="w-[18px] h-[18px]" style={{ color: 'var(--primary)' }} />;
+            default: return <Info className="w-[18px] h-[18px]" style={{ color: 'var(--text-muted)' }} />;
         }
     };
 
@@ -127,26 +163,40 @@ const StudentDashboard: React.FC = () => {
         return <div className="text-center p-8">Loading dashboard...</div>;
     }
 
+    if (error) {
+        return (
+            <div className="text-center p-8 space-y-4">
+                <p className="text-red-500 font-medium">{error}</p>
+                <button
+                    onClick={() => window.location.reload()}
+                    className="px-4 py-2 rounded-md bg-[var(--primary)] text-white hover:opacity-90 transition-opacity"
+                >
+                    Retry
+                </button>
+            </div>
+        );
+    }
+
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-3xl font-bold tracking-tight">Student Dashboard</h1>
-                <p className="text-slate-500 dark:text-slate-400">Welcome back, {user?.name}. Here's your progress overview.</p>
+                <h1 className="text-3xl font-bold tracking-tight" style={{ color: 'var(--text-main)' }}>Student Dashboard</h1>
+                <p style={{ color: 'var(--text-secondary)' }}>Welcome back, {user?.name}. Here's your progress overview.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <StatCard
-                    icon={<BookOpenIcon className="w-6 h-6 text-violet-500" />}
+                    icon={<BookOpen className="w-6 h-6" style={{ color: 'var(--primary)' }} />}
                     title="Enrolled Courses"
                     value={stats.assigned}
                 />
                 <StatCard
-                    icon={<CheckCircleIcon className="w-6 h-6 text-emerald-500" />}
+                    icon={<CheckCircle className="w-6 h-6" style={{ color: 'var(--accent-progress, var(--primary))' }} />}
                     title="Completed Quizzes"
                     value={stats.completed}
                 />
                 <StatCard
-                    icon={<TrendingUpIcon className="w-6 h-6 text-sky-500" />}
+                    icon={<TrendingUp className="w-6 h-6" style={{ color: 'var(--accent-badge, var(--accent-secondary))' }} />}
                     title="Average Score"
                     value={`${stats.progress}%`}
                 />
@@ -154,18 +204,18 @@ const StudentDashboard: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
-                    <Card>
+                    <Card className="ai-card-glow" hover={false}>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
-                                <SparklesIcon className="w-5 h-5 text-indigo-500" />
+                                <Sparkles className="w-5 h-5" style={{ color: 'var(--primary)' }} />
                                 AI Learning Suggestion
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
                             {isSuggestionLoading ? (
-                                <p className="text-slate-500">Analyzing performance...</p>
+                                <p style={{ color: 'var(--text-secondary)' }}>Analyzing performance...</p>
                             ) : (
-                                <p className="text-lg font-medium text-slate-800 dark:text-slate-200">
+                                <p className="text-lg font-medium" style={{ color: 'var(--text-main)' }}>
                                     "{learningSuggestion}"
                                 </p>
                             )}
@@ -194,19 +244,19 @@ const StudentDashboard: React.FC = () => {
                                     {recentActivity.map((activity) => (
                                         <li key={activity.id} className="flex gap-3">
                                             <div className="mt-1">
-                                                <div className="p-2 bg-slate-100 dark:bg-slate-800 rounded-full">
+                                                <div className="p-2 rounded-full" style={{ backgroundColor: 'var(--kpi-icon-chip)' }}>
                                                     {getActivityIcon(activity.type)}
                                                 </div>
                                             </div>
                                             <div>
-                                                <p className="text-sm font-medium text-slate-900 dark:text-white">{activity.title}</p>
-                                                <p className="text-xs text-slate-500 dark:text-slate-400">{formatTimeAgo(activity.timestamp)}</p>
+                                                <p className="text-sm font-medium" style={{ color: 'var(--text-main)' }}>{activity.title}</p>
+                                                <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{formatTimeAgo(activity.timestamp)}</p>
                                             </div>
                                         </li>
                                     ))}
                                 </ul>
                             ) : (
-                                <p className="text-slate-500 text-sm text-center py-4">No recent activity.</p>
+                                <p className="text-sm text-center py-4" style={{ color: 'var(--text-secondary)' }}>No recent activity.</p>
                             )}
                         </CardContent>
                     </Card>
@@ -222,13 +272,13 @@ const StudentDashboard: React.FC = () => {
                                 <CardHeader>
                                     <div className="flex justify-between items-start">
                                         <CardTitle className="text-lg">{quiz.title}</CardTitle>
-                                        <span className="text-xs font-semibold px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded text-slate-600 dark:text-slate-300">{quiz.difficulty}</span>
+                                        <span className="text-xs font-semibold px-2 py-1 rounded" style={{ backgroundColor: 'var(--kpi-icon-chip)', color: 'var(--text-secondary)' }}>{quiz.difficulty}</span>
                                     </div>
                                     <CardDescription>{quiz.courseTitle}</CardDescription>
                                 </CardHeader>
                                 <CardContent className="flex-grow">
-                                    <div className="flex items-center gap-2 text-sm text-slate-500">
-                                        <ClipboardListIcon className="w-4 h-4" />
+                                    <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                                        <ClipboardList className="w-4 h-4" />
                                         <span>{quiz.questions.length} Questions</span>
                                     </div>
                                 </CardContent>
@@ -243,8 +293,8 @@ const StudentDashboard: React.FC = () => {
                             </Card>
                         ))
                     ) : (
-                        <div className="col-span-full py-12 text-center border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg">
-                            <p className="text-slate-500">No quizzes assigned yet.</p>
+                        <div className="col-span-full py-12 text-center border-2 border-dashed rounded-lg empty-state">
+                            <p style={{ color: 'var(--text-secondary)' }}>No quizzes assigned yet.</p>
                         </div>
                     )}
                 </div>
@@ -254,13 +304,13 @@ const StudentDashboard: React.FC = () => {
 };
 
 const StatCard: React.FC<{ icon: React.ReactNode; title: string; value: string | number }> = ({ icon, title, value }) => (
-    <Card className="flex items-center p-6 gap-4">
-        <div className="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">
+    <Card className="flex items-center p-6 gap-4 card-themed">
+        <div className="p-3 rounded-lg kpi-icon-chip">
             {icon}
         </div>
         <div>
-            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{title}</p>
-            <p className="text-2xl font-bold">{value}</p>
+            <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{title}</p>
+            <p className="text-2xl font-bold" style={{ color: 'var(--text-main)' }}>{value}</p>
         </div>
     </Card>
 );
@@ -268,7 +318,7 @@ const StatCard: React.FC<{ icon: React.ReactNode; title: string; value: string |
 const ScoreTrendChart: React.FC<{ data: { score: number, date: string }[] }> = ({ data }) => {
     if (data.length < 2) {
         return (
-            <div className="h-40 flex items-center justify-center text-slate-400 border border-dashed rounded-lg border-slate-300 dark:border-slate-700">
+            <div className="h-40 flex items-center justify-center border border-dashed rounded-lg" style={{ color: 'var(--text-muted)', borderColor: 'var(--border-default)' }}>
                 <p className="text-sm">Not enough data to show trend.</p>
             </div>
         );
@@ -284,39 +334,19 @@ const ScoreTrendChart: React.FC<{ data: { score: number, date: string }[] }> = (
         return `${x},${y}`;
     }).join(' ');
 
+    // Use CSS variables for chart colors - teal line with purple markers for student
     return (
         <div className="w-full h-40">
             <svg viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`} className="w-full h-full overflow-visible">
-                <polyline points={points} fill="none" stroke="#6366f1" strokeWidth="3" />
+                <polyline points={points} fill="none" stroke="var(--chart-line, var(--primary))" strokeWidth="3" />
                 {data.map((d, i) => {
                     const x = PADDING + (i / (data.length - 1)) * (SVG_WIDTH - 2 * PADDING);
                     const y = (SVG_HEIGHT - PADDING) - (d.score / 100) * (SVG_HEIGHT - 2 * PADDING);
-                    return <circle key={i} cx={x} cy={y} r="4" className="fill-white stroke-indigo-500 stroke-2" />;
+                    return <circle key={i} cx={x} cy={y} r="4" fill="var(--card-bg)" stroke="var(--chart-marker, var(--accent-badge, #7B1FA2))" strokeWidth="2" />;
                 })}
             </svg>
         </div>
     );
 };
-
-const BookOpenIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>
-);
-const CheckCircleIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
-);
-const TrendingUpIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17" /><polyline points="16 7 22 7 22 13" /></svg>
-);
-const CheckIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
-);
-const LogInIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /><polyline points="10 17 15 12 10 7" /><line x1="15" y1="12" x2="3" y2="12" /></svg>
-);
-const InfoIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>
-);
-const SparklesIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.9 4.8-4.8 1.9 4.8 1.9L12 16l1.9-4.8 4.8-1.9-4.8-1.9L12 3z" /><path d="M5 22v-5l-1.9-4.8-4.8-1.9 4.8-1.9L5 5v5" /><path d="M19 22v-5l1.9-4.8 4.8-1.9-4.8-1.9L19 5v5" /></svg>;
-const ClipboardListIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg>;
 
 export default StudentDashboard;

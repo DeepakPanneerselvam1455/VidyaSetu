@@ -111,31 +111,31 @@ const TutoringRoom: React.FC = () => {
                 // For JaaS, standard format is usually tenant/room if using main domain OR just room if using tenant subdomain.
                 // Best practice for 8x8 JaaS:
                 // domain: "8x8.vc"
-                // roomName: "vpaas-magic-cookie-e0e1a2d4390d49b888d2f3d47b2ea567/skillforge-" + sessionId
+                // roomName: "vpaas-magic-cookie-e0e1a2d4390d49b888d2f3d47b2ea567/vidyasetu-" + sessionId
 
                 const tenantId = 'vpaas-magic-cookie-e0e1a2d4390d49b888d2f3d47b2ea567';
-                const roomName = `skillforge-${sessionId}`;
+                const roomName = `vidyasetu-${sessionId}`;
 
                 const options = {
                     roomName: `${tenantId}/${roomName}`, // MUST match JWT room claim (which is usually without tenant, but API expects full path)
                     // WAIT. The JWT 'room' claim usually *excludes* the tenant prefix for JaaS? 
                     // User said: "JWT room === Jitsi roomName === frontend room string".
-                    // If JWT signs "skillforge-123", then Jitsi roomName must be "skillforge-123"?
+                    // If JWT signs "vidyasetu-123", then Jitsi roomName must be "vidyasetu-123"?
                     // NO. JaaS usually requires "tenant/room" in the API but returns "room" in the JWT.
                     // BUT the user said "Match exactly". 
                     // Let's stick to the SAFEST JaaS config:
                     // domain: "8x8.vc"
                     // roomName: `${tenantId}/${roomName}`
-                    // JWT room claim: "skillforge-..." (handled by server) OR "*"
-                    // Server signs "skillforge-..."
+                    // JWT room claim: "vidyasetu-..." (handled by server) OR "*"
+                    // Server signs "vidyasetu-..."
                     // If this fails, we change server to sign `${tenantId}/${roomName}`.
                     // Let's assume server signs SHORT name, and API uses detailed name.
                     // Re-reading User Warning: "JWT room === Jitsi roomName".
                     // Okay, if I pass "tenant/room" to Jitsi, connection might fail if Token has just "room".
-                    // I will change the CLIENT to use `skillforge-${sessionId}` and set the domain to the specialized tenant URL if possible.
+                    // I will change the CLIENT to use `vidyasetu-${sessionId}` and set the domain to the specialized tenant URL if possible.
                     // User: "Initialize with tenant domain, not meet.jit.si: domain = JITSI_TENANT_DOMAIN"
                     // "domain = app-id.8x8.vc"
-                    // If I do that, roomName should be just "skillforge-...".
+                    // If I do that, roomName should be just "vidyasetu-...".
                     // Let's try that.
 
                     parentNode: document.getElementById('jitsi-container'),

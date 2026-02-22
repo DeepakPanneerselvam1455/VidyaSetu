@@ -50,7 +50,7 @@ const LineChart: React.FC<{ data: { name: string, score: number, date: string }[
     }, [pointCoordinates]);
 
     if (data.length < 2) {
-        return <div className="text-center py-10 text-sm text-slate-500">Not enough quiz attempts to display a trend.</div>;
+        return <div className="text-center py-10 text-sm" style={{ color: 'var(--text-secondary)' }}>Not enough quiz attempts to display a trend.</div>;
     }
 
     return (
@@ -60,7 +60,7 @@ const LineChart: React.FC<{ data: { name: string, score: number, date: string }[
                 {[0, 25, 50, 75, 100].map(label => {
                     const y = (SVG_HEIGHT - PADDING) - (label / 100) * (SVG_HEIGHT - 2 * PADDING);
                     return (
-                        <g key={label} className="text-slate-400 dark:text-slate-600">
+                        <g key={label} style={{ color: 'var(--text-muted)' }}>
                             <text x={PADDING - 8} y={y + 3} textAnchor="end" className="text-xs fill-current">{label}%</text>
                             <line x1={PADDING} x2={SVG_WIDTH - PADDING} y1={y} y2={y} className="stroke-current opacity-50" strokeDasharray="2,4" />
                         </g>
@@ -68,24 +68,24 @@ const LineChart: React.FC<{ data: { name: string, score: number, date: string }[
                 })}
                 {/* X-Axis Labels */}
                 {pointCoordinates.map(({ x }, index) => (
-                    <text key={`x-label-${index}`} x={x} y={SVG_HEIGHT - PADDING + 15} textAnchor="middle" className="text-xs fill-current text-slate-500 dark:text-slate-400">
+                    <text key={`x-label-${index}`} x={x} y={SVG_HEIGHT - PADDING + 15} textAnchor="middle" className="text-xs fill-current" style={{ color: 'var(--text-secondary)' }}>
                         {data[index].date}
                     </text>
                 ))}
                 {/* Line Path */}
-                <path d={pathData} fill="none" strokeWidth="2" className="text-indigo-500 stroke-current" />
+                <path d={pathData} fill="none" strokeWidth="2" style={{ stroke: 'var(--primary)' }} />
                 {/* Points & Hover Area */}
                 {pointCoordinates.map(({ x, y }, index) => (
                     <g key={index}>
-                        <circle cx={x} cy={y} r={hoveredIndex === index ? 6 : 4} className="text-indigo-500 fill-current transition-all stroke-white dark:stroke-slate-900" strokeWidth={2} />
+                        <circle cx={x} cy={y} r={hoveredIndex === index ? 6 : 4} className="transition-all" style={{ fill: 'var(--primary)', stroke: 'var(--card-bg)' }} strokeWidth={2} />
                         <rect x={x - 10} y={y - 10} width="20" height="20" fill="transparent" onMouseEnter={() => setHoveredIndex(index)} />
                     </g>
                 ))}
             </svg>
             {hoveredIndex !== null && (
                 <div
-                    className="absolute p-2 text-xs bg-slate-900 text-white rounded-md shadow-lg pointer-events-none transform -translate-x-1/2 -translate-y-full transition-opacity z-10"
-                    style={{ left: `${(pointCoordinates[hoveredIndex].x / SVG_WIDTH) * 100}%`, top: `${(pointCoordinates[hoveredIndex].y / SVG_HEIGHT) * 100}%`, marginTop: '-8px' }}
+                    className="absolute p-2 text-xs rounded-md shadow-lg pointer-events-none transform -translate-x-1/2 -translate-y-full transition-opacity z-10"
+                    style={{ backgroundColor: 'var(--text-main)', color: 'var(--card-bg)', left: `${(pointCoordinates[hoveredIndex].x / SVG_WIDTH) * 100}%`, top: `${(pointCoordinates[hoveredIndex].y / SVG_HEIGHT) * 100}%`, marginTop: '-8px' }}
                 >
                     <p className="font-semibold whitespace-nowrap">{data[hoveredIndex].name}</p>
                     <p>Score: <span className="font-bold">{data[hoveredIndex].score}%</span></p>
@@ -97,7 +97,7 @@ const LineChart: React.FC<{ data: { name: string, score: number, date: string }[
 
 // Helper to calculate performance
 const getPerformanceStatus = (avgScore: number): { status: 'Excellent' | 'Average' | 'Poor' | 'N/A'; color: string } => {
-    if (isNaN(avgScore)) return { status: 'N/A', color: 'bg-slate-500' };
+    if (isNaN(avgScore)) return { status: 'N/A', color: 'var(--text-muted)' };
     if (avgScore >= 80) return { status: 'Excellent', color: '#16a34a' }; // green-600
     if (avgScore >= 50) return { status: 'Average', color: '#f59e0b' }; // amber-500
     return { status: 'Poor', color: '#ef4444' }; // red-500
@@ -111,36 +111,36 @@ const StudentProgressCard: React.FC<{
 }> = ({ studentData, isExpanded, onToggle }) => {
     
     return (
-        <Card>
-            <CardHeader onClick={onToggle} className="cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+        <Card className="card-themed">
+            <CardHeader onClick={onToggle} className="cursor-pointer transition-colors" style={{ borderRadius: 'inherit' }}>
                 <div className="flex justify-between items-center">
-                    <CardTitle>{studentData.studentName}</CardTitle>
-                    <div className="flex items-center gap-4 text-sm text-slate-500">
+                    <CardTitle style={{ color: 'var(--text-main)' }}>{studentData.studentName}</CardTitle>
+                    <div className="flex items-center gap-4 text-sm" style={{ color: 'var(--text-secondary)' }}>
                         <span>{Object.keys(studentData.courses).length} Course(s)</span>
                         <ChevronDownIcon className={cn("w-5 h-5 transition-transform", isExpanded && "rotate-180")} />
                     </div>
                 </div>
             </CardHeader>
             {isExpanded && (
-                <CardContent className="pt-4 border-t dark:border-slate-700 space-y-6">
+                <CardContent className="pt-4 space-y-6" style={{ borderTop: '1px solid var(--border-color)' }}>
                     {Object.values(studentData.courses).map(({ course, progress, attempts, lastActivity, performance, chartData }) => (
-                        <div key={course.id} className="p-4 border dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-900/30">
+                        <div key={course.id} className="p-4 rounded-lg card-nested">
                             <h3 className="text-lg font-semibold">{course.title}</h3>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-3 text-sm">
                                 <div>
-                                    <p className="text-slate-500">Material Completion</p>
-                                    <p className="font-semibold">{progress}%</p>
+                                    <p style={{ color: 'var(--text-secondary)' }}>Material Completion</p>
+                                    <p className="font-semibold" style={{ color: 'var(--text-main)' }}>{progress}%</p>
                                 </div>
                                 <div>
-                                    <p className="text-slate-500">Last Activity</p>
-                                    <p className="font-semibold">{lastActivity}</p>
+                                    <p style={{ color: 'var(--text-secondary)' }}>Last Activity</p>
+                                    <p className="font-semibold" style={{ color: 'var(--text-main)' }}>{lastActivity}</p>
                                 </div>
                                 <div>
-                                    <p className="text-slate-500">Avg. Score</p>
-                                    <p className="font-semibold">{performance.avgScore}%</p>
+                                    <p style={{ color: 'var(--text-secondary)' }}>Avg. Score</p>
+                                    <p className="font-semibold" style={{ color: 'var(--text-main)' }}>{performance.avgScore}%</p>
                                 </div>
                                 <div>
-                                    <p className="text-slate-500">Performance</p>
+                                    <p style={{ color: 'var(--text-secondary)' }}>Performance</p>
                                     <Badge style={{ backgroundColor: performance.color }} className="text-white">{performance.status}</Badge>
                                 </div>
                             </div>
@@ -278,8 +278,8 @@ const MentorStudentProgress: React.FC = () => {
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Student Progress</h1>
-                    <p className="text-slate-500 dark:text-slate-400">Track the performance of students in your courses.</p>
+                    <h1 className="text-3xl font-bold tracking-tight" style={{ color: 'var(--text-main)' }}>Student Progress</h1>
+                    <p style={{ color: 'var(--text-secondary)' }}>Track the performance of students in your courses.</p>
                 </div>
                 <Input
                     placeholder="Search by student name..."
@@ -301,12 +301,12 @@ const MentorStudentProgress: React.FC = () => {
                     ))}
                 </div>
             ) : (
-                <div className="text-center py-16">
-                    <UsersIcon className="w-12 h-12 text-slate-400 mx-auto" />
-                    <p className="mt-4 font-semibold">
+                <div className="text-center py-16 empty-state">
+                    <UsersIcon className="w-12 h-12 mx-auto" style={{ color: 'var(--text-muted)' }} />
+                    <p className="mt-4 font-semibold" style={{ color: 'var(--text-main)' }}>
                         {studentData.length > 0 ? "No students match your search." : "No student data available."}
                     </p>
-                    <p className="text-slate-500 text-sm">
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
                         {studentData.length > 0 ? "Try a different name." : "Assign quizzes to students to see their progress here."}
                     </p>
                 </div>

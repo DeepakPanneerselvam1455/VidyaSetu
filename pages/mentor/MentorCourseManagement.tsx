@@ -11,6 +11,7 @@ import Dialog from '../../components/ui/Dialog';
 import { Input } from '../../components/ui/Input';
 import { Select } from '../../components/ui/Select';
 import { cn } from '../../lib/utils';
+import { FileIcon, LightbulbIcon } from '../../components/ui/Icons';
 
 const MentorCourseManagement: React.FC = () => {
     const { user } = useAuth();
@@ -61,7 +62,7 @@ const MentorCourseManagement: React.FC = () => {
             {courses.length > 0 ? (
                 <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                     {courses.map(course => (
-                        <Card key={course.id} className="flex flex-col">
+                        <Card key={course.id} className="flex flex-col card-themed">
                             <CardHeader>
                                 <CardTitle>{course.title}</CardTitle>
                                 <CardDescription>{course.description}</CardDescription>
@@ -84,10 +85,10 @@ const MentorCourseManagement: React.FC = () => {
                     ))}
                 </div>
             ) : (
-                <div className="text-center py-16 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg">
+                <div className="empty-state">
                     <LightbulbIcon className="w-[62px] h-[62px] mx-auto text-yellow-500" />
-                    <p className="mt-4 text-lg font-semibold">Share Your Knowledge!</p>
-                    <p className="text-slate-500 dark:text-slate-400">Click "Create Course" to build your first learning experience.</p>
+                    <p className="mt-4 text-lg font-semibold" style={{ color: 'var(--text-main)' }}>Share Your Knowledge!</p>
+                    <p style={{ color: 'var(--text-secondary)' }}>Click "Create Course" to build your first learning experience.</p>
                 </div>
             )}
             
@@ -199,14 +200,14 @@ const CourseForm: React.FC<{
                 <Input id="topics" value={topics} onChange={e => setTopics(e.target.value)} placeholder="e.g. Variables, Functions, Arrays" required />
             </div>
 
-            <div className="space-y-4 pt-4 border-t dark:border-slate-800">
-                <h4 className="text-lg font-medium">Course Materials</h4>
+            <div className="space-y-4 pt-4" style={{ borderTop: '1px solid var(--border-color)' }}>
+                <h4 className="text-lg font-medium" style={{ color: 'var(--text-main)' }}>Course Materials</h4>
                 {materials.length > 0 && (
-                    <ul className="space-y-2 max-h-40 overflow-y-auto p-2 border rounded-md dark:border-slate-700">
+                    <ul className="space-y-2 max-h-40 overflow-y-auto p-2 rounded-md" style={{ border: '1px solid var(--border-color)' }}>
                         {materials.map(mat => (
-                            <li key={mat.id} className="flex items-center justify-between p-2 bg-slate-100 dark:bg-slate-800 rounded">
+                            <li key={mat.id} className="flex items-center justify-between p-2 rounded" style={{ backgroundColor: 'var(--sidebar-bg)' }}>
                                 <div className="flex items-center gap-2 overflow-hidden">
-                                    <FileIcon className="w-[14px] h-[14px] text-slate-500 shrink-0" />
+                                    <FileIcon className="w-[14px] h-[14px] shrink-0" style={{ color: 'var(--text-secondary)' }} />
                                     <span className="font-medium text-sm truncate" title={mat.title}>{mat.title}</span>
                                 </div>
                                 <Button type="button" variant="ghost" size="sm" className="text-red-500 hover:text-red-600" onClick={() => handleRemoveMaterial(mat.id)}>Remove</Button>
@@ -215,8 +216,8 @@ const CourseForm: React.FC<{
                     </ul>
                 )}
                 
-                <div className="p-4 border dark:border-slate-700 rounded-lg space-y-3 bg-slate-50 dark:bg-slate-900">
-                    <h5 className="text-md font-semibold">Add New Material</h5>
+                <div className="p-4 rounded-lg space-y-3 card-nested">
+                    <h5 className="text-md font-semibold" style={{ color: 'var(--text-main)' }}>Add New Material</h5>
                     <Input placeholder="Material Title" value={newMaterialTitle} onChange={e => setNewMaterialTitle(e.target.value)} />
                     <Select value={newMaterialType} onChange={e => { setNewMaterialType(e.target.value as any); setNewMaterialUrl(''); }}>
                         <option value="link">Link</option>
@@ -305,7 +306,7 @@ const DeleteCourseDialog: React.FC<DeleteCourseDialogProps> = ({ isOpen, onClose
         >
             <div className="space-y-6 pt-2">
                 <p className="text-sm">
-                    You are about to permanently delete the course <strong className="font-semibold text-slate-900 dark:text-slate-100">"{course.title}"</strong>. This will also remove all associated quizzes and student submission data.
+                    You are about to permanently delete the course <strong className="font-semibold" style={{ color: 'var(--text-main)' }}>"{course.title}"</strong>. This will also remove all associated quizzes and student submission data.
                 </p>
                 <div>
                     <label htmlFor="delete-confirm" className="block text-sm font-medium mb-1">
@@ -332,10 +333,5 @@ const DeleteCourseDialog: React.FC<DeleteCourseDialogProps> = ({ isOpen, onClose
         </Dialog>
     );
 }
-
-const FileIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
-);
-const LightbulbIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>;
 
 export default MentorCourseManagement;

@@ -31,9 +31,9 @@ export const DropdownMenuTrigger: React.FC<{ children: React.ReactNode; asChild?
 
   const triggerProps = {
     onClick: (e: React.MouseEvent) => {
-        setIsOpen(!isOpen);
-        // Fix: Cast child.props to any to resolve "Property 'onClick' does not exist on type 'unknown'".
-        (child.props as any).onClick?.(e);
+      setIsOpen(!isOpen);
+      // Fix: Cast child.props to any to resolve "Property 'onClick' does not exist on type 'unknown'".
+      (child.props as any).onClick?.(e);
     },
     // Fix: Add `as const` to correctly type 'aria-haspopup' and resolve assignment error when spreading props.
     'aria-haspopup': 'menu' as const,
@@ -54,7 +54,7 @@ export const DropdownMenuContent: React.FC<{
 }> = ({ children, className, align = 'start' }) => {
   const { isOpen, setIsOpen } = useDropdownMenu();
   const contentRef = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (contentRef.current && !contentRef.current.contains(event.target as Node)) {
@@ -62,10 +62,10 @@ export const DropdownMenuContent: React.FC<{
       }
     };
     if (isOpen) {
-        document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
     }
     return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen, setIsOpen]);
 
@@ -75,11 +75,17 @@ export const DropdownMenuContent: React.FC<{
     <div
       ref={contentRef}
       className={cn(
-        'absolute z-50 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-slate-950 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none',
+        'absolute z-50 mt-2 w-56 origin-top-right rounded-xl focus:outline-none',
         'animate-in fade-in-0 zoom-in-95',
         align === 'end' ? 'right-0' : 'left-0',
         className
       )}
+      style={{
+        backgroundColor: 'var(--card-bg)',
+        border: '1px solid var(--border-strong)',
+        boxShadow: '0 4px 16px rgba(0,0,0,0.15), 0 12px 40px rgba(0,0,0,0.1)',
+        color: 'var(--text-main)',
+      }}
       role="menu"
       aria-orientation="vertical"
       tabIndex={-1}
@@ -96,48 +102,54 @@ export const DropdownMenuItem = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & { asChild?: boolean }
 >(({ className, children, asChild, ...props }, ref) => {
-    const { setIsOpen } = useDropdownMenu();
-    const child = asChild ? React.Children.only(children) as React.ReactElement : null;
+  const { setIsOpen } = useDropdownMenu();
+  const child = asChild ? React.Children.only(children) as React.ReactElement : null;
 
-    const itemProps = {
-        ...props,
-        className: cn(
-            'block w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-50',
-            'cursor-pointer',
-            className
-        ),
-        onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-            props.onClick?.(e);
-            if (child) {
-                // Fix: Cast child.props to any to resolve "Property 'onClick' does not exist on type 'unknown'".
-                (child.props as any).onClick?.(e);
-            }
-            setIsOpen(false);
-        },
-        role: "menuitem",
-        ref: ref,
-    };
+  const itemProps = {
+    ...props,
+    className: cn(
+      'block w-full text-left px-4 py-2 text-sm cursor-pointer rounded-md transition-colors duration-150 dropdown-item-themed',
+      className
+    ),
+    style: {
+      color: 'var(--text-main)',
+      ...props.style,
+    },
+    onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      props.onClick?.(e);
+      if (child) {
+        // Fix: Cast child.props to any to resolve "Property 'onClick' does not exist on type 'unknown'".
+        (child.props as any).onClick?.(e);
+      }
+      setIsOpen(false);
+    },
+    role: "menuitem",
+    ref: ref,
+  };
 
-    if (asChild && child) {
-        return React.cloneElement(child, {
-            ...itemProps,
-            // Fix: Cast child.props to any to allow spreading and accessing properties, resolving multiple type errors.
-            ...(child.props as any), // Keep original child props
-            className: cn(itemProps.className, (child.props as any).className), // Merge classNames
-        });
-    }
+  if (asChild && child) {
+    return React.cloneElement(child, {
+      ...itemProps,
+      // Fix: Cast child.props to any to allow spreading and accessing properties, resolving multiple type errors.
+      ...(child.props as any), // Keep original child props
+      className: cn(itemProps.className, (child.props as any).className), // Merge classNames
+    });
+  }
 
-    return <div {...itemProps}>{children}</div>
+  return <div {...itemProps}>{children}</div>
 });
 DropdownMenuItem.displayName = 'DropdownMenuItem';
 
 
-export const DropdownMenuLabel: React.FC<{
-  children: React.ReactNode;
-  className?: string;
-}> = ({ children, className }) => {
+export const DropdownMenuLabel: React.FC<
+  React.HTMLAttributes<HTMLDivElement>
+> = ({ children, className, style, ...props }) => {
   return (
-    <div className={cn('px-4 py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider', className)}>
+    <div
+      className={cn('px-4 py-2 text-xs font-semibold uppercase tracking-wider', className)}
+      style={{ color: 'var(--text-secondary)', ...style }}
+      {...props}
+    >
       {children}
     </div>
   );
@@ -145,5 +157,5 @@ export const DropdownMenuLabel: React.FC<{
 
 
 export const DropdownMenuSeparator: React.FC<{ className?: string }> = ({ className }) => {
-  return <div className={cn('-mx-1 my-1 h-px bg-slate-100 dark:bg-slate-800', className)} />;
+  return <div className={cn('-mx-1 my-1 h-px', className)} style={{ backgroundColor: 'var(--border-default)' }} />;
 };

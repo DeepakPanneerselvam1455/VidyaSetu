@@ -10,8 +10,8 @@ import { useAuth } from '../../lib/auth';
 import { cn } from '../../lib/utils';
 
 // Icons
-const ThumbsUpIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/></svg>;
-const UserIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>;
+const ThumbsUpIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 10v12" /><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z" /></svg>;
+const UserIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="5" /><path d="M20 21a8 8 0 0 0-16 0" /></svg>;
 
 const ForumThreadView: React.FC = () => {
     const { threadId } = useParams<{ threadId: string }>();
@@ -77,7 +77,7 @@ const ForumThreadView: React.FC = () => {
     return (
         <div className="max-w-4xl mx-auto space-y-6">
             <Link to="/forums" className="text-sm text-indigo-600 hover:underline">← Back to Forums</Link>
-            
+
             {/* Main Thread Post */}
             <Card>
                 <CardHeader className="pb-4">
@@ -89,13 +89,13 @@ const ForumThreadView: React.FC = () => {
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                    <div className="prose dark:prose-invert max-w-none">
-                        <p className="whitespace-pre-wrap text-slate-800 dark:text-slate-200">{thread.content}</p>
+                    <div className="prose max-w-none">
+                        <p className="whitespace-pre-wrap" style={{ color: 'var(--text-main)' }}>{thread.content}</p>
                     </div>
-                    <div className="flex items-center gap-4 pt-4 border-t dark:border-slate-800">
-                        <Button 
-                            variant={hasVoted ? "default" : "outline"} 
-                            size="sm" 
+                    <div className="flex items-center gap-4 pt-4 border-t" style={{ borderColor: 'var(--border-default)' }}>
+                        <Button
+                            variant={hasVoted ? "default" : "outline"}
+                            size="sm"
                             onClick={handleVote}
                             className="gap-2"
                         >
@@ -104,7 +104,7 @@ const ForumThreadView: React.FC = () => {
                         </Button>
                         <div className="flex gap-2">
                             {thread.tags.map(tag => (
-                                <span key={tag} className="text-xs bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded text-slate-600 dark:text-slate-400">#{tag}</span>
+                                <span key={tag} className="text-xs px-2 py-1 rounded" style={{ backgroundColor: 'var(--kpi-icon-chip)', color: 'var(--text-secondary)' }}>#{tag}</span>
                             ))}
                         </div>
                     </div>
@@ -115,10 +115,10 @@ const ForumThreadView: React.FC = () => {
             <div className="space-y-4">
                 <h3 className="text-lg font-semibold">{posts.length} Replies</h3>
                 {posts.map(post => (
-                    <Card key={post.id} className="bg-slate-50 dark:bg-slate-900/50">
+                    <Card key={post.id} style={{ backgroundColor: 'var(--kpi-icon-chip)' }}>
                         <CardContent className="p-6">
                             <div className="flex items-start gap-4">
-                                <div className="p-2 bg-slate-200 dark:bg-slate-800 rounded-full">
+                                <div className="p-2 rounded-full" style={{ backgroundColor: 'var(--surface-nested, var(--kpi-icon-chip))' }}>
                                     <UserIcon className="w-6 h-6 text-slate-500" />
                                 </div>
                                 <div className="flex-1 space-y-2">
@@ -126,7 +126,7 @@ const ForumThreadView: React.FC = () => {
                                         <span className="font-semibold text-sm">{post.authorName}</span>
                                         <span className="text-xs text-slate-500">{new Date(post.createdAt).toLocaleDateString()}</span>
                                     </div>
-                                    <p className="text-slate-800 dark:text-slate-200 text-sm whitespace-pre-wrap">{post.content}</p>
+                                    <p className="text-sm whitespace-pre-wrap" style={{ color: 'var(--text-main)' }}>{post.content}</p>
                                 </div>
                             </div>
                         </CardContent>
@@ -139,10 +139,10 @@ const ForumThreadView: React.FC = () => {
                 <CardContent className="p-6">
                     <h3 className="font-semibold mb-4">Post a Reply</h3>
                     <form onSubmit={handleReply} className="space-y-4">
-                        <Textarea 
-                            value={newReply} 
-                            onChange={e => setNewReply(e.target.value)} 
-                            placeholder="Type your reply here..." 
+                        <Textarea
+                            value={newReply}
+                            onChange={e => setNewReply(e.target.value)}
+                            placeholder="Type your reply here..."
                             rows={4}
                             required
                         />

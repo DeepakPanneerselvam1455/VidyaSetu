@@ -92,7 +92,7 @@ const Profile: React.FC = () => {
             setIsSaving(false);
         }
     };
-    
+
     const handleCancel = () => {
         // Reset form to original user data
         setFormData({
@@ -114,33 +114,33 @@ const Profile: React.FC = () => {
                     <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
                 )}
             </div>
-             <form onSubmit={handleSave}>
+            <form onSubmit={handleSave}>
                 <Card>
                     <CardHeader className="items-center text-center">
-                        <UserCircle2Icon className="w-24 h-24 text-slate-300 dark:text-slate-600"/>
+                        <UserCircle2Icon className="w-24 h-24" style={{ color: 'var(--text-muted)' }} />
                         <CardTitle className="text-2xl">{user?.name}</CardTitle>
                         <CardDescription>
-                            {isEditing ? 'Update your personal details below.' : 'Your personal details on the SkillForge platform.'}
+                            {isEditing ? 'Update your personal details below.' : 'Your personal details on the VidyaSetu platform.'}
                         </CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-6 pt-6 border-t dark:border-slate-800">
+                    <CardContent className="space-y-6 pt-6 border-t" style={{ borderColor: 'var(--border-default)' }}>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <ProfileField label="Full Name" id="name" value={formData.name} isEditing={isEditing} onChange={handleInputChange} />
                             <ProfileField label="Email Address" value={user?.email} isEditing={false} />
                             <ProfileField label="Role" value={user?.role === 'mentor' ? 'Instructor' : user?.role} isEditing={false} />
                             <ProfileField label="Member Since" value={user ? new Date(user.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A'} isEditing={false} />
-                            
-                            <hr className="md:col-span-2 border-slate-200 dark:border-slate-700" />
-                            
+
+                            <hr className="md:col-span-2" style={{ borderColor: 'var(--border-default)' }} />
+
                             <ProfileField label="Date of Birth" id="dob" value={formData.dob} isEditing={isEditing} onChange={handleInputChange} placeholder="DD/MM/YYYY" />
                             <ProfileField label="Education" id="education" value={formData.education} isEditing={isEditing} onChange={handleInputChange} placeholder="e.g., High School, Bachelor's" />
                             <ProfileField label="School Name" id="school" value={formData.school} isEditing={isEditing} onChange={handleInputChange} placeholder="e.g., State University" />
-                            <ProfileField 
-                                label="State" 
-                                id="state" 
-                                value={formData.state} 
-                                isEditing={isEditing} 
-                                onChange={handleInputChange} 
+                            <ProfileField
+                                label="State"
+                                id="state"
+                                value={formData.state}
+                                isEditing={isEditing}
+                                onChange={handleInputChange}
                                 as="select"
                                 options={states}
                             />
@@ -176,7 +176,7 @@ interface ProfileFieldProps {
 const ProfileField: React.FC<ProfileFieldProps> = ({ label, id, value, isEditing, onChange, type = 'text', placeholder, as = 'input', options = [] }) => {
     return (
         <div>
-            <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">{label}</p>
+            <p className="text-sm font-medium mb-1" style={{ color: 'var(--text-secondary)' }}>{label}</p>
             {isEditing && id && onChange ? (
                 as === 'select' ? (
                     <Select id={id} value={String(value || '')} onChange={onChange}>
@@ -193,13 +193,13 @@ const ProfileField: React.FC<ProfileFieldProps> = ({ label, id, value, isEditing
                     />
                 )
             ) : (
-                <p className="text-lg h-10 flex items-center">{value || <span className="text-slate-400 dark:text-slate-500 italic text-base">Not set</span>}</p>
+                <p className="text-lg h-10 flex items-center">{value || <span className="italic text-base" style={{ color: 'var(--text-muted)' }}>Not set</span>}</p>
             )}
         </div>
     );
 };
 
-const UserCircle2Icon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 20a6 6 0 0 0-12 0"/><circle cx="12" cy="10" r="4"/><circle cx="12" cy="12" r="10"/></svg>;
+const UserCircle2Icon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 20a6 6 0 0 0-12 0" /><circle cx="12" cy="10" r="4" /><circle cx="12" cy="12" r="10" /></svg>;
 
 
 export default Profile;

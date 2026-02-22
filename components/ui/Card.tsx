@@ -1,17 +1,24 @@
-
 import React from "react"
 import { cn } from "../../lib/utils"
 
 const Card = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
+  React.HTMLAttributes<HTMLDivElement> & { hover?: boolean }
+>(({ className, style, hover = true, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
-      "rounded-lg border border-slate-200 bg-white text-slate-950 shadow-sm dark:border-slate-800 dark:bg-slate-950 dark:text-slate-50",
+      "rounded-xl border transition-all duration-200",
+      hover && "hover:shadow-lg hover:-translate-y-0.5",
       className
     )}
+    style={{
+      backgroundColor: 'var(--card-bg)',
+      borderColor: 'var(--border-default)',
+      color: 'var(--text-main)',
+      boxShadow: 'var(--shadow-card)',
+      ...style
+    }}
     {...props}
   />
 ))
@@ -32,13 +39,17 @@ CardHeader.displayName = "CardHeader"
 const CardTitle = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
+>(({ className, style, ...props }, ref) => (
   <h3
     ref={ref}
     className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
+      "text-xl font-bold leading-none tracking-tight",
       className
     )}
+    style={{
+      color: 'var(--text-heading, var(--text-main))',
+      ...style
+    }}
     {...props}
   />
 ))
@@ -47,10 +58,14 @@ CardTitle.displayName = "CardTitle"
 const CardDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
+>(({ className, style, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-sm text-slate-500 dark:text-slate-400", className)}
+    className={cn("text-sm", className)}
+    style={{
+      color: 'var(--text-secondary)',
+      ...style
+    }}
     {...props}
   />
 ))
