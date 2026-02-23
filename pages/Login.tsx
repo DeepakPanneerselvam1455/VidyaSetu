@@ -196,7 +196,7 @@ const LoginPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowDemoPanel(!showDemoPanel)}
-              className="w-full text-sm auth-text-muted flex items-center justify-center gap-1.5 mb-3 hover:opacity-80 transition-opacity"
+              className="w-full text-sm auth-text-muted auth-sandbox-toggle flex items-center justify-center gap-1.5 mb-3 hover:underline transition-all"
             >
               <BeakerIcon className="w-4 h-4" />
               {showDemoPanel ? 'Hide sandbox accounts' : 'Try with sandbox accounts'}
@@ -272,7 +272,7 @@ const LoginPage: React.FC = () => {
                 <h2 className="text-2xl font-bold leading-snug mb-3">
                   Your learning<br />journey starts here.
                 </h2>
-                <p className="text-white/80 text-[0.9375rem] leading-relaxed">
+                <p className="text-white text-[0.9375rem] leading-relaxed" style={{ opacity: 1 }}>
                   Access courses, track progress, and connect with instructors — all in one place.
                 </p>
               </div>
@@ -282,28 +282,28 @@ const LoginPage: React.FC = () => {
                   <div className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center backdrop-blur-sm">
                     <CheckIcon className="w-4 h-4 text-white" />
                   </div>
-                  <span className="text-sm text-white/90">AI-powered quiz generation</span>
+                  <span className="text-sm text-white">AI-powered quiz generation</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center backdrop-blur-sm">
                     <CheckIcon className="w-4 h-4 text-white" />
                   </div>
-                  <span className="text-sm text-white/90">Live 1-on-1 tutoring sessions</span>
+                  <span className="text-sm text-white">Live 1-on-1 tutoring sessions</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center backdrop-blur-sm">
                     <CheckIcon className="w-4 h-4 text-white" />
                   </div>
-                  <span className="text-sm text-white/90">Real-time progress tracking</span>
+                  <span className="text-sm text-white">Real-time progress tracking</span>
                 </div>
               </div>
 
               {/* Testimonial quote */}
               <div className="mt-10 pt-6 border-t border-white/15">
-                <p className="text-sm text-white/85 italic leading-relaxed">
+                <p className="text-sm text-white italic leading-relaxed" style={{ opacity: 0.9 }}>
                   "VidyaSetu has completely transformed how I manage my courses and connect with students."
                 </p>
-                <p className="text-xs text-white/60 mt-2">— Instructor, Computer Science</p>
+                <p className="text-xs text-white mt-2" style={{ opacity: 0.75 }}>— Instructor, Computer Science</p>
               </div>
             </div>
           </div>
