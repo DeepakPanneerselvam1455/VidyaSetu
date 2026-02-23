@@ -120,15 +120,7 @@ const RegisterPage: React.FC = () => {
                                     autoComplete="name"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
-                                    style={{
-                                        paddingLeft: '3rem',
-                                        backgroundColor: '#f8fafc',
-                                        color: '#0f172a',
-                                        WebkitTextFillColor: '#0f172a',
-                                        caretColor: '#0f172a',
-                                        border: '2px solid #cbd5e1',
-                                        opacity: 1,
-                                    }}
+                                    style={{ paddingLeft: '3rem' }}
                                 />
                             </div>
                         </div>
@@ -147,15 +139,7 @@ const RegisterPage: React.FC = () => {
                                     autoComplete="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    style={{
-                                        paddingLeft: '3rem',
-                                        backgroundColor: '#f8fafc',
-                                        color: '#0f172a',
-                                        WebkitTextFillColor: '#0f172a',
-                                        caretColor: '#0f172a',
-                                        border: '2px solid #cbd5e1',
-                                        opacity: 1,
-                                    }}
+                                    style={{ paddingLeft: '3rem' }}
                                 />
                             </div>
                         </div>
@@ -177,12 +161,6 @@ const RegisterPage: React.FC = () => {
                                     style={{
                                         paddingRight: '2.5rem',
                                         paddingLeft: '3rem',
-                                        backgroundColor: '#f8fafc',
-                                        color: '#0f172a',
-                                        WebkitTextFillColor: '#0f172a',
-                                        caretColor: '#0f172a',
-                                        border: '2px solid #cbd5e1',
-                                        opacity: 1,
                                     }}
                                 />
                                 <button
@@ -216,12 +194,6 @@ const RegisterPage: React.FC = () => {
                                     style={{
                                         paddingRight: '2.5rem',
                                         paddingLeft: '3rem',
-                                        backgroundColor: '#f8fafc',
-                                        color: '#0f172a',
-                                        WebkitTextFillColor: '#0f172a',
-                                        caretColor: '#0f172a',
-                                        border: '2px solid #cbd5e1',
-                                        opacity: 1,
                                     }}
                                 />
                                 <button
@@ -248,20 +220,13 @@ const RegisterPage: React.FC = () => {
                                     className="auth-select"
                                     value={role}
                                     onChange={(e) => setRole(e.target.value as User['role'])}
-                                    style={{
-                                        paddingLeft: '3rem',
-                                        backgroundColor: '#f8fafc',
-                                        color: '#0f172a',
-                                        WebkitTextFillColor: '#0f172a',
-                                        border: '2px solid #cbd5e1',
-                                        opacity: 1,
-                                    }}
+                                    style={{ paddingLeft: '3rem' }}
                                 >
                                     <option value="student">Student — Learn and take courses</option>
                                     <option value="mentor">Instructor — Create and manage courses</option>
                                     <option value="admin">Admin — Manage the platform</option>
                                 </select>
-                                <ChevronIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 auth-text-muted pointer-events-none" />
+                                <ChevronIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: 'currentColor' }} />
                             </div>
                         </div>
 
