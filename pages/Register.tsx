@@ -272,8 +272,8 @@ const RegisterPage: React.FC = () => {
             <Dialog
                 isOpen={isConfirmModalOpen}
                 onClose={() => setIsConfirmModalOpen(false)}
-                title="Confirm Your Details"
-                description="Please review your information before creating your account."
+                title="Ready to Join?"
+                description="Just one more step to create your account"
             >
                 <div className="space-y-6 my-6">
                     <div className="space-y-1">

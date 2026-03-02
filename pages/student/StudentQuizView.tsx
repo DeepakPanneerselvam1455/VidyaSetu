@@ -182,9 +182,9 @@ const StudentQuizView: React.FC = () => {
         }
     };
 
-    if (isLoading) return <div className="text-center p-8 text-white">Loading quiz...</div>;
+    if (isLoading) return <div className="text-center p-8" style={{ color: 'var(--text-main)' }}>Loading quiz...</div>;
     if (error) return <div className="text-center p-8 text-red-600 font-semibold border rounded-lg" style={{ backgroundColor: 'color-mix(in srgb, red 10%, transparent)', borderColor: 'color-mix(in srgb, red 30%, transparent)' }}>{error}</div>;
-    if (!quiz || !course) return <div className="text-center p-8 text-white">Quiz data could not be fully loaded.</div>;
+    if (!quiz || !course) return <div className="text-center p-8" style={{ color: 'var(--text-main)' }}>Quiz data could not be fully loaded.</div>;
 
     const currentQuestion = quiz.questions[currentQuestionIndex];
     const formatTime = (seconds: number) => {
@@ -196,24 +196,68 @@ const StudentQuizView: React.FC = () => {
     if (quizState === 'confirming') {
         const percentage = bestScore ? Math.round((bestScore.score / bestScore.total) * 100) : 0;
         return (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-                <div className="w-full max-w-md m-4 bg-[#1E293B] border border-slate-700 rounded-2xl text-white p-8 space-y-6 animate-in fade-in-0 zoom-in-95">
+            /* Outer: fixed full-screen stacking context */
+            <div className="fixed inset-0 z-[100] flex items-center justify-center">
+                {/* 1. Dedicated backdrop — click to dismiss would go here */}
+                <div className="absolute inset-0 modal-overlay" aria-hidden="true" />
+
+                {/* 2. Card — sits above the backdrop, stays sharp */}
+                <div
+                    className="relative z-10 w-full max-w-md m-4 rounded-2xl p-8 space-y-6 animate-in fade-in-0 zoom-in-95 border"
+                    style={{
+                        backgroundColor: 'var(--card-bg)',
+                        borderColor: 'var(--border-default)',
+                        color: 'var(--text-main)',
+                        boxShadow: '0 25px 60px rgba(0,0,0,0.4)'
+                    }}
+                >
                     <div className="text-center">
-                        <div className="w-16 h-16 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <BookCopyIcon className="w-8 h-8 text-violet-400" />
+                        <div
+                            className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                            style={{ backgroundColor: 'var(--kpi-icon-chip)' }}
+                        >
+                            <BookCopyIcon className="w-8 h-8" style={{ color: 'var(--primary)' }} />
                         </div>
-                        <h2 className="text-2xl font-bold">Ready to begin?</h2>
-                        <p className="text-slate-300 mt-1">{quiz.title}</p>
-                        <p className="text-xs text-slate-400">{course.title}</p>
+                        <h2 className="text-2xl font-bold" style={{ color: 'var(--text-heading)' }}>Ready to begin?</h2>
+                        <p className="mt-1" style={{ color: 'var(--text-secondary)' }}>{quiz.title}</p>
+                        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{course.title}</p>
                     </div>
-                    <div className="space-y-3 text-sm border-t border-b border-slate-700 py-4">
-                        <div className="flex justify-between items-center"><span className="text-slate-300">Questions:</span> <span className="font-semibold">{quiz.questions.length}</span></div>
-                        <div className="flex justify-between items-center"><span className="text-slate-300">Time Limit:</span> <span className="font-semibold">{quiz.duration ? `${quiz.duration} minutes` : 'None'}</span></div>
-                        <div className="flex justify-between items-center"><span className="text-slate-300">Your Best Score:</span> <span className={`font-semibold ${bestScore ? 'text-green-400' : ''}`}>{bestScore ? `${percentage}%` : 'N/A'}</span></div>
+                    <div
+                        className="space-y-3 text-sm border-t border-b py-4"
+                        style={{ borderColor: 'var(--border-default)' }}
+                    >
+                        <div className="flex justify-between items-center">
+                            <span style={{ color: 'var(--text-secondary)' }}>Questions:</span>
+                            <span className="font-semibold" style={{ color: 'var(--text-main)' }}>{quiz.questions.length}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span style={{ color: 'var(--text-secondary)' }}>Time Limit:</span>
+                            <span className="font-semibold" style={{ color: 'var(--text-main)' }}>{quiz.duration ? `${quiz.duration} minutes` : 'None'}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span style={{ color: 'var(--text-secondary)' }}>Your Best Score:</span>
+                            <span className={`font-semibold ${bestScore ? 'text-green-500' : ''}`} style={!bestScore ? { color: 'var(--text-main)' } : undefined}>
+                                {bestScore ? `${percentage}%` : 'N/A'}
+                            </span>
+                        </div>
                     </div>
-                    <p className="text-xs text-center text-slate-400">Once you begin, the timer will start and cannot be paused.</p>
+                    <p className="text-xs text-center" style={{ color: 'var(--text-muted)' }}>Once you begin, the timer will start and cannot be paused.</p>
                     <div className="flex gap-4">
-                        <Button variant="outline" className="w-full" onClick={() => navigate('/student/quizzes')}>Go Back</Button>
+                        {/* Secondary: outline with explicit visible border color */}
+                        <button
+                            className="w-full h-10 px-5 rounded-lg text-sm font-semibold border-2 transition-all"
+                            style={{
+                                borderColor: 'var(--primary)',
+                                color: 'var(--primary)',
+                                background: 'transparent',
+                            }}
+                            onClick={() => navigate('/student/quizzes')}
+                            onMouseOver={e => (e.currentTarget.style.background = 'var(--kpi-icon-chip)')}
+                            onMouseOut={e => (e.currentTarget.style.background = 'transparent')}
+                        >
+                            Go Back
+                        </button>
+                        {/* Primary: themed gradient */}
                         <Button className="w-full" onClick={handleStartQuiz}>Begin Quiz</Button>
                     </div>
                 </div>
@@ -359,23 +403,27 @@ const StudentQuizView: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             <div className="lg:col-span-2 space-y-6">
                 <div className="space-y-1">
-                    <h1 className="text-2xl font-bold text-white">{quiz.title}</h1>
-                    <p className="text-slate-400 flex items-center gap-2">
+                    <h1 className="text-2xl font-bold" style={{ color: 'var(--text-heading)' }}>{quiz.title}</h1>
+                    <p className="flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
                         <BookCopyIcon className="w-4 h-4" /> {course.title}
                     </p>
                 </div>
-                <Card className="bg-[#1E293B] border-slate-700 shadow-xl overflow-hidden">
-                    <CardHeader className="border-b border-slate-700 pb-4">
+                <Card className="shadow-xl overflow-hidden" style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-default)' }}>
+                    <CardHeader className="border-b pb-4" style={{ borderColor: 'var(--border-default)' }}>
                         <div className="flex justify-between items-center">
-                            <p className="font-semibold text-lg text-slate-100">Question {currentQuestionIndex + 1} of {quiz.questions.length}</p>
-                            <Badge variant="outline" className="border-slate-600 text-slate-400 font-normal">{currentQuestion.points} points</Badge>
+                            <p className="font-semibold text-lg" style={{ color: 'var(--text-heading, #042F2E)' }}>Question {currentQuestionIndex + 1} of {quiz.questions.length}</p>
+                            <Badge variant="outline" style={{ borderColor: 'var(--border-strong)', color: 'var(--text-secondary, #0F766E)' }} className="font-normal">{currentQuestion.points} points</Badge>
                         </div>
                     </CardHeader>
                     <CardContent className="p-8 space-y-8">
-                        <p className="text-xl font-medium text-white leading-relaxed">{currentQuestion.question}</p>
+                        <p className="text-xl font-medium leading-relaxed" style={{ color: 'var(--text-main, #083344)' }}>{currentQuestion.question}</p>
                         <div className="space-y-3">
                             {currentQuestion.type === 'multiple-choice' && currentQuestion.options?.map((option, index) => (
-                                <div key={index} className="flex items-center space-x-3 p-4 rounded-lg border border-slate-700 bg-slate-800/50 hover:bg-slate-700 transition-colors cursor-pointer" onClick={() => handleAnswerChange(currentQuestion.id, option)}>
+                                <div
+                                    key={index}
+                                    className={cn('quiz-option', answers[currentQuestion.id] === option ? 'selected' : '')}
+                                    onClick={() => handleAnswerChange(currentQuestion.id, option)}
+                                >
                                     <input
                                         type="radio"
                                         name={`question-${currentQuestion.id}`}
@@ -383,34 +431,33 @@ const StudentQuizView: React.FC = () => {
                                         value={option}
                                         checked={answers[currentQuestion.id] === option}
                                         onChange={() => handleAnswerChange(currentQuestion.id, option)}
-                                        className="w-4 h-4 text-violet-600 bg-slate-700 border-slate-500 focus:ring-violet-600 focus:ring-2"
+                                        className="w-4 h-4 accent-[var(--primary)] shrink-0"
                                     />
-                                    <label htmlFor={`option-${index}`} className="flex-1 cursor-pointer text-slate-200">{option}</label>
+                                    <label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">{option}</label>
                                 </div>
                             ))}
                             {currentQuestion.type === 'short-answer' && (
                                 <Textarea
                                     placeholder="Type your answer here..."
-                                    className="bg-slate-800 border-slate-700 text-white min-h-[120px]"
+                                    className="min-h-[120px]"
+                                    style={{ backgroundColor: 'var(--input-bg, var(--card-bg))', borderColor: 'var(--border-default)', color: 'var(--text-main)' }}
                                     value={answers[currentQuestion.id] || ''}
                                     onChange={(e) => handleAnswerChange(currentQuestion.id, e.target.value)}
                                 />
                             )}
                         </div>
                     </CardContent>
-                    <CardFooter className="bg-slate-800/50 border-t border-slate-700 p-4 flex justify-between">
+                    <CardFooter className="border-t p-4 flex justify-between" style={{ backgroundColor: 'var(--kpi-icon-chip)', borderColor: 'var(--border-default)' }}>
                         <Button
                             variant="outline"
                             onClick={() => setCurrentQuestionIndex(prev => Math.max(0, prev - 1))}
                             disabled={currentQuestionIndex === 0}
-                            className="text-white border-slate-600 hover:bg-slate-700 hover:text-white"
                         >
                             Previous
                         </Button>
                         {currentQuestionIndex < quiz.questions.length - 1 ? (
                             <Button
                                 onClick={() => setCurrentQuestionIndex(prev => Math.min(quiz.questions.length - 1, prev + 1))}
-                                className="bg-violet-600 hover:bg-violet-700 text-white"
                             >
                                 Next Question
                             </Button>
@@ -427,23 +474,26 @@ const StudentQuizView: React.FC = () => {
             </div>
 
             <div className="space-y-6">
-                <Card className="bg-[#1E293B] border-slate-700 text-white">
+                <Card style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-default)' }}>
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-lg flex items-center gap-2">
+                        <CardTitle className="text-lg flex items-center gap-2" style={{ color: 'var(--text-heading)' }}>
                             <ClockIcon className="w-5 h-5 text-amber-400" /> Time Remaining
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-3xl font-mono font-bold text-center py-4 bg-slate-800/50 rounded-lg tracking-wider">
+                        <div
+                            className="text-3xl font-mono font-bold text-center py-4 rounded-lg tracking-wider"
+                            style={{ backgroundColor: 'var(--kpi-icon-chip)', color: 'var(--text-main)' }}
+                        >
                             {formatTime(timeElapsed)}
                         </div>
-                        <p className="text-xs text-center text-slate-400 mt-2">Started at {new Date(startTimeRef.current || Date.now()).toLocaleTimeString()}</p>
+                        <p className="text-xs text-center mt-2" style={{ color: 'var(--text-muted)' }}>Started at {new Date(startTimeRef.current || Date.now()).toLocaleTimeString()}</p>
                     </CardContent>
                 </Card>
 
-                <Card className="bg-[#1E293B] border-slate-700 text-white">
+                <Card style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-default)' }}>
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-lg">Question Map</CardTitle>
+                        <CardTitle className="text-lg" style={{ color: 'var(--text-heading)' }}>Question Map</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="grid grid-cols-5 gap-2">
@@ -455,12 +505,14 @@ const StudentQuizView: React.FC = () => {
                                     <button
                                         key={q.id}
                                         onClick={() => setCurrentQuestionIndex(i)}
+                                        style={isCurrent ? undefined : {
+                                            backgroundColor: isAnswered ? 'var(--kpi-icon-chip)' : 'transparent',
+                                            borderColor: isAnswered ? 'var(--primary)' : 'var(--border-default)',
+                                            color: isAnswered ? 'var(--text-main)' : isVisited ? 'var(--text-secondary)' : 'var(--text-muted)'
+                                        }}
                                         className={cn(
                                             "h-10 w-10 rounded-md text-sm font-semibold transition-all border",
-                                            isCurrent ? "bg-violet-600 border-violet-500 text-white ring-2 ring-violet-400/30" :
-                                                isAnswered ? "bg-slate-700 border-slate-600 text-slate-200 hover:bg-slate-600" :
-                                                    isVisited ? "bg-slate-800 border-slate-600 text-slate-400 hover:bg-slate-700" :
-                                                        "bg-transparent border-slate-700 text-slate-500 hover:bg-slate-800"
+                                            isCurrent ? "bg-violet-600 border-violet-500 text-white ring-2 ring-violet-400/30" : ""
                                         )}
                                     >
                                         {i + 1}
@@ -468,10 +520,10 @@ const StudentQuizView: React.FC = () => {
                                 );
                             })}
                         </div>
-                        <div className="flex gap-4 mt-6 text-xs text-slate-400 justify-center">
+                        <div className="flex gap-4 mt-6 text-xs justify-center" style={{ color: 'var(--text-muted)' }}>
                             <div className="flex items-center gap-1"><div className="w-3 h-3 bg-violet-600 rounded-sm"></div> Current</div>
-                            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-slate-700 rounded-sm"></div> Answered</div>
-                            <div className="flex items-center gap-1"><div className="w-3 h-3 border border-slate-700 rounded-sm"></div> Pending</div>
+                            <div className="flex items-center gap-1"><div className="w-3 h-3 rounded-sm" style={{ backgroundColor: 'var(--kpi-icon-chip)', border: '1px solid var(--primary)' }}></div> Answered</div>
+                            <div className="flex items-center gap-1"><div className="w-3 h-3 rounded-sm" style={{ border: '1px solid var(--border-default)' }}></div> Pending</div>
                         </div>
                     </CardContent>
                 </Card>
@@ -488,13 +540,13 @@ const StudentQuizView: React.FC = () => {
                         <AlertTriangleIcon className="w-5 h-5 text-yellow-500 shrink-0" />
                         <div>
                             <p className="text-sm font-medium text-yellow-500">Unanswered Questions</p>
-                            <p className="text-sm text-slate-300">
-                                You have answered <span className="font-bold text-white">{Object.keys(answers).length}</span> out of <span className="font-bold text-white">{quiz.questions.length}</span> questions.
+                            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                                You have answered <span className="font-bold" style={{ color: 'var(--text-main)' }}>{Object.keys(answers).length}</span> out of <span className="font-bold" style={{ color: 'var(--text-main)' }}>{quiz.questions.length}</span> questions.
                             </p>
                         </div>
                     </div>
                     <div className="flex justify-end gap-3 pt-4">
-                        <Button variant="outline" onClick={() => setIsConfirmSubmitOpen(false)} className="border-slate-600 text-slate-300 hover:bg-slate-800">Keep Reviewing</Button>
+                        <Button variant="outline" onClick={() => setIsConfirmSubmitOpen(false)}>Keep Reviewing</Button>
                         <Button onClick={handleSubmit} disabled={isSubmitting} className="bg-green-600 hover:bg-green-700 text-white">
                             {isSubmitting ? 'Submitting...' : 'Yes, Submit'}
                         </Button>

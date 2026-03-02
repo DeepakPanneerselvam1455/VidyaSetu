@@ -134,7 +134,7 @@ const LoginPage: React.FC = () => {
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label htmlFor="password" className="auth-label" style={{ marginBottom: 0 }}>Password</label>
-                  <button type="button" className="auth-link text-xs" tabIndex={-1}>Forgot password?</button>
+                  <button type="button" className="auth-link text-xs" tabIndex={-1} aria-label="Forgot password">Forgot password?</button>
                 </div>
                 <div className="relative">
                   <LockIcon className="auth-input-icon" />
@@ -154,6 +154,7 @@ const LoginPage: React.FC = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="auth-toggle-btn"
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    aria-pressed={showPassword}
                   >
                     {showPassword ? <EyeOffIcon className="w-[18px] h-[18px]" /> : <EyeIcon className="w-[18px] h-[18px]" />}
                   </button>
@@ -168,6 +169,7 @@ const LoginPage: React.FC = () => {
                   className="auth-checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
+                  aria-label="Remember me"
                 />
                 <label htmlFor="remember" className="text-sm auth-text-muted cursor-pointer select-none">Remember me</label>
               </div>

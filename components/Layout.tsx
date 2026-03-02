@@ -160,7 +160,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     >
                         <div className="flex justify-end p-4">
                             <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
-                                <X className="w-5 h-5" />
+                                <X className="w-5 h-5" style={{ color: 'var(--text-main)' }} />
                             </Button>
                         </div>
                         <SidebarContent />
@@ -184,6 +184,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                             size="icon"
                             className="md:hidden"
                             onClick={() => setIsMobileMenuOpen(true)}
+                            aria-label="Open navigation menu"
                         >
                             <Menu className="w-6 h-6" style={{ color: 'var(--text-main)' }} />
                         </Button>
