@@ -289,13 +289,13 @@ const RegisterPage: React.FC = () => {
                         <p className="text-lg font-medium capitalize" style={{ color: 'var(--text-heading)' }}>{role === 'mentor' ? 'Instructor' : role}</p>
                     </div>
                 </div>
-                <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-2">
+                <div className="flex flex-row justify-end gap-3 pt-2">
                     <Button
                         type="button"
                         variant="ghost"
                         onClick={() => setIsConfirmModalOpen(false)}
                         disabled={isLoading}
-                        className="w-full sm:w-auto"
+                        className="w-auto"
                     >
                         Cancel
                     </Button>
@@ -303,7 +303,7 @@ const RegisterPage: React.FC = () => {
                         type="button"
                         onClick={handleConfirmRegistration}
                         disabled={isLoading}
-                        className="w-full sm:w-auto min-w-[120px]"
+                        className="w-auto min-w-[120px]"
                         size="lg"
                     >
                         {isLoading ? (
