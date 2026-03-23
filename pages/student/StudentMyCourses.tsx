@@ -195,9 +195,16 @@ const StudentMyCourses: React.FC = () => {
                                             </span>
                                         </div>
 
-                                        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white dark:group-hover:bg-indigo-500 transition-all duration-300 shadow-sm">
-                                            <ArrowRightIcon className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
-                                        </div>
+                                        <button 
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                navigate(`/student/my-courses/${course.id}`);
+                                            }}
+                                            className="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white transition-all duration-300 bg-indigo-600 rounded-full hover:bg-indigo-700 hover:shadow-md hover:-translate-y-0.5"
+                                        >
+                                            Start
+                                        </button>
                                     </div>
                                 </div>
                             </div>
