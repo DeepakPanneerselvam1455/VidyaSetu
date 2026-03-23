@@ -1,0 +1,1 @@
+// This file is deprecated. The project now uses LocalStorage for data management.
