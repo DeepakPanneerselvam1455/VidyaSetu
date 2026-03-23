@@ -117,32 +117,41 @@ const CommunityForums: React.FC = () => {
                 <div className="flex-1 space-y-4">
                     {isLoading ? <p>Loading discussions...</p> : filteredThreads.length > 0 ? (
                         filteredThreads.map(thread => (
-                            <Card key={thread.id} className="hover:shadow-md transition-shadow">
-                                <CardContent className="p-6">
-                                    <div className="flex justify-between items-start gap-4">
-                                        <div className="flex-1 min-w-0 space-y-2">
-                                            <div className="flex items-center gap-2 flex-wrap">
-                                                <Badge variant="outline">{categories.find(c => c.id === thread.categoryId)?.name}</Badge>
-                                                <span className="text-xs leading-tight" style={{ color: 'var(--text-muted)' }}>Posted by {thread.authorName}</span>
+                            <Card key={thread.id} className="p-6 hover:shadow-md transition-shadow">
+                                    <div className="flex justify-between items-center gap-4 h-full">
+                                        <div className="flex-1 min-w-0 flex flex-col justify-center gap-3">
+                                            <div>
+                                                <Link to={`/forums/thread/${thread.id}`} className="block text-xl font-bold leading-tight hover:text-[var(--primary)] transition-colors mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                                                    {thread.title}
+                                                </Link>
+                                                <p style={{ color: 'var(--text-secondary)' }} className="line-clamp-2 text-sm leading-relaxed">
+                                                    {thread.content}
+                                                </p>
                                             </div>
-                                            <Link to={`/forums/thread/${thread.id}`} className="block text-xl font-semibold leading-tight hover:text-[var(--primary)] transition-colors" style={{ color: 'var(--text-main)' }}>
-                                                {thread.title}
-                                            </Link>
-                                            <p style={{ color: 'var(--text-secondary)' }} className="line-clamp-2 text-sm leading-relaxed">{thread.content}</p>
+                                            
+                                            <div className="flex items-center gap-3 flex-wrap pt-1 mt-auto">
+                                                <Badge variant="outline" className="text-xs px-2.5 py-0.5">{categories.find(c => c.id === thread.categoryId)?.name}</Badge>
+                                                <div className="flex items-center gap-2 text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+                                                    <span>•</span>
+                                                    <span>Posted by {thread.authorName}</span>
+                                                </div>
+                                                {thread.tags.length > 0 && (
+                                                    <div className="flex items-center gap-2 text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+                                                        <span>•</span>
+                                                        <div className="flex gap-1.5 flex-wrap">
+                                                            {thread.tags.map(tag => (
+                                                                <span key={tag} className="bg-[var(--kpi-icon-chip)] text-[var(--text-secondary)] px-2 py-0.5 rounded-sm">#{tag}</span>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
-                                        <div className="flex items-center gap-1.5 flex-shrink-0 self-center" style={{ color: 'var(--text-muted)' }}>
-                                            <MessageSquareIcon className="w-4 h-4" />
-                                            <span className="text-sm font-medium">{thread.replyCount}</span>
+                                        <div className="flex flex-col items-center justify-center p-3 rounded-lg bg-[var(--kpi-icon-chip)] flex-shrink-0" style={{ color: 'var(--primary)' }}>
+                                            <MessageSquareIcon className="w-5 h-5 mb-1" />
+                                            <span className="text-sm font-bold">{thread.replyCount}</span>
                                         </div>
                                     </div>
-                                    {thread.tags.length > 0 && (
-                                        <div className="mt-4 flex gap-2 flex-wrap">
-                                            {thread.tags.map(tag => (
-                                                <span key={tag} className="text-xs px-2.5 py-1 rounded leading-tight" style={{ backgroundColor: 'var(--kpi-icon-chip)', color: 'var(--text-secondary)' }}>#{tag}</span>
-                                            ))}
-                                        </div>
-                                    )}
-                                </CardContent>
                             </Card>
                         ))
                     ) : (

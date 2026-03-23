@@ -149,24 +149,23 @@ const ForumThreadView: React.FC = () => {
             </div>
 
             {/* Reply Form */}
-            <Card>
-                <CardContent className="p-6">
-                    <h3 className="font-semibold mb-4">Post a Reply</h3>
-                    <form onSubmit={handleReply} className="space-y-4">
-                        <Textarea
-                            value={newReply}
-                            onChange={e => setNewReply(e.target.value)}
-                            placeholder="Type your reply here..."
-                            rows={4}
-                            required
-                            error={replyError}
-                        />
-                        {replyError && <FormError error={replyError} />}
-                        <div className="flex justify-end">
-                            <Button type="submit">Post Reply</Button>
-                        </div>
-                    </form>
-                </CardContent>
+            <Card className="p-6 mt-8">
+                <h3 className="font-bold mb-4 text-lg" style={{ color: 'var(--text-heading)' }}>Post a Reply</h3>
+                <form onSubmit={handleReply} className="space-y-4">
+                    <Textarea
+                        value={newReply}
+                        onChange={e => setNewReply(e.target.value)}
+                        placeholder="Type your reply here..."
+                        rows={5}
+                        required
+                        error={replyError}
+                        className="w-full resize-y"
+                    />
+                    {replyError && <FormError error={replyError} />}
+                    <div className="flex justify-end pt-2">
+                        <Button type="submit" className="font-semibold px-6">Post Reply</Button>
+                    </div>
+                </form>
             </Card>
         </div>
     );
