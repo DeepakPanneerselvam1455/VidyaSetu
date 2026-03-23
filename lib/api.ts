@@ -32,6 +32,11 @@ export const login = async (email: string, pass: string) => {
 
         console.log(`[Auth] Profile loaded. Role: ${profile.role}`);
 
+        if (profile.accountStatus === 'DISABLED') {
+            await supabase.auth.signOut();
+            throw new Error("Your account has been disabled. Please contact an administrator.");
+        }
+
         if (!profile.role) {
             console.error("[Auth] Critical: User has no role assigned in database.");
             throw new Error("User has no role assigned.");
@@ -54,6 +59,11 @@ export const getProfile = async () => {
         .single();
 
     if (profile) {
+        if (profile.accountStatus === 'DISABLED') {
+             // Force logout if the account was disabled while they had an active session
+             await supabase.auth.signOut();
+             return null;
+        }
         console.log(`[Auth] Session restored for user ${profile.id}. Role: ${profile.role}`);
     }
 
