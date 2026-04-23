@@ -945,61 +945,134 @@ const AssignQuizDialog: React.FC<AssignQuizDialogProps> = ({ isOpen, onClose, qu
 
     return (
         <Dialog isOpen={isOpen} onClose={onClose} title={`Assign Quiz: ${quiz.title}`}>
-            <div className="space-y-4">
+            <div className="space-y-5">
                 {successMessage ? (
-                    <div className="text-center p-8 bg-green-50 dark:bg-green-900/20 rounded-xl">
-                        <CheckIcon className="w-12 h-12 text-green-500 mx-auto mb-4" />
-                        <p className="font-bold text-green-700 dark:text-green-300 text-lg">{successMessage}</p>
+                    <div className="text-center py-10 px-6 bg-green-50 rounded-xl border border-green-100">
+                        <CheckIcon className="w-12 h-12 text-green-500 mx-auto mb-3" />
+                        <p className="font-bold text-green-700 text-base">{successMessage}</p>
                     </div>
                 ) : (
                     <>
+                        {/* ── Student Selection ── */}
                         <div>
-                            <label className="block text-sm font-semibold mb-2">Select Target Students</label>
-                            <div className="border rounded-xl max-h-60 overflow-y-auto p-2 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
-                                <div className="flex items-center p-3 border-b dark:border-slate-800">
+                            <label className="block text-sm font-semibold text-gray-800 mb-2">
+                                Select Target Students
+                            </label>
+
+                            <div className="border border-gray-300 rounded-xl overflow-hidden bg-white shadow-sm">
+                                {/* Select All row */}
+                                <label
+                                    htmlFor="select-all"
+                                    className="flex items-center gap-3 px-4 py-3 bg-gray-50 border-b border-gray-200 cursor-pointer hover:bg-indigo-50 transition-colors duration-150 select-none"
+                                >
                                     <input
                                         type="checkbox"
                                         id="select-all"
-                                        className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
-                                        checked={selectedStudentIds.length === students.length && students.length > 0}
+                                        className="w-4 h-4 rounded border-gray-400 text-indigo-600 accent-indigo-600 cursor-pointer focus:ring-2 focus:ring-indigo-400 focus:ring-offset-1"
+                                        checked={selectedStudentIds.length === students.filter(s => !assignedStudentIds.includes(s.id)).length && students.filter(s => !assignedStudentIds.includes(s.id)).length > 0}
                                         onChange={handleSelectAll}
                                     />
-                                    <label htmlFor="select-all" className="ml-3 font-bold text-sm">Select All Students</label>
+                                    <span className="font-semibold text-sm text-gray-800">Select All Students</span>
+                                </label>
+
+                                {/* Student list */}
+                                <div className="max-h-52 overflow-y-auto divide-y divide-gray-100">
+                                    {students.length === 0 ? (
+                                        <p className="text-sm text-gray-500 text-center py-6 px-4">No students enrolled yet.</p>
+                                    ) : (
+                                        students.map(student => {
+                                            const isAssigned = assignedStudentIds.includes(student.id);
+                                            const isChecked = isAssigned || selectedStudentIds.includes(student.id);
+                                            return (
+                                                <label
+                                                    key={student.id}
+                                                    htmlFor={`student-${student.id}`}
+                                                    className={cn(
+                                                        "flex items-center gap-3 px-4 py-3 transition-colors duration-150 select-none",
+                                                        isAssigned
+                                                            ? "bg-gray-50 cursor-not-allowed"
+                                                            : "cursor-pointer hover:bg-indigo-50"
+                                                    )}
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        id={`student-${student.id}`}
+                                                        className="w-4 h-4 rounded border-gray-400 text-indigo-600 accent-indigo-600 cursor-pointer disabled:cursor-not-allowed focus:ring-2 focus:ring-indigo-400 focus:ring-offset-1"
+                                                        checked={isChecked}
+                                                        disabled={isAssigned}
+                                                        onChange={() => handleStudentSelect(student.id)}
+                                                    />
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className={cn(
+                                                            "text-sm font-medium truncate",
+                                                            isAssigned ? "text-gray-400" : "text-gray-800"
+                                                        )}>
+                                                            {student.name}
+                                                        </p>
+                                                        <p className={cn(
+                                                            "text-xs truncate",
+                                                            isAssigned ? "text-gray-300" : "text-gray-500"
+                                                        )}>
+                                                            {student.email}
+                                                        </p>
+                                                    </div>
+                                                    {isAssigned && (
+                                                        <span className="shrink-0 text-[10px] font-semibold uppercase tracking-wide bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">
+                                                            Assigned
+                                                        </span>
+                                                    )}
+                                                </label>
+                                            );
+                                        })
+                                    )}
                                 </div>
-                                {students.map(student => {
-                                    const isAssigned = assignedStudentIds.includes(student.id);
-                                    return (
-                                        <div key={student.id} className={cn("flex items-center p-3 rounded-lg hover:bg-white dark:hover:bg-slate-800 transition-colors", isAssigned ? "opacity-75" : "")}>
-                                            <input
-                                                type="checkbox"
-                                                id={`student-${student.id}`}
-                                                className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
-                                                checked={isAssigned || selectedStudentIds.includes(student.id)}
-                                                disabled={isAssigned}
-                                                onChange={() => handleStudentSelect(student.id)}
-                                            />
-                                            <div className="ml-3 flex items-center gap-3">
-                                                <div>
-                                                    <label htmlFor={`student-${student.id}`} className="block text-sm font-medium">{student.name}</label>
-                                                    <p className="text-[10px] text-slate-500">{student.email}</p>
-                                                </div>
-                                                {isAssigned && <Badge variant="secondary" className="text-[10px] py-0 px-2 h-4">Assigned</Badge>}
-                                            </div>
-                                        </div>
-                                    );
-                                })}
                             </div>
+
+                            {selectedStudentIds.length > 0 && (
+                                <p className="text-xs text-indigo-600 font-medium mt-1.5">
+                                    {selectedStudentIds.length} student{selectedStudentIds.length !== 1 ? 's' : ''} selected
+                                </p>
+                            )}
                         </div>
+
+                        {/* ── Due Date ── */}
                         <div>
-                            <label htmlFor="due-date" className="block text-sm font-semibold mb-1.5">Due Date (Optional)</label>
-                            <Input id="due-date" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} />
+                            <label htmlFor="due-date" className="block text-sm font-semibold text-gray-800 mb-1.5">
+                                Due Date <span className="font-normal text-gray-400">(Optional)</span>
+                            </label>
+                            <input
+                                id="due-date"
+                                type="date"
+                                value={dueDate}
+                                onChange={e => setDueDate(e.target.value)}
+                                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 placeholder-gray-400 shadow-sm cursor-pointer transition-colors duration-150 hover:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            />
                         </div>
-                        {error && <p className="text-sm text-red-500">{error}</p>}
-                        <div className="flex justify-end gap-3 pt-4">
-                            <Button type="button" variant="ghost" onClick={onClose}>Cancel</Button>
-                            <Button onClick={handleAssign} disabled={isAssigning} className="bg-indigo-600 hover:bg-indigo-700">
-                                {isAssigning ? 'Assigning...' : 'Confirm Assignments'}
-                            </Button>
+
+                        {/* ── Error ── */}
+                        {error && (
+                            <p className="text-sm text-red-600 font-medium bg-red-50 border border-red-200 px-3 py-2 rounded-lg">
+                                {error}
+                            </p>
+                        )}
+
+                        {/* ── Actions ── */}
+                        <div className="flex justify-end gap-3 pt-1">
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                className="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-800 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleAssign}
+                                disabled={isAssigning || selectedStudentIds.length === 0}
+                                className="px-5 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 shadow-sm"
+                            >
+                                {isAssigning ? 'Assigning…' : 'Confirm Assignments'}
+                            </button>
                         </div>
                     </>
                 )}
